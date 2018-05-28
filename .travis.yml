@@ -10,5 +10,8 @@ addons:
     token: $SONAR_TOKEN
 install:
   - pip install -r requirements.txt
+script:
+  - python3 exemples/main.py
+  - sonar-scanner
 notifications:
   email: false
