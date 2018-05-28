@@ -9,6 +9,6 @@ addons:
     organization: taken0711-github
     token: $SONAR_TOKEN
 install:
-  - pip install -r requirements.txt
+  - python -m unittest
 notifications:
   email: false
