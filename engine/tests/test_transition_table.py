@@ -27,4 +27,8 @@ class TestTransitionTable(unittest.TestCase):
     def test_should_set_value_when_set(self):
         t = TransitionTable(2)
         t.set([1, 1], 5)
+        self.assertEqual(0, t.get([0, 0]))
+        self.assertEqual(0, t.get([0, 1]))
+        self.assertEqual(0, t.get([1, 0]))
+        self.assertEqual(5, t.get([1, 1]))
 

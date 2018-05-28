@@ -1,9 +1,11 @@
+import copy
+
 class TransitionTable:
     def __init__(self, dimension, initial_value=0):
         self.dimension = dimension
         self.transitions = initial_value
         for _ in range(dimension):
-            self.transitions = [self.transitions] * dimension
+            self.transitions = [copy.deepcopy(self.transitions) for _ in range(dimension)]
 
     def set(self, indexes, value):
         self.__check_dimension(indexes)
