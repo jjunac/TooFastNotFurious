@@ -1,9 +1,9 @@
-from math import cos, sin
+from math import cos, sin, pi
 
 import pygame
 from pygame.locals import *
 
-from visualizer.road import Road
+from visualizer.road import Road, RoadSprite
 
 HEIGHT = 7
 WIDTH = 12
@@ -23,10 +23,17 @@ class Drawing:
         self.continuer = 1
 
     def draw(self):
-        r = Road(0, 0, 400, 400, 60, 40)
+        r = Road(100, 100, 600, 100, None, length=50, height=50)
+        r2 = Road(200, 0, 200, 400, None, length=50, height=50)
         r.draw(self.fenetre)
+        r2.draw(self.fenetre)
+        clear = pygame.sprite.RenderClear()
+        # clear.add(RoadSprite(100, 100, 50, 50, pi/4))
+        clear.draw(pygame.display.get_surface())
+        pygame.draw.circle(self.fenetre, (255, 0, 0), (100, 100), 10)
+        pygame.draw.circle(self.fenetre, (255, 0, 0), (0, 0), 10)
+        pygame.draw.circle(self.fenetre, (255, 0, 0), (200, 400), 10)
         pygame.display.flip()
-
         while self.continuer:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -34,33 +41,3 @@ class Drawing:
 
 
 Drawing().draw()
-
-
-class RotatableRect:
-    def __init__(self, xpos, ypos, width, height, angle):
-        self.height = height
-        self.xpos = xpos
-        self.ypos = ypos
-        self.width = width
-        self.angle = angle
-
-    def draw(self, surface, color):
-        b_l = (self.xpos, self.ypos)
-        b_r = self.__rotatePoint((b_l[0] + self.width), b_l)
-        t_r = (self.xpos + self.width, self.ypos + self.height)
-        t_l = (self.xpos, self.ypos + self.height)
-        pygame.draw.aaline(surface, color, (self.xpos, self.ypos), self.__rotatePoint(b_l, b_r))
-        pygame.draw.aaline(surface, color, b_r, self.__rotatePoint(b_r, t_r))
-        pygame.draw.aaline(surface, color, t_r, self.__rotatePoint(t_r, t_l))
-        pygame.draw.aaline(surface, color, t_l, self.__rotatePoint(t_l, b_l))
-
-    def __rotateLine(self, origin, line):
-        point = self.__rotatePoint(origin, line[0])
-        self.__rotatePoint(origin, line[1])
-
-    def rotatePoint(angle, point, origin=(0, 0)):
-        return (cos(angle) * (point[0] - origin[0]) - sin(angle) * (point[1] - origin[1]) + origin[0],
-                sin(angle) * (point[0] - origin[0]) + cos(angle) * (point[1] - origin[1]) + origin[1])
-
-    def rotate(self, angle):
-        self.angle = angle
