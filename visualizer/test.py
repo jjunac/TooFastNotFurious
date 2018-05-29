@@ -31,7 +31,11 @@ class Drawing:
 
     def draw_road(self, x, y, xa, ya):
 
-        # Prendre le coeff inverse
+        if x > xa:
+            x, xa = xa, x
+
+        if y > ya:
+            y, ya = ya, y
 
         d = 0
 
@@ -42,15 +46,6 @@ class Drawing:
 
             d = y - (coeff * x)
 
-        # an = -1 / coeff
-        #
-        # normale = self.f(x, coeff, d) + an * (x - x)
-
-        # pygame.draw.circle(self.fenetre, BLACK, [x, int(normale)], 4, 2)
-
-        pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, self.normale(x, coeff, d, x + HEIGHT / 2)),
-                           (x - HEIGHT / 2, self.normale(x, coeff, d, x - HEIGHT / 2)), True)
-
         if (y == ya):
 
             pygame.draw.aaline(self.fenetre, BLACK, (x, y + HEIGHT / 2),
@@ -58,24 +53,55 @@ class Drawing:
             pygame.draw.aaline(self.fenetre, BLACK, (x, y - HEIGHT / 2),
                                (xa, ya - HEIGHT / 2), True)
 
+        elif coeff == 0:
+
+            pygame.draw.aaline(self.fenetre, BLACK, (x - HEIGHT / 2, y),
+                               (x - HEIGHT / 2, ya), True)
+            pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, y),
+                               (x + HEIGHT / 2, ya), True)
+
         else:
 
-            pygame.draw.aaline(self.fenetre, BLACK, (x - HEIGHT / 2, y + HEIGHT / 2),
-                               (xa - HEIGHT / 2, ya + HEIGHT / 2), True)
-            pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, y - HEIGHT / 2),
-                               (xa + HEIGHT / 2, ya - HEIGHT / 2), True)
+            # pygame.draw.aaline(self.fenetre, BLACK, (x - HEIGHT / 2, y + HEIGHT / 2),
+            #                    (xa - HEIGHT / 2, ya + HEIGHT / 2), True)
+            # pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, y - HEIGHT / 2),
+            #                    (xa + HEIGHT / 2, ya - HEIGHT / 2), True)
+
+            pygame.draw.aaline(self.fenetre, BLACK, (x - HEIGHT / 2, self.normale(x, coeff, d, x - HEIGHT / 2)),
+                               (xa - HEIGHT / 2, self.normale(xa, coeff, d, xa - HEIGHT / 2)), True)
+            pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, self.normale(x, coeff, d, x + HEIGHT / 2)),
+                               (xa + HEIGHT / 2, self.normale(xa, coeff, d, xa + HEIGHT / 2)), True)
 
         i = x
 
-        while i < xa + 1:
-            # pygame.draw.aaline(self.fenetre, BLACK, (i + HEIGHT / 2, coeff * i + d - HEIGHT / 2),
-            #                    (i - HEIGHT / 2, coeff * i + d + HEIGHT / 2), True)
-            # pygame.draw.aaline(self.fenetre, BLACK, (i  , self.f(i , coeff, d)),
-            #                    (i, self.f(i, coeff, d)), True)
-            pygame.draw.aaline(self.fenetre, BLACK, (i + HEIGHT / 2, self.normale(i, coeff, d, i + HEIGHT / 2)),
-                               (i - HEIGHT / 2, self.normale(i, coeff, d, i - HEIGHT / 2)), True)
+        if y == ya:
 
-            i += WIDTH
+            while i < xa + 1:
+                pygame.draw.aaline(self.fenetre, BLACK, (i, y + HEIGHT / 2),
+                                   (i, y - HEIGHT / 2), True)
+
+                i += WIDTH
+
+        elif x == xa:
+
+            i = y
+
+            while i < ya + 1:
+                pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, i),
+                                   (x - HEIGHT / 2, i), True)
+
+                i += WIDTH
+
+        else:
+
+            pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, self.normale(x, coeff, d, x + HEIGHT / 2)),
+                               (x - HEIGHT / 2, self.normale(x, coeff, d, x - HEIGHT / 2)), True)
+
+            while i < xa + 1:
+                pygame.draw.aaline(self.fenetre, BLACK, (i + HEIGHT / 2, self.normale(i, coeff, d, i + HEIGHT / 2)),
+                                   (i - HEIGHT / 2, self.normale(i, coeff, d, i - HEIGHT / 2)), True)
+
+                i += WIDTH
 
     def draw(self):
 
@@ -84,7 +110,7 @@ class Drawing:
         self.draw_road(100, 465, 984, 597)
         self.draw_road(100, 465, 100, 100)
         self.draw_road(100, 465, 500, 465)
-        # self.draw_road(0, 10, 1200, 10)
+        self.draw_road(0, 10, 1200, 10)
 
         pygame.display.flip()
 
