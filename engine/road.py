@@ -1,8 +1,8 @@
-from engine.entity import Entity
+from engine.tickable import Tickable
 from engine.state import State
 from engine.transition_table import TransitionTable
 
-class Road(Entity):
+class Road(Tickable):
 
     transitions = TransitionTable(3)
     transitions.set([State.EMPTY,   State.EMPTY,    State.EMPTY],   State.EMPTY)
