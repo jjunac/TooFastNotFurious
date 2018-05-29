@@ -1,8 +1,7 @@
-from math import cos, sin, pi
-
 import pygame
 from pygame.locals import *
-from visualizer.road import SimpleRoad, RoadSprite, Road
+
+from visualizer.road import SimpleRoad
 
 HEIGHT = 7
 WIDTH = 12
@@ -27,12 +26,12 @@ class Drawing:
         return int(f(c, coeff, d) + an * (x - c))
 
     def draw(self):
-        road = RoadSprite()
+        # road = RoadSprite()
         # road.image = pygame.transform.rotate(road.image, 30)
         render_clear = pygame.sprite.RenderClear()
-        render_clear.add(road)
+        # render_clear.add(road)
         render_clear.draw(self.fenetre)
-        r = Road(0, 0, 400, 0, render_clear)
+        # r = Road(0, 0, 400, 0, render_clear)
         road2 = SimpleRoad(205, 200, 260, 454)
         road2.draw(self.fenetre)
         pygame.display.flip()
