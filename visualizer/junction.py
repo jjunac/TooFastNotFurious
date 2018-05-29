@@ -62,6 +62,12 @@ class Junction:
                 pygame.draw.line(self.fenetre, BLACK, (x, y - WIDTH * 1.5),
                                    (x, y + WIDTH * 1.5), WIDTH_LINE)
 
+    def update(self, junction_entity):
+
+
+
+        print("coucou")
+
     def draw(self):
 
         self.draw_junction(50, 50, 4)

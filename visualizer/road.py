@@ -2,6 +2,8 @@ from math import sqrt, cos, sin, atan2, pi
 
 import pygame
 
+from engine.state import State
+
 
 class SimpleRoad:
 
@@ -73,12 +75,13 @@ def rotatePoint(angle, point, origin=(0, 0)):
 
 class Road(pygame.sprite.Group):
 
-    def __init__(self, x, y, xa, ya, width=30, height=30):
+    def __init__(self, x, y, xa, ya, car_group, height=30, width=30):
         super().__init__()
         self.x = x
         self.y = y
         self.xa = xa
         self.ya = ya
+        self.car_group = car_group
         self.width = width
         self.height = height
         vect = (self.xa - self.x, self.ya - self.y)
@@ -103,6 +106,23 @@ class Road(pygame.sprite.Group):
     #     self.group.draw(pygame.display.get_surface())
 
 
+    def update(self, road_cells):
+
+        index = 0
+
+        self.car_group.clear()
+        self.draw(pygame.display.get_surface())
+
+        for cell in road_cells:
+
+            if cell == State.CAR:
+                car = CarSprite(self.x + self.width * index, self.y)
+                self.car_group.add(car)
+
+            index += 1
+        self.car_group.draw(pygame.display.get_surface())
+
+
 class RoadSprite(pygame.sprite.Sprite):
 
     def __init__(self, x=0, y=0, width=50, height=50, angle=0.0):
@@ -114,3 +134,14 @@ class RoadSprite(pygame.sprite.Sprite):
         image = pygame.transform.rotate(image, -angle * 180 / pi)
         self.image = image
         self.rect = image.get_rect().move(x, y)
+
+
+class CarSprite(pygame.sprite.Sprite):
+
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        load = pygame.image.load("../resources/car.png")
+        load = pygame.Surface.convert_alpha(load)
+        self.image = load
+        self.rect = self.image.get_rect()
+        self.rect.move(x, y)
