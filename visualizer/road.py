@@ -1,3 +1,5 @@
+from math import sqrt
+
 import pygame
 
 
@@ -63,3 +65,34 @@ class SimpleRoad:
                 pygame.draw.aaline(surface, color, (i, self.f(i, coeff, d - height / 2)),
                                    (i, self.f(i, coeff, d + height / 2)), True)
                 i += width
+
+
+class Road:
+
+    def __init__(self, x, y, xa, ya, group, height=30, width=30):
+        self.x = x
+        self.y = y
+        self.xa = xa
+        self.ya = ya
+        self.group = group
+        self.width = width
+        self.height = height
+
+    def draw(self):
+        vect = (self.xa - self.x, self.ya - self.y)
+        dist = sqrt(vect[0] ** 2 + vect[1] ** 2)
+        i = 0
+        while i < dist:
+            roadPortion = RoadSprite()
+            self.group.add(roadPortion)
+        self.group.draw(pygame.display.get_surface())
+
+
+class RoadSprite(pygame.sprite.Sprite):
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        load = pygame.image.load("../resources/testRoad.png")
+        load = pygame.Surface.convert_alpha(load)
+        self.image = load
+        self.rect = self.image.get_rect()
