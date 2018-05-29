@@ -21,7 +21,8 @@ class TestRoad(unittest.TestCase):
             for j in range(i+1, r.length):
                 self.assertEqual(State.EMPTY, r.cells[j])
 
-            r.tick()
+            r.compute_next()
+            r.apply_next()
 
 
     def test_a_car_should_stop_when_there_is_a_car_ahead(self):
@@ -32,17 +33,20 @@ class TestRoad(unittest.TestCase):
             r.cells[i] = State.CAR
         r.cells[1] = State.CAR
 
-        r.tick()
+        r.compute_next()
+        r.apply_next()
         self.assertEqual(State.EMPTY, r.cells[1])
         self.assertEqual(State.CAR, r.cells[2])
         self.assertEqual(State.EMPTY, r.cells[3])
 
-        r.tick()
+        r.compute_next()
+        r.apply_next()
         self.assertEqual(State.EMPTY, r.cells[2])
         self.assertEqual(State.CAR, r.cells[3])
         self.assertEqual(State.CAR, r.cells[4])
 
-        r.tick()
+        r.compute_next()
+        r.apply_next()
         self.assertEqual(State.EMPTY, r.cells[2])
         self.assertEqual(State.CAR, r.cells[3])
         self.assertEqual(State.CAR, r.cells[4])
@@ -53,27 +57,32 @@ class TestRoad(unittest.TestCase):
         r.cells[1] = State.CAR
         r.cells[2] = State.CAR
 
-        r.tick()
+        r.compute_next()
+        r.apply_next()
         self.assertEqual(State.CAR, r.cells[0])
         self.assertEqual(State.CAR, r.cells[1])
         self.assertEqual(State.EMPTY, r.cells[2])
 
-        r.tick()
+        r.compute_next()
+        r.apply_next()
         self.assertEqual(State.CAR, r.cells[0])
         self.assertEqual(State.EMPTY, r.cells[1])
         self.assertEqual(State.CAR, r.cells[2])
 
-        r.tick()
+        r.compute_next()
+        r.apply_next()
         self.assertEqual(State.EMPTY, r.cells[0])
         self.assertEqual(State.CAR, r.cells[1])
         self.assertEqual(State.EMPTY, r.cells[2])
 
-        r.tick()
+        r.compute_next()
+        r.apply_next()
         self.assertEqual(State.EMPTY, r.cells[0])
         self.assertEqual(State.EMPTY, r.cells[1])
         self.assertEqual(State.CAR, r.cells[2])
 
-        r.tick()
+        r.compute_next()
+        r.apply_next()
         self.assertEqual(State.EMPTY, r.cells[0])
         self.assertEqual(State.EMPTY, r.cells[1])
         self.assertEqual(State.EMPTY, r.cells[2])

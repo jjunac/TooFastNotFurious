@@ -4,4 +4,4 @@ class Core:
 
     def tick(self):
         for e in self.entities:
-            e.tick()
+            e.compute_next()
