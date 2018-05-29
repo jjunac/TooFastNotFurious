@@ -12,7 +12,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 
-class Crossroads:
+class Junction:
 
     def __init__(self):
         pygame.init()
@@ -23,7 +23,7 @@ class Crossroads:
 
         self.continuer = 1
 
-    def draw_crossroad(self, x, y, nb_entries, orientation=0):
+    def draw_junction(self, x, y, nb_entries, orientation=0):
 
         if nb_entries == 4:
 
@@ -64,11 +64,11 @@ class Crossroads:
 
     def draw(self):
 
-        self.draw_crossroad(50, 50, 4)
-        self.draw_crossroad(100, 50, 3, Orientation.NORTH)
-        self.draw_crossroad(150, 50, 3, Orientation.EAST)
-        self.draw_crossroad(200, 50, 3, Orientation.WEST)
-        self.draw_crossroad(250, 50, 3, Orientation.SOUTH)
+        self.draw_junction(50, 50, 4)
+        self.draw_junction(100, 50, 3, Orientation.NORTH)
+        self.draw_junction(150, 50, 3, Orientation.EAST)
+        self.draw_junction(200, 50, 3, Orientation.WEST)
+        self.draw_junction(250, 50, 3, Orientation.SOUTH)
         pygame.display.flip()
 
         while self.continuer:
@@ -77,4 +77,4 @@ class Crossroads:
                     self.continuer = 0
 
 
-Crossroads().draw()
+Junction().draw()
