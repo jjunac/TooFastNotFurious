@@ -1,12 +1,19 @@
-import pygame
+from math import cos, sin, pi
 
+import pygame
 from pygame.locals import *
+from visualizer.road import SimpleRoad
 
 HEIGHT = 7
 WIDTH = 12
 
 BLACK = (0, 0, 0)
+RED = (220, 0, 0)
 WHITE = (255, 255, 255)
+
+
+def f(x, a, b):
+    return a * x + b
 
 
 class Drawing:
@@ -15,100 +22,20 @@ class Drawing:
         pygame.init()
         self.fenetre = pygame.display.set_mode((1600, 900))
         self.fenetre.fill(WHITE)
-
         pygame.display.flip()
 
         self.continuer = 1
 
-    def f(self, x, coeff, d):
-        return coeff * x + d
-
     def normale(self, c, coeff, d, x):
 
         an = -1 / coeff
-
-        return int(self.f(c, coeff, d) + an * (x - c))
-
-    def draw_road(self, x, y, xa, ya):
-
-        if x > xa:
-            x, xa = xa, x
-
-        if y > ya:
-            y, ya = ya, y
-
-        d = 0
-
-        coeff = 0
-
-        if xa - x != 0:
-            coeff = (ya - y) / (xa - x)
-
-            d = y - (coeff * x)
-
-        if y == ya:
-
-            pygame.draw.aaline(self.fenetre, BLACK, (x, y + HEIGHT / 2),
-                               (xa, ya + HEIGHT / 2), True)
-            pygame.draw.aaline(self.fenetre, BLACK, (x, y - HEIGHT / 2),
-                               (xa, ya - HEIGHT / 2), True)
-
-        elif coeff == 0:
-
-            pygame.draw.aaline(self.fenetre, BLACK, (x - HEIGHT / 2, y),
-                               (x - HEIGHT / 2, ya), True)
-            pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, y),
-                               (x + HEIGHT / 2, ya), True)
-
-        else:
-
-            pygame.draw.aaline(self.fenetre, BLACK, (x - HEIGHT / 2, self.normale(x, coeff, d, x - HEIGHT / 2)),
-                               (xa - HEIGHT / 2, self.normale(xa, coeff, d, xa - HEIGHT / 2)), True)
-            pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, self.normale(x, coeff, d, x + HEIGHT / 2)),
-                               (xa + HEIGHT / 2, self.normale(xa, coeff, d, xa + HEIGHT / 2)), True)
-
-        i = x
-
-        if y == ya:
-
-            while i < xa + 1:
-                pygame.draw.aaline(self.fenetre, BLACK, (i, y + HEIGHT / 2),
-                                   (i, y - HEIGHT / 2), True)
-
-                i += WIDTH
-
-        elif x == xa:
-
-            i = y
-
-            while i < ya + 1:
-                pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, i),
-                                   (x - HEIGHT / 2, i), True)
-
-                i += WIDTH
-
-        else:
-
-            pygame.draw.aaline(self.fenetre, BLACK, (x + HEIGHT / 2, self.normale(x, coeff, d, x + HEIGHT / 2)),
-                               (x - HEIGHT / 2, self.normale(x, coeff, d, x - HEIGHT / 2)), True)
-
-            while i < xa + 1:
-                pygame.draw.aaline(self.fenetre, BLACK, (i + HEIGHT / 2, self.normale(i, coeff, d, i + HEIGHT / 2)),
-                                   (i - HEIGHT / 2, self.normale(i, coeff, d, i - HEIGHT / 2)), True)
-                pygame.draw.aaline(self.fenetre, BLACK, (i, self.f(i, coeff, d - HEIGHT / 2)),
-                                   (i, self.f(i, coeff, d + HEIGHT / 2)), True)
-
-                i += WIDTH
+        return int(f(c, coeff, d) + an * (x - c))
 
     def draw(self):
-
-        # self.draw_road(100, 465, 500, 359)
-        # self.draw_road(100, 465, 365, 597)
-        # self.draw_road(100, 465, 984, 597)
-        self.draw_road(100, 465, 100, 100)
-        self.draw_road(100, 465, 500, 465)
-        self.draw_road(0, 10, 1200, 10)
-
+        road = SimpleRoad(100, 465, 400, 465)
+        road.draw(self.fenetre)
+        road2 = SimpleRoad(205, 200, 260, 454)
+        road2.draw(self.fenetre)
         pygame.display.flip()
 
         while self.continuer:
@@ -117,4 +44,35 @@ class Drawing:
                     self.continuer = 0
 
 
-Drawing().draw()
+class RotatableRect:
+    def __init__(self, xpos, ypos, width, height, angle):
+        self.height = height
+        self.xpos = xpos
+        self.ypos = ypos
+        self.width = width
+        self.angle = angle
+
+    def draw(self, surface, color):
+        b_l = (self.xpos, self.ypos)
+        b_r = self.__rotatePoint((b_l[0] + self.width), b_l)
+        t_r = (self.xpos + self.width, self.ypos + self.height)
+        t_l = (self.xpos, self.ypos + self.height)
+        pygame.draw.aaline(surface, color, (self.xpos, self.ypos), self.__rotatePoint(b_l, b_r))
+        pygame.draw.aaline(surface, color, b_r, self.__rotatePoint(b_r, t_r))
+        pygame.draw.aaline(surface, color, t_r, self.__rotatePoint(t_r, t_l))
+        pygame.draw.aaline(surface, color, t_l, self.__rotatePoint(t_l, b_l))
+
+    def __rotateLine(self, origin, line):
+        point = self.__rotatePoint(origin, line[0])
+        self.__rotatePoint(origin, line[1])
+
+    def __rotatePoint(self, point, origin=(0, 0)):
+        return (cos(self.angle) * (point[0] - origin[0]) - sin(self.angle) * (point[1] - origin[1]) + origin[0],
+                sin(self.angle) * (point[0] - origin[0]) + cos(self.angle) * (point[1] - origin[1]) + origin[1])
+
+    def rotate(self, angle):
+        self.angle = angle
+
+
+if __name__ == '__main__':
+    Drawing().draw()
