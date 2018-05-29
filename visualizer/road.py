@@ -1,4 +1,4 @@
-from math import sqrt
+from math import sqrt, cos, sin, atan2, pi
 
 import pygame
 
@@ -6,7 +6,6 @@ import pygame
 class SimpleRoad:
 
     def __init__(self, x, y, xa, ya):
-
         self.ya = ya
         self.xa = xa
         self.y = y
@@ -67,32 +66,51 @@ class SimpleRoad:
                 i += width
 
 
-class Road:
+def rotatePoint(angle, point, origin=(0, 0)):
+    return (cos(angle) * (point[0] - origin[0]) - sin(angle) * (point[1] - origin[1]) + origin[0],
+            sin(angle) * (point[0] - origin[0]) + cos(angle) * (point[1] - origin[1]) + origin[1])
 
-    def __init__(self, x, y, xa, ya, group, height=30, width=30):
+
+class Road(pygame.sprite.Group):
+
+    def __init__(self, x, y, xa, ya, width=30, height=30):
+        super().__init__()
         self.x = x
         self.y = y
         self.xa = xa
         self.ya = ya
-        self.group = group
         self.width = width
         self.height = height
-
-    def draw(self):
         vect = (self.xa - self.x, self.ya - self.y)
         dist = sqrt(vect[0] ** 2 + vect[1] ** 2)
+        angle = atan2(vect[1], vect[0])
         i = 0
+        xi = x
+        yi = y
         while i < dist:
-            roadPortion = RoadSprite()
-            self.group.add(roadPortion)
-        self.group.draw(pygame.display.get_surface())
+            roadPortion = RoadSprite(xi, yi, width, height, angle)
+            self.add(roadPortion)
+            xi, yi = rotatePoint(angle, (xi + width, yi), (xi, yi))
+            i += width
+
+    # def draw(self, surface):
+    #     vect = (self.xa - self.x, self.ya - self.y)
+    #     dist = sqrt(vect[0] ** 2 + vect[1] ** 2)
+    #     i = 0
+    #     while i < dist:
+    #         roadPortion = RoadSprite()
+    #         self.group.add(roadPortion)
+    #     self.group.draw(pygame.display.get_surface())
 
 
 class RoadSprite(pygame.sprite.Sprite):
 
-    def __init__(self):
+    def __init__(self, x=0, y=0, width=50, height=50, angle=0.0):
         pygame.sprite.Sprite.__init__(self)
-        load = pygame.image.load("../resources/testRoad.png")
-        load = pygame.Surface.convert_alpha(load)
-        self.image = load
-        self.rect = self.image.get_rect()
+        image = pygame.image.load("../resources/testRoad.png")
+        if not image.get_alpha():
+            image = pygame.Surface.convert_alpha(image)
+        image = pygame.transform.scale(image, (width, height))
+        image = pygame.transform.rotate(image, -angle * 180 / pi)
+        self.image = image
+        self.rect = image.get_rect().move(x, y)
