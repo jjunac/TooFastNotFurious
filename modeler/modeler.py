@@ -1,13 +1,8 @@
 from modeler.entry_node import EntryNode
 from modeler.exit_node import ExitNode
-from modeler.road import Road
 
-
-def createEntryNode():
+def entry_node():
     return EntryNode()
 
-def createExitNode():
+def exit_node():
     return ExitNode()
-
-def createRoad():
-    return Road()
