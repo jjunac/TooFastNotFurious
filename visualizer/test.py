@@ -21,7 +21,6 @@ class Drawing:
         self.fenetre = pygame.display.set_mode((1600, 900))
         self.fenetre.fill(WHITE)
         pygame.display.flip()
-
         self.continuer = 1
 
     def draw(self):

@@ -32,26 +32,9 @@ class Junction(pygame.sprite.Group):
             self.add(JunctionSprite(x, y, self.width, self.height))
 
         else:
-
-            if orientation == Orientation.NORTH:
-                self.width = length * 3
-                self.height = height * 2
-                self.add(JunctionSprite(x, y, self.width, self.height, 180.0, junction3))
-
-            elif orientation == Orientation.SOUTH:
-                self.width = length * 3
-                self.height = height * 2
-                self.add(JunctionSprite(x, y, self.width, self.height, image=junction3))
-
-            elif orientation == Orientation.EAST:
-                self.width = length * 3
-                self.height = height * 2
-                self.add(JunctionSprite(x, y, self.width, self.height, 270, junction3))
-
-            else:
-                self.width = length * 3
-                self.height = height * 2
-                self.add(JunctionSprite(x, y, self.width, self.height, 90, junction3))
+            self.width = length * 3
+            self.height = height * 2
+            self.add(JunctionSprite(x, y, self.width, self.height, orientation, junction3))
 
     def update(self, junction_entity):
 
