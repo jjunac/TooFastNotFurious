@@ -14,9 +14,16 @@ class TrafficNode(ABC):
 
     def compute_next(self):
         # FIXME always send to the first successor
-        if self.is_car_present and self.successors[0].can_move(self):
+        if not self.is_car_present:
+            return
+        if len(self.successors) == 0:
+            self.next_is_car_present = False
+            return
+        if self.successors[0].can_move(self):
             self.next_is_car_present = False
             self.successors[0].next_is_car_present = True
+        else:
+            self.next_is_car_present = True
 
     def apply_next(self):
         self.is_car_present = self.next_is_car_present
