@@ -1,43 +1,23 @@
-from math import cos, sin, pi
+import random
+import time
+import turtle
 
-import pygame
-from pygame.locals import *
+screen = turtle.Screen()
 
-from visualizer.road import Road, RoadSprite
+turtlepower = []
 
-HEIGHT = 7
-WIDTH = 12
+turtle.tracer(0, 0)
+image = "../resources/testRoad.png"
+screen.addshape(image)
+for i in range(1000):
+    t = turtle.Turtle()
+    t.shape(image)
+    t.goto(random.random() * 500, random.random() * 1000)
+    turtlepower.append(t)
 
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+for i in range(1000):
+    turtle.stamp()
 
+turtle.update()
 
-class Drawing:
-
-    def __init__(self):
-        pygame.init()
-        self.fenetre = pygame.display.set_mode((1600, 900))
-        self.fenetre.fill(WHITE)
-        pygame.display.flip()
-
-        self.continuer = 1
-
-    def draw(self):
-        r = Road(100, 100, 600, 100, None, length=50, height=50)
-        r2 = Road(200, 0, 200, 400, None, length=50, height=50)
-        r.draw(self.fenetre)
-        r2.draw(self.fenetre)
-        clear = pygame.sprite.RenderClear()
-        # clear.add(RoadSprite(100, 100, 50, 50, pi/4))
-        clear.draw(pygame.display.get_surface())
-        pygame.draw.circle(self.fenetre, (255, 0, 0), (100, 100), 10)
-        pygame.draw.circle(self.fenetre, (255, 0, 0), (0, 0), 10)
-        pygame.draw.circle(self.fenetre, (255, 0, 0), (200, 400), 10)
-        pygame.display.flip()
-        while self.continuer:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    self.continuer = 0
-
-
-Drawing().draw()
+time.sleep(3)

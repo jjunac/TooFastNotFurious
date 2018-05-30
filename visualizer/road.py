@@ -4,6 +4,9 @@ import pygame
 
 from engine.state import State
 
+road_image = pygame.image.load("../resources/testRoad.png")
+car_image = pygame.image.load("../resources/car.png")
+
 
 class SimpleRoad:
 
@@ -92,39 +95,38 @@ class Road(pygame.sprite.Group):
         self.xi = int(xtmp - x)
         self.yi = int(ytmp - y)
         while i < int(dist / length):
-            road_portion = Sprite(x + self.xi * i, y + self.yi * i, length, height, self.angle)
+            road_portion = RoadSprite(x + self.xi * i, y + self.yi * i, length, height, self.angle)
             self.add(road_portion)
             i += 1
-        if dist / length - i > 0:
-            self.add(Sprite(x + self.xi * (i), y + self.yi * (i), int(dist - i * length), height, self.angle))
+        if dist / length - i > 1:
+            self.add(RoadSprite(x + self.xi * i, y + self.yi * i, int(dist - i * length), height, self.angle))
 
     def update(self, road_cells):
-
         index = 0
-
         self.car_group.clear()
         self.draw(pygame.display.get_surface())
-
         for cell in road_cells:
-
             if cell == State.CAR:
-                car = Sprite(self.x + self.xi * index, self.y + self.yi * index, self.width, self.height,
-                             self.angle, "car")
+                car = MySprite(self.x + self.xi * index, self.y + self.yi * index, self.width, self.height,
+                               self.angle, "car")
                 self.car_group.add(car)
-
             index += 1
         self.car_group.draw(pygame.display.get_surface())
 
 
-class Sprite(pygame.sprite.Sprite):
+class MySprite(pygame.sprite.Sprite):
 
-    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0, image="testRoad"):
+    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0, image=None):
         pygame.sprite.Sprite.__init__(self)
-        image = pygame.image.load("../resources/" + image + ".png")
         if not image.get_alpha():
             image = pygame.Surface.convert_alpha(image)
         image = pygame.transform.scale(image, (length, height))
-        self.image = pygame.transform.rotate(image, -angle * 180 / pi)
+        angle_degrees = -angle * 180 / pi
+        self.image = pygame.transform.rotate(image, angle_degrees)
         point = rotate_point(-angle, (0, height))
+        self.rect = image.get_rect().move(x - point[0], y)
 
-        self.rect = image.get_rect().move(x, y - point[0])
+
+class RoadSprite(MySprite):
+    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0):
+        super().__init__(x, y, length, height, angle, road_image)
