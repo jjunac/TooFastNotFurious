@@ -8,69 +8,6 @@ road_image = pygame.image.load("../resources/testRoad.png")
 car_image = pygame.image.load("../resources/car.png")
 
 
-class SimpleRoad:
-
-    def __init__(self, x, y, xa, ya):
-        self.ya = ya
-        self.xa = xa
-        self.y = y
-        self.x = x
-
-    @staticmethod
-    def f(x, a, b):
-        return a * x + b
-
-    @staticmethod
-    def normal(c, coeff, d, x):
-        an = -1 / coeff
-        return int(SimpleRoad.f(c, coeff, d) + an * (x - c))
-
-    def draw(self, surface, color=(0, 0, 0), height=30, width=30):
-        if self.x > self.xa:
-            self.x, self.xa = self.xa, self.x
-        if self.y > self.ya:
-            self.y, self.ya = self.ya, self.y
-        d = 0
-        coeff = 0
-        if self.xa - self.x != 0:
-            coeff = (self.ya - self.y) / (self.xa - self.x)
-            d = self.y - (coeff * self.x)
-        if self.y == self.ya:
-            pygame.draw.aaline(surface, color, (self.x, self.y + height / 2), (self.xa, self.ya + height / 2),
-                               True)
-            pygame.draw.aaline(surface, color, (self.x, self.y - height / 2), (self.xa, self.ya - height / 2), True)
-        elif coeff == 0:
-            pygame.draw.aaline(surface, color, (self.x - height / 2, self.y), (self.x - height / 2, self.ya), True)
-            pygame.draw.aaline(surface, color, (self.x + height / 2, self.y), (self.x + height / 2, self.ya), True)
-        else:
-            pygame.draw.aaline(surface, color,
-                               (self.x - height / 2, self.normal(self.x, coeff, d, self.x - height / 2)),
-                               (self.xa - height / 2, self.normal(self.xa, coeff, d, self.xa - height / 2)), True)
-            pygame.draw.aaline(surface, color, (
-                self.x + height / 2, self.normal(self.x, coeff, d, self.x + height / 2)),
-                               (self.xa + height / 2, self.normal(self.xa, coeff, d, self.xa + height / 2)), True)
-        i = self.x
-        if self.y == self.ya:
-            while i < self.xa + 1:
-                pygame.draw.aaline(surface, color, (i, self.y + height / 2), (i, self.y - height / 2), True)
-                i += width
-        elif self.x == self.xa:
-            i = self.y
-            while i < self.ya + 1:
-                pygame.draw.aaline(surface, color, (self.x + height / 2, i), (self.x - height / 2, i), True)
-                i += width
-        else:
-            pygame.draw.aaline(surface, color, (
-                self.x + height / 2, self.normal(self.x, coeff, d, self.x + height / 2)),
-                               (self.x - height / 2, self.normal(self.x, coeff, d, self.x - height / 2)), True)
-            while i < self.xa + 1:
-                pygame.draw.aaline(surface, color, (i + height / 2, self.normal(i, coeff, d, i + height / 2)),
-                                   (i - height / 2, self.normal(i, coeff, d, i - height / 2)), True)
-                pygame.draw.aaline(surface, color, (i, self.f(i, coeff, d - height / 2)),
-                                   (i, self.f(i, coeff, d + height / 2)), True)
-                i += width
-
-
 def rotate_point(angle, point, origin=(0, 0)):
     return (cos(angle) * (point[0] - origin[0]) - sin(angle) * (point[1] - origin[1]) + origin[0],
             sin(angle) * (point[0] - origin[0]) + cos(angle) * (point[1] - origin[1]) + origin[1])
@@ -107,8 +44,8 @@ class Road(pygame.sprite.Group):
         self.draw(pygame.display.get_surface())
         for cell in road_cells:
             if cell == State.CAR:
-                car = MySprite(self.x + self.xi * index, self.y + self.yi * index, self.width, self.height,
-                               self.angle, "car")
+                car = CarSprite(self.x + self.xi * index, self.y + self.yi * index, self.width, self.height,
+                                self.angle)
                 self.car_group.add(car)
             index += 1
         self.car_group.draw(pygame.display.get_surface())
@@ -130,3 +67,8 @@ class MySprite(pygame.sprite.Sprite):
 class RoadSprite(MySprite):
     def __init__(self, x=0, y=0, length=50, height=50, angle=0.0):
         super().__init__(x, y, length, height, angle, road_image)
+
+
+class CarSprite(MySprite):
+    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0):
+        super().__init__(x, y, length, height, angle, car_image)
