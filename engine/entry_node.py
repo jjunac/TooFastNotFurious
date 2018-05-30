@@ -1,18 +1,19 @@
 from engine.state import State
-from engine.entity import Entity
 import random
 
+from engine.traffic_node import TrafficNode
 
-class EntryNode(Entity):
 
-    def __init__(self, avg_car_per_tick, road):
-        self.to_spawn = 0
+class EntryNode(TrafficNode):
+
+    def __init__(self, avg_car_per_tick):
+        super().__init__()
         self.avg_car_per_tick = avg_car_per_tick
-        self.road = road
+        self.to_spawn = 0
 
-    def tick(self):
+    def compute_next(self):
         if random.random() >= 0.5:
             self.to_spawn += 1
-        if self.to_spawn > 0 and self.road.get_state(0) == State.EMPTY:
-            self.road.set_state(0, State.CAR)
+        if self.to_spawn > 0 and not self.successors[0].is_car_present:
+            self.next_is_car_present = True
             self.to_spawn -= 1
