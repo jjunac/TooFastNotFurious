@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 
 from visualizer.orientation import Orientation
+from visualizer.road import rotate_point
 
 HEIGHT = 7
 WIDTH = 12
@@ -11,76 +12,57 @@ WIDTH_LINE = 2
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+junction4 = pygame.image.load("../resources/junction4.png")
+junction3 = pygame.image.load("../resources/junction3.png")
 
-class Junction:
 
-    def __init__(self):
-        pygame.init()
-        self.fenetre = pygame.display.set_mode((1600, 900))
-        self.fenetre.fill(WHITE)
+class Junction(pygame.sprite.Group):
 
-        pygame.display.flip()
-
-        self.continuer = 1
-
-    def draw_junction(self, x, y, nb_entries, orientation=0):
+    def __init__(self, x, y, car_group, nb_entries=4, orientation=0, length=30, height=30):
+        super().__init__()
+        self.x = x
+        self.y = y
+        self.car_group = car_group
+        self.nb_entries = nb_entries
+        self.orientation = orientation
 
         if nb_entries == 4:
-
-            pygame.draw.line(self.fenetre, BLACK, (x - WIDTH * 1.5, y),
-                               (x + WIDTH * 1.5, y), WIDTH_LINE)
-            pygame.draw.line(self.fenetre, BLACK, (x, y - WIDTH * 1.5),
-                               (x, y + WIDTH * 1.5), WIDTH_LINE)
+            self.width = length * 3
+            self.height = height * 3
+            self.add(JunctionSprite(x, y, self.width, self.height))
 
         else:
 
             if orientation == Orientation.NORTH:
-
-                pygame.draw.line(self.fenetre, BLACK, (x - WIDTH * 1.5, y),
-                                   (x + WIDTH * 1.5, y), WIDTH_LINE)
-                pygame.draw.line(self.fenetre, BLACK, (x, y - WIDTH * 1.5),
-                                   (x, y), WIDTH_LINE)
+                self.width = length * 3
+                self.height = height * 2
+                self.add(JunctionSprite(x, y, self.width, self.height, 180.0, junction3))
 
             elif orientation == Orientation.SOUTH:
-
-                pygame.draw.line(self.fenetre, BLACK, (x - WIDTH * 1.5, y),
-                                   (x + WIDTH * 1.5, y), WIDTH_LINE)
-                pygame.draw.line(self.fenetre, BLACK, (x, y),
-                                   (x, y + WIDTH * 1.5), WIDTH_LINE)
+                self.width = length * 3
+                self.height = height * 2
+                self.add(JunctionSprite(x, y, self.width, self.height, image=junction3))
 
             elif orientation == Orientation.EAST:
-
-                pygame.draw.line(self.fenetre, BLACK, (x, y),
-                                   (x + WIDTH * 1.5, y), WIDTH_LINE)
-                pygame.draw.line(self.fenetre, BLACK, (x, y - WIDTH * 1.5),
-                                   (x, y + WIDTH * 1.5), WIDTH_LINE)
+                self.width = length * 3
+                self.height = height * 2
+                self.add(JunctionSprite(x, y, self.width, self.height, 270, junction3))
 
             else:
-
-                pygame.draw.line(self.fenetre, BLACK, (x - WIDTH * 1.5, y),
-                                   (x, y), WIDTH_LINE)
-                pygame.draw.line(self.fenetre, BLACK, (x, y - WIDTH * 1.5),
-                                   (x, y + WIDTH * 1.5), WIDTH_LINE)
+                self.width = length * 3
+                self.height = height * 2
+                self.add(JunctionSprite(x, y, self.width, self.height, 90, junction3))
 
     def update(self, junction_entity):
 
-
-
         print("coucou")
 
-    def draw(self):
 
-        self.draw_junction(50, 50, 4)
-        self.draw_junction(100, 50, 3, Orientation.NORTH)
-        self.draw_junction(150, 50, 3, Orientation.EAST)
-        self.draw_junction(200, 50, 3, Orientation.WEST)
-        self.draw_junction(250, 50, 3, Orientation.SOUTH)
-        pygame.display.flip()
-
-        while self.continuer:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    self.continuer = 0
-
-
-Junction().draw()
+class JunctionSprite(pygame.sprite.Sprite):
+    def __init__(self, x=0, y=0, length=150, height=150, angle=0.0, image=junction4):
+        pygame.sprite.Sprite.__init__(self)
+        if not image.get_alpha():
+            image = pygame.Surface.convert_alpha(image)
+        image = pygame.transform.scale(image, (length, height))
+        self.image = pygame.transform.rotate(image, angle)
+        self.rect = image.get_rect().move(x, y)
