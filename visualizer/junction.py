@@ -25,15 +25,14 @@ class Junction(pygame.sprite.Group):
         self.car_group = car_group
         self.nb_entries = nb_entries
         self.orientation = orientation
+        self.width = length
+        self.height = height
 
         if nb_entries == 4:
-            self.width = length * 3
-            self.height = height * 3
             self.add(JunctionSprite(x, y, self.width, self.height))
 
         else:
-            self.width = length * 3
-            self.height = height * 2
+
             self.add(JunctionSprite(x, y, self.width, self.height, orientation, junction3))
 
     def update(self, junction_entity):
@@ -42,7 +41,7 @@ class Junction(pygame.sprite.Group):
 
 
 class JunctionSprite(pygame.sprite.Sprite):
-    def __init__(self, x=0, y=0, length=150, height=150, angle=0.0, image=junction4):
+    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0, image=junction4):
         pygame.sprite.Sprite.__init__(self)
         if not image.get_alpha():
             image = pygame.Surface.convert_alpha(image)
