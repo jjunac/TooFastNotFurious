@@ -18,6 +18,7 @@ class MyTestCase(unittest.TestCase):
         for n in road:
             n.compute_next()
 
+
     def apply_next(self, road):
         for n in road:
             n.apply_next()
@@ -26,17 +27,17 @@ class MyTestCase(unittest.TestCase):
     def test_a_car_should_go_forward_when_it_is_alone(self):
         road = self.build_road(10)
         for n in road:
-            self.assertEqual(False, n.is_car_present)
+            self.assertFalse(n.is_car_present)
         road[0].is_car_present = True
         for i in range(10):
             # Empty before the car
             for j in range(i):
-                self.assertEqual(False, road[j].is_car_present)
+                self.assertFalse(road[j].is_car_present)
             # Check if the car is at the right place
-            self.assertEqual(True, road[i].is_car_present)
+            self.assertTrue(road[i].is_car_present)
             # Empty after the car
             for j in range(i+1, len(road)):
-                self.assertEqual(False, road[j].is_car_present)
+                self.assertFalse(road[j].is_car_present)
             self.compute_next(road)
             self.apply_next(road)
 
@@ -51,21 +52,21 @@ class MyTestCase(unittest.TestCase):
 
         self.compute_next(road)
         self.apply_next(road)
-        self.assertEqual(False, road[1].is_car_present)
-        self.assertEqual(True, road[2].is_car_present)
-        self.assertEqual(False, road[3].is_car_present)
+        self.assertFalse(road[1].is_car_present)
+        self.assertTrue(road[2].is_car_present)
+        self.assertFalse(road[3].is_car_present)
 
         self.compute_next(road)
         self.apply_next(road)
-        self.assertEqual(False, road[2].is_car_present)
-        self.assertEqual(True, road[3].is_car_present)
-        self.assertEqual(True, road[4].is_car_present)
+        self.assertFalse(road[2].is_car_present)
+        self.assertTrue(road[3].is_car_present)
+        self.assertTrue(road[4].is_car_present)
 
         self.compute_next(road)
         self.apply_next(road)
-        self.assertEqual(False, road[2].is_car_present)
-        self.assertEqual(True, road[3].is_car_present)
-        self.assertEqual(True, road[4].is_car_present)
+        self.assertFalse(road[2].is_car_present)
+        self.assertTrue(road[3].is_car_present)
+        self.assertTrue(road[4].is_car_present)
 
     def test_a_car_should_wait_before_go_forward_when_there_is_a_car_ahead(self):
         road = self.build_road(3)
@@ -75,33 +76,33 @@ class MyTestCase(unittest.TestCase):
 
         self.compute_next(road)
         self.apply_next(road)
-        self.assertEqual(True, road[0].is_car_present)
-        self.assertEqual(True, road[1].is_car_present)
-        self.assertEqual(False, road[2].is_car_present)
+        self.assertTrue(road[0].is_car_present)
+        self.assertTrue(road[1].is_car_present)
+        self.assertFalse(road[2].is_car_present)
 
         self.compute_next(road)
         self.apply_next(road)
-        self.assertEqual(True, road[0].is_car_present)
-        self.assertEqual(False, road[1].is_car_present)
-        self.assertEqual(True, road[2].is_car_present)
+        self.assertTrue(road[0].is_car_present)
+        self.assertFalse(road[1].is_car_present)
+        self.assertTrue(road[2].is_car_present)
 
         self.compute_next(road)
         self.apply_next(road)
-        self.assertEqual(False, road[0].is_car_present)
-        self.assertEqual(True, road[1].is_car_present)
-        self.assertEqual(False, road[2].is_car_present)
+        self.assertFalse(road[0].is_car_present)
+        self.assertTrue(road[1].is_car_present)
+        self.assertFalse(road[2].is_car_present)
 
         self.compute_next(road)
         self.apply_next(road)
-        self.assertEqual(False, road[0].is_car_present)
-        self.assertEqual(False, road[1].is_car_present)
-        self.assertEqual(True, road[2].is_car_present)
+        self.assertFalse(road[0].is_car_present)
+        self.assertFalse(road[1].is_car_present)
+        self.assertTrue(road[2].is_car_present)
 
         self.compute_next(road)
         self.apply_next(road)
-        self.assertEqual(False, road[0].is_car_present)
-        self.assertEqual(False, road[1].is_car_present)
-        self.assertEqual(False, road[2].is_car_present)
+        self.assertFalse(road[0].is_car_present)
+        self.assertFalse(road[1].is_car_present)
+        self.assertFalse(road[2].is_car_present)
 
 
 if __name__ == '__main__':
