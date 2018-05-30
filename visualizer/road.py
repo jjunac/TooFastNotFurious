@@ -120,7 +120,7 @@ class Sprite(pygame.sprite.Sprite):
 
     def __init__(self, x=0, y=0, length=50, height=50, angle=0.0, image="testRoad"):
         pygame.sprite.Sprite.__init__(self)
-        image = pygame.image.load("../resources/" + image + "testRoad.png")
+        image = pygame.image.load("../resources/" + image + ".png")
         if not image.get_alpha():
             image = pygame.Surface.convert_alpha(image)
         image = pygame.transform.scale(image, (length, height))
