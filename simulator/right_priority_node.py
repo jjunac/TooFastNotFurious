@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from engine.traffic_node import TrafficNode
+from simulator.traffic_node import TrafficNode
 
 
 class RightPriorityNode(TrafficNode):

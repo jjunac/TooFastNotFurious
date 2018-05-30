@@ -1,6 +1,6 @@
 import random
 
-from engine.traffic_node import TrafficNode
+from simulator.traffic_node import TrafficNode
 
 
 class EntryNode(TrafficNode):
@@ -10,8 +10,12 @@ class EntryNode(TrafficNode):
         self.avg_car_per_tick = avg_car_per_tick
         self.to_spawn = 0
 
+    def can_move(self, node):
+        return False
+
     def compute_next(self):
-        if random.random() >= 0.5:
+        super().compute_next()
+        if random.random() <= 0.2:
             self.to_spawn += 1
         if self.to_spawn > 0 and not self.successors[0].is_car_present:
             self.next_is_car_present = True

@@ -1,7 +1,7 @@
 import unittest
 
-from engine.road_node import RoadNode
-from engine.utils import *
+from simulator.road_node import RoadNode
+from simulator.utils import *
 
 
 class MyTestCase(unittest.TestCase):

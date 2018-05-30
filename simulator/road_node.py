@@ -1,4 +1,4 @@
-from engine.traffic_node import TrafficNode
+from simulator.traffic_node import TrafficNode
 
 
 class RoadNode(TrafficNode):

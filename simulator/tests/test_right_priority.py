@@ -1,6 +1,6 @@
 import unittest
-from engine.right_priority_node import RightPriorityNode
-from engine.road_node import RoadNode
+from simulator.right_priority_node import RightPriorityNode
+from simulator.road_node import RoadNode
 
 
 

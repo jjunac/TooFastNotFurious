@@ -1,4 +1,4 @@
-import engine
+import simulator
 from modeler.node import Node
 
 
@@ -7,4 +7,4 @@ class ExitNode(Node):
         super().__init__()
 
     def build(self):
-        return engine.ExitNode()
+        return simulator.ExitNode()

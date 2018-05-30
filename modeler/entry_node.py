@@ -1,5 +1,5 @@
 from modeler.node import Node
-import engine
+import simulator
 
 class EntryNode(Node):
 
@@ -7,4 +7,4 @@ class EntryNode(Node):
         super().__init__()
 
     def build(self):
-        return engine.EntryNode(0.5)
+        return simulator.EntryNode(0.5)

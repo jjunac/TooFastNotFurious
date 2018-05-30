@@ -1,4 +1,4 @@
-from engine.road_node import RoadNode
+from simulator.road_node import RoadNode
 
 
 def build_road(length):
