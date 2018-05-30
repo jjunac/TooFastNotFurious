@@ -1,6 +1,3 @@
-from engine.state import State
-import random
-
 from engine.traffic_node import TrafficNode
 
 
