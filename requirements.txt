@@ -1,3 +1,4 @@
-wheel
 nose
+codecov
+wheel
 pygame
