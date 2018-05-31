@@ -1,9 +1,6 @@
 import pygame
 
-from pygame.locals import *
-
-from visualizer.orientation import Orientation
-from visualizer.road import rotate_point
+from resources import JUNCTION3, JUNCTION4
 
 HEIGHT = 7
 WIDTH = 12
@@ -11,9 +8,6 @@ WIDTH_LINE = 2
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-
-junction4 = pygame.image.load("../resources/junction4.png")
-junction3 = pygame.image.load("../resources/junction3.png")
 
 
 class Junction(pygame.sprite.Group):
@@ -33,7 +27,7 @@ class Junction(pygame.sprite.Group):
 
         else:
 
-            self.add(JunctionSprite(x, y, self.width, self.height, orientation, junction3))
+            self.add(JunctionSprite(x, y, self.width, self.height, orientation, JUNCTION3))
 
     def update(self, junction_entity):
 
@@ -41,7 +35,7 @@ class Junction(pygame.sprite.Group):
 
 
 class JunctionSprite(pygame.sprite.Sprite):
-    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0, image=junction4):
+    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0, image=JUNCTION4):
         pygame.sprite.Sprite.__init__(self)
         if not image.get_alpha():
             image = pygame.Surface.convert_alpha(image)

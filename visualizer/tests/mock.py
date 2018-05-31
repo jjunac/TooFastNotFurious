@@ -1,12 +1,8 @@
-from math import cos, sin, pi
-
 import pygame
+from engine.state import State
 from pygame.locals import *
 
-from visualizer.junction import Junction
-from visualizer.road import Road, MySprite
-from visualizer.orientation import Orientation
-from engine.state import State
+from visualizer.road import GraphicRoad
 
 HEIGHT = 7
 WIDTH = 12
@@ -23,7 +19,7 @@ class Mock:
         self.fenetre.fill(WHITE)
         pygame.display.flip()
         self.continuer = 1
-        self.r = Road(100, 100, 600, 100, pygame.sprite.Group(), length=50, height=50)
+        self.r = GraphicRoad(100, 100, 600, 100, pygame.sprite.Group(), cell_length=50, height=50)
         self.clock = pygame.time.Clock()
 
     def draw(self):

@@ -9,3 +9,6 @@ class RoadNode(TrafficNode):
 
     def can_move(self, node):
         return not self.is_car_present
+
+    def __str__(self):
+        return "_"
