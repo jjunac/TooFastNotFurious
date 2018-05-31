@@ -2,8 +2,6 @@ from math import sqrt, cos, sin, atan2, pi
 
 import pygame
 
-from engine.state import State
-
 road_image = pygame.image.load("../resources/testRoad.png")
 car_image = pygame.image.load("../resources/car.png")
 
@@ -31,12 +29,14 @@ class Road(pygame.sprite.Group):
         xtmp, ytmp = rotate_point(self.angle, (x + length, y), (x, y))
         self.xi = int(xtmp - x)
         self.yi = int(ytmp - y)
+        angle_degree = -self.angle * 180 / pi
         while i < int(dist / length):
-            road_portion = RoadSprite(x + self.xi * i, y + self.yi * i, length, height, self.angle)
+            road_portion = RoadSprite(x + self.xi * i, y + self.yi * i, length, height, angle_degree)
             self.add(road_portion)
             i += 1
         if dist / length - i > 1:
-            self.add(RoadSprite(x + self.xi * i, y + self.yi * i, int(dist - i * length), height, self.angle))
+            self.add(
+                RoadSprite(x + self.xi * i, y + self.yi * i, int(dist - i * length), height, angle_degree))
 
     def update(self, road_cells):
         index = 0
@@ -59,10 +59,8 @@ class MySprite(pygame.sprite.Sprite):
         if not image.get_alpha():
             image = pygame.Surface.convert_alpha(image)
         image = pygame.transform.scale(image, (length, height))
-        angle_degrees = -angle * 180 / pi
-        self.image = pygame.transform.rotate(image, angle_degrees)
-        point = rotate_point(-angle, (0, height))
-        self.rect = image.get_rect().move(x - point[0], y)
+        self.image = pygame.transform.rotate(image, angle)
+        self.rect = image.get_rect().move(x, y)
 
 
 class RoadSprite(MySprite):

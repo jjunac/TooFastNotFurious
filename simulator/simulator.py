@@ -1,10 +1,10 @@
 from simulator.utils import *
 
+
 class Simulator:
 
     def __init__(self, nodes):
         self.nodes = nodes
-
 
     def tick(self):
         compute_next(self.nodes)

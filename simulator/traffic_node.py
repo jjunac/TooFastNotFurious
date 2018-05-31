@@ -8,11 +8,9 @@ class TrafficNode(ABC):
         self.is_car_present = False
         self.next_is_car_present = False
 
-
     @abstractmethod
     def can_move(self, node):
         pass
-
 
     def compute_next(self):
         # FIXME always send to the first successor
@@ -27,10 +25,8 @@ class TrafficNode(ABC):
         else:
             self.next_is_car_present = True
 
-
     def apply_next(self):
         self.is_car_present = self.next_is_car_present
-
 
     def __str__(self):
         return "#" if self.is_car_present else " "

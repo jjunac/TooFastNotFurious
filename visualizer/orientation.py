@@ -2,7 +2,10 @@ from enum import IntEnum
 
 
 class Orientation(IntEnum):
-    NORTH = 180
-    EAST = 270
-    SOUTH = 0
-    WEST = 90
+    NORTH = -90
+    EAST = 0
+    SOUTH = 90
+    WEST = 180
+
+    def invert(self):
+        return Orientation((self.value + 180) % 4)

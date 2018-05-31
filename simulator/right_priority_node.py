@@ -1,5 +1,3 @@
-from abc import ABC, abstractmethod
-
 from simulator.traffic_node import TrafficNode
 
 

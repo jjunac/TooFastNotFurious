@@ -7,6 +7,5 @@ class RoadNode(TrafficNode):
         super().__init__()
         self.orientation = orientation
 
-
     def can_move(self, node):
         return not self.is_car_present
