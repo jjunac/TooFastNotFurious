@@ -15,3 +15,6 @@ class RightPriorityNode(TrafficNode):
     # first node has to let the priority to the second
     def add_priority(self, node1, node2):
         self.priorityMap[node1] = node2
+
+    def __str__(self):
+        return "+"

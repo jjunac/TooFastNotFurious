@@ -1,6 +1,5 @@
 import unittest
 
-from simulator.road_node import RoadNode
 from simulator.utils import *
 
 
@@ -18,11 +17,10 @@ class MyTestCase(unittest.TestCase):
             # Check if the car is at the right place
             self.assertTrue(road[i].is_car_present)
             # Empty after the car
-            for j in range(i+1, len(road)):
+            for j in range(i + 1, len(road)):
                 self.assertFalse(road[j].is_car_present)
             compute_next(road)
             apply_next(road)
-
 
     def test_a_car_should_stop_when_there_is_a_car_ahead(self):
         road = build_road(10)
