@@ -4,17 +4,17 @@ from simulator.traffic_node import TrafficNode
 class RightPriorityNode(TrafficNode):
     def __init__(self):
         TrafficNode.__init__(self)
-        self.priorityMap = {}
 
     def can_move(self, node):
-        if node in self.priorityMap:
-            return self.current_car is None and self.priorityMap.get(node).current_car is None
+        if not self.current_car:
+            priority = self.get_successor_from_orientation(node.orientation.right())
+            return not priority or not priority.current_car
         else:
-            return self.current_car is None
+            return False
 
-    # first node has to let the priority to the second
-    def add_priority(self, node1, node2):
-        self.priorityMap[node1] = node2
+    def get_successor_from_orientation(self, orientation):
+        res = list(filter(lambda s: s.orientation.invert() == orientation, self.predecessors))
+        return res[0] if res else None
 
     def __str__(self):
         return "+"

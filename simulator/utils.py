@@ -18,3 +18,8 @@ def compute_next(road):
 def apply_next(road):
     for n in road:
         n.apply_next()
+
+
+def link(predecessor, successor):
+    predecessor.successors.append(successor)
+    successor.predecessors.append(predecessor)

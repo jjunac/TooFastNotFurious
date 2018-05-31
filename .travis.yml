@@ -14,7 +14,6 @@ install:
 script:
   - nosetests --with-coverage --cover-xml
   - sonar-scanner
-after_success:
   - codecov
 notifications:
   email: false
