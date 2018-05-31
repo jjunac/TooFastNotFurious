@@ -1,3 +1,4 @@
+from simulator.car import Car
 from simulator.entry_node import EntryNode
 from simulator.exit_node import ExitNode
 from simulator.path import Path

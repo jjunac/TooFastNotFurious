@@ -1,26 +1,25 @@
 import unittest
 from copy import deepcopy
 
-from simulator import EntryNode, build_road, ExitNode, Simulator, Path
-from simulator.car import Car
-from simulator.right_priority_node import RightPriorityNode
+from shared import Orientation
+from simulator import *
 
 
 class TestRoad(unittest.TestCase):
 
     def test_integration_3_input_1_output_with_right_priority(self):
-        entry1 = EntryNode(1, 1)
-        entry2 = EntryNode(1, 1)
-        entry3 = EntryNode(1, 1)
+        entry1 = EntryNode(1, 0)
+        entry2 = EntryNode(1, 0)
+        entry3 = EntryNode(1, 0)
         entry1.to_spawn = 0
         entry2.to_spawn = 0
         entry3.to_spawn = 0
 
         p = Path([0] * 6)
         # used to prevent car to spawn randomly during integration test
-        entry1.paths[0] = deepcopy(p)
-        entry2.paths[0] = deepcopy(p)
-        entry3.paths[0] = deepcopy(p)
+        entry1.paths[100] = deepcopy(p)
+        entry2.paths[100] = deepcopy(p)
+        entry3.paths[100] = deepcopy(p)
         rpn = RightPriorityNode()
         entry1.current_car = Car(deepcopy(p))
         entry2.current_car = Car(deepcopy(p))
@@ -29,27 +28,25 @@ class TestRoad(unittest.TestCase):
         exit1 = ExitNode()
 
         # road to south
-        road1 = build_road(2, 2)
-        entry1.successors.append(road1[0])
+        road1 = build_road(2, Orientation.SOUTH)
+        link(entry1, road1[0])
 
         # road to east
-        road2 = build_road(2, 1)
-        entry2.successors.append(road2[0])
+        road2 = build_road(2, Orientation.EAST)
+        link(entry2, road2[0])
 
         # road to north
-        road3 = build_road(2, 0)
-        entry3.successors.append(road3[0])
+        road3 = build_road(2, Orientation.NORTH)
+        link(entry3, road3[0])
 
         # road to east to the exit
         road4 = build_road(2, 1)
-        road4[-1].successors.append(exit1)
+        link(road4[-1], exit1)
 
-        road1[-1].successors.append(rpn)
-        road2[-1].successors.append(rpn)
-        road3[-1].successors.append(rpn)
-        rpn.successors.append(road4[0])
-        rpn.add_priority(road1[-1], road2[-1])
-        rpn.add_priority(road2[-1], road3[-1])
+        link(road1[-1], rpn)
+        link(road2[-1], rpn)
+        link(road3[-1], rpn)
+        link(rpn, road4[0])
 
         system = [entry1, entry2, entry3, exit1, rpn]
         for i in range(2):

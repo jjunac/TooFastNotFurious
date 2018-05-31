@@ -27,10 +27,10 @@ class MyTestCase(unittest.TestCase):
             apply_next(road)
 
     def test_a_car_should_stop_when_there_is_a_car_ahead(self):
-        road = build_road(10,Orientation(0))
+        road = build_road(10, Orientation.NORTH)
         for c in road:
             self.assertIsNone(c.current_car)
-        p = Path
+        p = Path([0] * 10)
         for i in range(4, 10):
             road[i].current_car = Car(p)
         road[1].current_car = Car(p)
@@ -54,8 +54,8 @@ class MyTestCase(unittest.TestCase):
         self.assertIsNotNone(road[4].current_car)
 
     def test_a_car_should_wait_before_go_forward_when_there_is_a_car_ahead(self):
-        road = build_road(3, Orientation(0))
-        p = Path
+        road = build_road(3, Orientation.NORTH)
+        p = Path([0] * 3)
         road[0].current_car = Car(p)
         road[1].current_car = Car(p)
         road[2].current_car = Car(p)
