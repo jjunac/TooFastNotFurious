@@ -1,5 +1,8 @@
 import unittest
 
+from shared import Orientation
+from simulator.Car import Car
+from simulator.path import Path
 from simulator.road_node import RoadNode
 from simulator.utils import *
 
@@ -7,84 +10,88 @@ from simulator.utils import *
 class MyTestCase(unittest.TestCase):
 
     def test_a_car_should_go_forward_when_it_is_alone(self):
-        road = build_road(10)
+        road = build_road(10,Orientation(0))
         for n in road:
-            self.assertFalse(n.is_car_present)
-        road[0].is_car_present = True
+            self.assertIsNone(n.current_car)
+        #road[0].is_car_present = True
+        p = Path()
+        road[0].current_car = Car(p)
         for i in range(10):
             # Empty before the car
             for j in range(i):
-                self.assertFalse(road[j].is_car_present)
+                self.assertIsNone(road[j].current_car)
             # Check if the car is at the right place
-            self.assertTrue(road[i].is_car_present)
+            self.assertIsNotNone(road[i].current_car)
             # Empty after the car
             for j in range(i+1, len(road)):
-                self.assertFalse(road[j].is_car_present)
+                self.assertIsNone(road[j].current_car)
             compute_next(road)
             apply_next(road)
 
 
     def test_a_car_should_stop_when_there_is_a_car_ahead(self):
-        road = build_road(10)
+        road = build_road(10,Orientation(0))
         for c in road:
-            self.assertFalse(False, c.is_car_present)
+            self.assertIsNone(c.current_car)
+        p = Path
         for i in range(4, 10):
-            road[i].is_car_present = True
-        road[1].is_car_present = True
+            road[i].current_car = Car(p)
+        road[1].current_car = Car(p)
 
         compute_next(road)
         apply_next(road)
-        self.assertFalse(road[1].is_car_present)
-        self.assertTrue(road[2].is_car_present)
-        self.assertFalse(road[3].is_car_present)
+        self.assertIsNone(road[1].current_car)
+        self.assertIsNotNone(road[2].current_car)
+        self.assertIsNone(road[3].current_car)
 
         compute_next(road)
         apply_next(road)
-        self.assertFalse(road[2].is_car_present)
-        self.assertTrue(road[3].is_car_present)
-        self.assertTrue(road[4].is_car_present)
+        self.assertIsNone(road[2].current_car)
+        self.assertIsNotNone(road[3].current_car)
+        self.assertIsNotNone(road[4].current_car)
 
         compute_next(road)
         apply_next(road)
-        self.assertFalse(road[2].is_car_present)
-        self.assertTrue(road[3].is_car_present)
-        self.assertTrue(road[4].is_car_present)
+        self.assertIsNone(road[2].current_car)
+        self.assertIsNotNone(road[3].current_car)
+        self.assertIsNotNone(road[4].current_car)
 
     def test_a_car_should_wait_before_go_forward_when_there_is_a_car_ahead(self):
-        road = build_road(3)
-        road[0].is_car_present = True
-        road[1].is_car_present = True
-        road[2].is_car_present = True
+        road = build_road(3, Orientation(0))
+        p = Path
+        road[0].current_car = Car(p)
+        road[1].current_car = Car(p)
+        road[2].current_car = Car(p)
 
         compute_next(road)
         apply_next(road)
-        self.assertTrue(road[0].is_car_present)
-        self.assertTrue(road[1].is_car_present)
-        self.assertFalse(road[2].is_car_present)
+        self.assertIsNotNone(road[0].current_car)
+        self.assertIsNotNone(road[1].current_car)
+        self.assertIsNone(road[2].current_car)
 
         compute_next(road)
         apply_next(road)
-        self.assertTrue(road[0].is_car_present)
-        self.assertFalse(road[1].is_car_present)
-        self.assertTrue(road[2].is_car_present)
+        self.assertIsNotNone(road[0].current_car)
+        self.assertIsNone(road[1].current_car)
+        self.assertIsNotNone(road[2].current_car)
 
         compute_next(road)
         apply_next(road)
-        self.assertFalse(road[0].is_car_present)
-        self.assertTrue(road[1].is_car_present)
-        self.assertFalse(road[2].is_car_present)
+        self.assertIsNone(road[0].current_car)
+        self.assertIsNotNone(road[1].current_car)
+        self.assertIsNone(road[2].current_car)
 
         compute_next(road)
         apply_next(road)
-        self.assertFalse(road[0].is_car_present)
-        self.assertFalse(road[1].is_car_present)
-        self.assertTrue(road[2].is_car_present)
+        self.assertIsNone(road[0].current_car)
+        self.assertIsNone(road[1].current_car)
+        self.assertIsNotNone(road[2].current_car)
 
         compute_next(road)
         apply_next(road)
-        self.assertFalse(road[0].is_car_present)
-        self.assertFalse(road[1].is_car_present)
-        self.assertFalse(road[2].is_car_present)
+        self.assertIsNone(road[0].current_car)
+        self.assertIsNone(road[1].current_car)
+        self.assertIsNone(road[2].current_car)
 
 
 if __name__ == '__main__':

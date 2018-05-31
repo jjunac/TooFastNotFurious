@@ -10,9 +10,9 @@ class RightPriorityNode(TrafficNode):
 
     def can_move(self, node):
         if node in self.priorityMap:
-            return not (self.is_car_present or self.priorityMap.get(node).is_car_present)
+            return self.current_car is None and self.priorityMap.get(node).current_car is None
         else:
-            return not self.is_car_present
+            return self.current_car is None
 
     # first node has to let the priority to the second
     def add_priority(self, node1, node2):
