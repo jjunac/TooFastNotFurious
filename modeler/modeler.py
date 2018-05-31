@@ -1,8 +1,18 @@
 from modeler.entry_node import EntryNode
 from modeler.exit_node import ExitNode
+from modeler.simulation import Simulation
+
+nodes = []
 
 def entry_node():
-    return EntryNode()
+    node = EntryNode()
+    nodes.append(node)
+    return node
 
 def exit_node():
-    return ExitNode()
+    node = ExitNode()
+    nodes.append(node)
+    return node
+
+def new_simulation():
+    return Simulation()

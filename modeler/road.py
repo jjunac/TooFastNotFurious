@@ -1,3 +1,5 @@
+import simulator
+
 class Road:
 
     def __init__(self, start, orientation_start):
@@ -15,3 +17,6 @@ class Road:
         self.end = destination
         destination.entries[self.orientation_end] = self
         return self
+
+    def __build(self):
+        simulator.build_road()
