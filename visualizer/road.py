@@ -24,32 +24,21 @@ class GraphicRoad(pygame.sprite.Group):
         vect = (self.xa - self.x, self.ya - self.y)
         dist = sqrt(vect[0] ** 2 + vect[1] ** 2)
         self.angle = atan2(vect[1], vect[0])
-        i = 0
-        xtmp, ytmp = rotate_point(self.angle, (x + length, y), (x, y))
-        self.angle = 0
-        self.xi = int(xtmp - x)
-        self.yi = int(ytmp - y)
-        angle_degree = -self.angle * 180 / pi
+        i = 1
+        xtmp, ytmp = rotate_point(self.angle, (self.x + length, self.y), (self.x, self.y))
+        self.xi = int(xtmp - self.x)
+        self.yi = int(ytmp - self.y)
+        angle_degree = self.angle * 180 / pi
         while i < int(dist / length):
-            road_portion = RoadSprite(x + self.xi * i, y + self.yi * i, length, height, angle_degree)
+            road_portion = RoadSprite(self.x + self.xi * i, self.y + self.yi * i, length, height, angle_degree)
             self.add(road_portion)
             i += 1
         if dist / length - i > 1:
-            self.add(RoadSprite(x + self.xi * i, y + self.yi * i, int(dist - i * length), height, angle_degree))
+            self.add(
+                RoadSprite(self.x + self.xi * i, self.y + self.yi * i, int(dist - i * length), height, angle_degree))
 
     def update(self, road_cells):
         pass
-        # index = 0
-        # # self.car_group.clear(pygame.display.get_surface(), pygame.display.get_surface())
-        # self.car_group.empty()
-        # self.draw(pygame.display.get_surface())
-        # for cell in road_cells:
-        #     if cell == State.CAR:
-        #         car = CarSprite(self.x + self.xi * index, self.y + self.yi * index, self.cell_length, self.height,
-        #                         self.angle_degree)
-        #         self.car_group.add(car)
-        #     index += 1
-        # self.car_group.draw(pygame.display.get_surface())
 
 
 class MySprite(pygame.sprite.Sprite):
@@ -60,8 +49,15 @@ class MySprite(pygame.sprite.Sprite):
         if not image.get_alpha():
             image = pygame.Surface.convert_alpha(image)
         image = pygame.transform.scale(image, (length, height))
-        self.image = pygame.transform.rotate(image, angle)
-        self.rect = image.get_rect().move(x, y)
+        rect = image.get_rect().move(x - image.get_rect().width / 2, y - image.get_rect().height / 2)
+        self.image, self.rect = MySprite.rotate(image, rect, angle)
+
+    @staticmethod
+    def rotate(image, rect, angle):
+        """Rotate the image while keeping its center."""
+        new_image = pygame.transform.rotate(image, angle)
+        rect = new_image.get_rect(center=rect.center)
+        return new_image, rect
 
 
 class RoadSprite(MySprite):
