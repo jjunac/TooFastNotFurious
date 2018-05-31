@@ -1,5 +1,6 @@
 from modeler.entry_node import EntryNode
 from modeler.exit_node import ExitNode
+from modeler.path import Path
 from modeler.simulation import Simulation
 
 nodes = []
@@ -16,3 +17,6 @@ def exit_node():
 
 def new_simulation():
     return Simulation()
+
+def go_to(destination):
+    return Path(destination)

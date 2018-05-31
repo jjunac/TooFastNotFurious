@@ -1,10 +1,15 @@
+from collections import deque
+
 
 class Path:
 
-    def __init__(self):
-        self.queue = []
+    def __init__(self, directions):
+        self.directions = deque(directions)
 
-    #récup le prochain indice pour le successeur. Dans le cas où on a fini et on est pas arrivé à la fin on return 0
 
-    def get_new_index(self):
-        return 0
+    def next_direction(self):
+        return self.directions[0]
+
+
+    def pop_direction(self):
+        return self.directions.popleft()
