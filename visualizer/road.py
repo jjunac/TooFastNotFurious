@@ -40,7 +40,8 @@ class Road(pygame.sprite.Group):
 
     def update(self, road_cells):
         index = 0
-        self.car_group.clear()
+        # self.car_group.clear(pygame.display.get_surface(), pygame.display.get_surface())
+        self.car_group.empty()
         self.draw(pygame.display.get_surface())
         for cell in road_cells:
             if cell == State.CAR:
