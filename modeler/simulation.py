@@ -1,4 +1,3 @@
-from simulator.utils import build_road
 from simulator.simulator import Simulator
 
 class Simulation:
@@ -16,7 +15,7 @@ class Simulation:
 
 
     def add_road(self, road):
-        build = build_road(road.length)
+        build = road.build()
 
         # Link the start
         start_build = self.node_conversion[road.start]
@@ -31,6 +30,16 @@ class Simulation:
         self.nodes.extend(build)
         self.nodes.append(end_build)
         return self
+
+
+    def add_path(self, path):
+        node = self.node_conversion[path.departure]
+        directions = [0] * path.departure.possible_destinations[path.junctions[0]]
+        for i in range(len(path.junctions) - 1):
+            directions.append(path.junctions[i].possible_destinations.index(path.junctions[i + 1]))
+            directions.extend([0] * path.junctions[i].possible_destinations[path.junctions[i + 1]])
+        total_proportion = max(node.paths.keys()) if len(node.paths) >= 1 else 0
+        node.paths[total_proportion + path.proportion] = directions
 
 
     def run_for(self, ticks):

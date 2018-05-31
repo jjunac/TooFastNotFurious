@@ -1,4 +1,6 @@
 from modeler import *
+from shared import Orientation
+
 
 def main():
     s = new_simulation()
@@ -9,6 +11,9 @@ def main():
     s.add_node(e2)
 
     s.add_road(e1.connect(Orientation.NORTH).to(e2).with_length(20))
+
+    s.add_path(e1.go_through(e2).with_proportion(30))
+    s.add_path(e1.go_through(e2).with_proportion(70))
 
     s.run_for(50)
 

@@ -6,6 +6,7 @@ class Node:
     def __init__(self):
         self.exits = {}
         self.entries = {}
+        self.possible_destinations = {}
 
     def connect(self, orientation):
         r = Road(self, orientation)
