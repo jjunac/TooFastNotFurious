@@ -1,4 +1,3 @@
-
 from simulator.entry_node import EntryNode
 from simulator.exit_node import ExitNode
 from simulator.road_node import RoadNode
