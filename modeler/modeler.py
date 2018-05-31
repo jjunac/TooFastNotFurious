@@ -2,6 +2,7 @@ from modeler.entry_node import EntryNode
 from modeler.exit_node import ExitNode
 from modeler.path import Path
 from modeler.simulation import Simulation
+from modeler.right_priority_junction import RightPriorityJunction
 
 nodes = []
 
@@ -20,3 +21,6 @@ def new_simulation():
 
 def go_to(destination):
     return Path(destination)
+
+def right_priority_junction():
+    return RightPriorityJunction()

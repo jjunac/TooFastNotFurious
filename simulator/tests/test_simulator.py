@@ -16,14 +16,14 @@ class TestRoad(unittest.TestCase):
         entry3.to_spawn = 0
 
         p = Path([0] * 6)
-        # used to prevent car to spawn randomly during integration test
+
         entry1.paths[100] = deepcopy(p)
         entry2.paths[100] = deepcopy(p)
         entry3.paths[100] = deepcopy(p)
         rpn = RightPriorityNode()
-        entry1.current_car = Car(deepcopy(p))
-        entry2.current_car = Car(deepcopy(p))
-        entry3.current_car = Car(deepcopy(p))
+        entry1.current_car = Car(deepcopy(p), entry1)
+        entry2.current_car = Car(deepcopy(p), entry2)
+        entry3.current_car = Car(deepcopy(p), entry3)
 
         exit1 = ExitNode()
 

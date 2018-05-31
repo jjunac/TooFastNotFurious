@@ -28,6 +28,6 @@ class EntryNode(TrafficNode):
             draw = random.random()
             for p in probas:
                 if draw <= p/100:
-                    self.next_car = Car(deepcopy(self.paths[p]))
+                    self.next_car = Car(deepcopy(self.paths[p]), self)
                     self.to_spawn -= 1
                     break
