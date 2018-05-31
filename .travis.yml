@@ -14,7 +14,7 @@ install:
 script:
   - python3 exemples/main.py
   - sonar-scanner
-  - nosetests --with-coverage
+  - nosetests --with-coverage --cover-xml
 after_success:
   - codecov
 notifications:

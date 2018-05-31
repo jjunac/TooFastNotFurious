@@ -3,18 +3,16 @@ import unittest
 from shared import Orientation
 from simulator.car import Car
 from simulator.path import Path
-from simulator.road_node import RoadNode
 from simulator.utils import *
 
 
 class MyTestCase(unittest.TestCase):
 
     def test_a_car_should_go_forward_when_it_is_alone(self):
-        road = build_road(10,Orientation(0))
+        road = build_road(10, Orientation.NORTH)
         for n in road:
             self.assertIsNone(n.current_car)
-        #road[0].is_car_present = True
-        p = Path()
+        p = Path([0] * 11)
         road[0].current_car = Car(p)
         for i in range(10):
             # Empty before the car
@@ -23,11 +21,10 @@ class MyTestCase(unittest.TestCase):
             # Check if the car is at the right place
             self.assertIsNotNone(road[i].current_car)
             # Empty after the car
-            for j in range(i+1, len(road)):
+            for j in range(i + 1, len(road)):
                 self.assertIsNone(road[j].current_car)
             compute_next(road)
             apply_next(road)
-
 
     def test_a_car_should_stop_when_there_is_a_car_ahead(self):
         road = build_road(10,Orientation(0))

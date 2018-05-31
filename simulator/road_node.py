@@ -7,6 +7,8 @@ class RoadNode(TrafficNode):
         super().__init__()
         self.orientation = orientation
 
-
     def can_move(self, node):
         return self.current_car is None
+
+    def __str__(self):
+        return "_"

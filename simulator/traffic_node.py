@@ -7,11 +7,9 @@ class TrafficNode(ABC):
         self.current_car = None
         self.next_car = None
 
-
     @abstractmethod
     def can_move(self, node):
         pass
-
 
     def compute_next(self):
         if self.current_car is None:
@@ -26,10 +24,8 @@ class TrafficNode(ABC):
         else:
             self.next_car = self.current_car
 
-
     def apply_next(self):
         self.current_car = self.next_car
-
 
     def __str__(self):
         return "#" if self.current_car else " "
