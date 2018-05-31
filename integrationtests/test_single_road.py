@@ -4,7 +4,7 @@ import unittest
 import random
 
 
-class SingleRoad(unittest.TestCase):
+class TestSingleRoad(unittest.TestCase):
     def test_single_road(self):
         s = new_simulation()
 
