@@ -20,12 +20,10 @@ class Simulation:
 
         # Link the start
         start_build = self.node_conversion[road.start]
-        start_build.successors.append(build[0])
-        build[0].predecessors.append(start_build)
+        simulator.link(start_build, build[0])
         # Link the end
         end_build = self.node_conversion[road.end]
-        end_build.predecessors.append(build[-1])
-        build[-1].successors.append(end_build)
+        simulator.link(build[-1], end_build)
 
         self.nodes.remove(end_build)
         self.nodes.extend(build)

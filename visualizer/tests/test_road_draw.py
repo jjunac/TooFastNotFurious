@@ -2,7 +2,7 @@ import unittest
 from math import pi
 
 from shared.orientation import Orientation
-from simulator import build_road, RightPriorityNode, EntryNode, ExitNode
+from simulator import *
 from visualizer.drawer import Drawing
 from visualizer.road import rotate_point
 
@@ -16,14 +16,14 @@ class MyTestCase(unittest.TestCase):
         entry = EntryNode(1, 0.5)
         entry2 = EntryNode(1, 0.5)
         right_priority = RightPriorityNode()
-        road[-1].successors.append(right_priority)
-        road3[-1].successors.append(right_priority)
-        right_priority.successors.append(road2[0])
-        entry2.successors.append(road3[0])
+        link(road[-1], right_priority)
+        link(road3[-1], right_priority)
+        link(right_priority, road2[0])
+        link(entry2, road3[0])
         exit2 = ExitNode()
-        road2[-1].successors.append(exit2)
+        link(road2[-1], exit2)
         nodes = road3 + road2 + road
-        entry.successors.append(road[0])
+        link(entry, road[0])
         visited, road_map = Drawing.depth_first_search([entry, entry2])
         self.assertEqual(set(nodes), visited)
         roads = [r["road"] for r in road_map]

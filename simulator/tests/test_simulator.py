@@ -48,15 +48,7 @@ class TestRoad(unittest.TestCase):
         link(road3[-1], rpn)
         link(rpn, road4[0])
 
-        system = [entry1, entry2, entry3, exit1, rpn]
-        for i in range(2):
-            system.append(road1[i])
-        for i in range(2):
-            system.append(road2[i])
-        for i in range(2):
-            system.append(road3[i])
-        for i in range(2):
-            system.append(road4[i])
+        system = [entry1, entry2, entry3, exit1, rpn, *road1, *road2, *road3, *road4]
 
         sim = Simulator(system)
 
@@ -136,8 +128,8 @@ class TestRoad(unittest.TestCase):
         entry2.paths[100] = deepcopy(p2)
 
         rpn = RightPriorityNode()
-        entry1.current_car = Car(deepcopy(p1))
-        entry2.current_car = Car(deepcopy(p2))
+        entry1.current_car = Car(deepcopy(p1), entry1)
+        entry2.current_car = Car(deepcopy(p2), entry2)
 
         exit1 = ExitNode()
         exit2 = ExitNode()
@@ -163,15 +155,7 @@ class TestRoad(unittest.TestCase):
         link(rpn, road3[0])
         link(rpn, road4[0])
 
-        system = [entry1, entry2, exit1, exit2, rpn]
-        for i in range(2):
-            system.append(road1[i])
-        for i in range(2):
-            system.append(road2[i])
-        for i in range(2):
-            system.append(road3[i])
-        for i in range(2):
-            system.append(road4[i])
+        system = [entry1, entry2, exit1, exit2, rpn, *road1, *road2, *road3, *road4]
 
         sim = Simulator(system)
         self.assertIsNotNone(entry1.current_car)
