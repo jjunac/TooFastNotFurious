@@ -33,7 +33,7 @@ class Drawing:
         height = 30
         for road in roads:
             print(point)
-            pygame.draw.circle(self.fenetre, (255, 0, 0), point, 10)
+            pygame.draw.circle(self.fenetre, (0, 255, 0), point, 10)
             road_length = len(road["road"])
             orientation = road["road"][0].orientation
             angle = orientation * pi / 180
@@ -41,7 +41,7 @@ class Drawing:
             graphic_road = GraphicRoad(point[0], point[1], xa, ya, None, cell_length, height)
             graphic_road.draw(self.fenetre)
             point = (int(xa), int(ya))
-            pygame.draw.circle(self.fenetre, (0, 255, 0), point, 10)
+            pygame.draw.circle(self.fenetre, (255, 0, 0), point, 10)
 
     @staticmethod
     def depth_first_search(start):
