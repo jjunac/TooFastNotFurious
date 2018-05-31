@@ -39,17 +39,6 @@ class GraphicRoad(pygame.sprite.Group):
 
     def update(self, road_cells):
         pass
-        # index = 0
-        # # self.car_group.clear(pygame.display.get_surface(), pygame.display.get_surface())
-        # self.car_group.empty()
-        # self.draw(pygame.display.get_surface())
-        # for cell in road_cells:
-        #     if cell == State.CAR:
-        #         car = CarSprite(self.x + self.xi * index, self.y + self.yi * index, self.cell_length, self.height,
-        #                         self.angle_degree)
-        #         self.car_group.add(car)
-        #     index += 1
-        # self.car_group.draw(pygame.display.get_surface())
 
 
 class MySprite(pygame.sprite.Sprite):
@@ -66,9 +55,7 @@ class MySprite(pygame.sprite.Sprite):
     @staticmethod
     def rotate(image, rect, angle):
         """Rotate the image while keeping its center."""
-        # Rotate the original image without modifying it.
         new_image = pygame.transform.rotate(image, angle)
-        # Get a new rect with the center of the old rect.
         rect = new_image.get_rect(center=rect.center)
         return new_image, rect
 

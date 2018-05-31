@@ -2,7 +2,7 @@ import unittest
 from math import pi
 
 from shared.orientation import Orientation
-from simulator import build_road, EntryNode, ExitNode
+from simulator import build_road, RightPriorityNode, EntryNode, ExitNode
 from visualizer.drawer import Drawing
 from visualizer.road import rotate_point
 
@@ -12,22 +12,28 @@ class MyTestCase(unittest.TestCase):
     def test_search(self):
         road = build_road(5, Orientation.EAST)
         road2 = build_road(5, Orientation.NORTH)
+        road3 = build_road(5, Orientation.NORTH)
         entry = EntryNode(1)
-        exit = ExitNode()
-        exit.successors.append(road2[0])
+        entry2 = EntryNode(1)
+        right_priority = RightPriorityNode()
+        right_priority.add_priority(road[-1], road3[-1])
+        road[-1].successors.append(right_priority)
+        road3[-1].successors.append(right_priority)
+        right_priority.successors.append(road2[0])
+        entry2.successors.append(road3[0])
         exit2 = ExitNode()
         road2[-1].successors.append(exit2)
-        nodes = [entry] + road + [exit] + road2 + [exit2]
+        nodes = road3 + road2 + road
         entry.successors.append(road[0])
-        entry.successors.append(road[-1])
-        visited, roads = Drawing.depth_first_search(entry)
-        self.assertEqual(0, len(visited.difference(set(nodes))))
-        # self.assertEqual(entry, roads[0]["entry"])
-        # self.assertEqual(road, roads[0]["road"])
-        # self.assertEqual(exit, roads[0]["exit"])
+        visited, road_map = Drawing.depth_first_search([entry, entry2])
+        self.assertEqual(set(nodes), visited)
+        roads = [r["road"] for r in road_map]
+        self.assertTrue(road in roads)
+        self.assertTrue(road2 in roads)
+        self.assertTrue(road3 in roads)
 
-        drawing = Drawing(nodes)
-        drawing.draw()
+        # drawing = Drawing(nodes)
+        # drawing.draw()
 
     def test_rotate_point(self):
         self.assertEqual((10, 0), rotate_point(0, (10, 0)))
