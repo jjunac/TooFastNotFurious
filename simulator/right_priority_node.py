@@ -11,7 +11,6 @@ class RightPriorityNode(TrafficNode):
     def can_move(self, node):
         if node in self.priorityMap:
             return self.current_car is None and self.priorityMap.get(node).current_car is None
-            #return not (self.is_car_present or self.priorityMap.get(node).is_car_present)
         else:
             return self.current_car is None
 

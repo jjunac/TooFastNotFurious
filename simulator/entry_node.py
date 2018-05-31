@@ -1,5 +1,6 @@
 import random
 
+from simulator.Car import Car
 from simulator.traffic_node import TrafficNode
 
 
@@ -17,6 +18,6 @@ class EntryNode(TrafficNode):
         super().compute_next()
         if random.random() <= 0.2:
             self.to_spawn += 1
-        if self.to_spawn > 0 and not self.successors[0].is_car_present:
-            self.next_is_car_present = True
+        if self.to_spawn > 0 and self.successors[0].current_car is None:
+            self.next_car = Car()
             self.to_spawn -= 1
