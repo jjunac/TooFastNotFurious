@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
 
+from simulator.Car import Car
+
 
 class TrafficNode(ABC):
     def __init__(self):
         self.successors = []
         self.predecessors = []
-        self.is_car_present = False
-        self.next_is_car_present = False
+        self.current_car = None
+        self.next_car = None
 
 
     @abstractmethod
@@ -16,21 +18,21 @@ class TrafficNode(ABC):
 
     def compute_next(self):
         # FIXME always send to the first successor
-        if not self.is_car_present:
+        if self.current_car is None:
             return
         if len(self.successors) == 0:
-            self.next_is_car_present = False
+            self.next_car = None
             return
-        if self.successors[0].can_move(self):
-            self.next_is_car_present = False
-            self.successors[0].next_is_car_present = True
+        if self.successors[self.current_car.get_way_index()].can_move(self):
+            self.successors[self.current_car.get_way_index()].next_car = self.current_car
+            self.next_car = None
         else:
-            self.next_is_car_present = True
+            self.next_car = self.current_car
 
 
     def apply_next(self):
-        self.is_car_present = self.next_is_car_present
+        self.current_car = self.next_car
 
 
-    def __str__(self):
-        return "#" if self.is_car_present else " "
+    # def __str__(self):
+    #     return "#" if self.is_car_present else " "
