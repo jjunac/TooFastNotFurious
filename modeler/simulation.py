@@ -1,3 +1,4 @@
+import simulator
 from simulator.simulator import Simulator
 
 class Simulation:
@@ -34,12 +35,12 @@ class Simulation:
 
     def add_path(self, path):
         node = self.node_conversion[path.departure]
-        directions = [0] * path.departure.possible_destinations[path.junctions[0]]
+        directions = [0] * (path.departure.possible_destinations[path.junctions[0]] + 1)
         for i in range(len(path.junctions) - 1):
             directions.append(path.junctions[i].possible_destinations.index(path.junctions[i + 1]))
             directions.extend([0] * path.junctions[i].possible_destinations[path.junctions[i + 1]])
         total_proportion = max(node.paths.keys()) if len(node.paths) >= 1 else 0
-        node.paths[total_proportion + path.proportion] = directions
+        node.paths[total_proportion + path.proportion] = simulator.Path(directions)
 
 
     def run_for(self, ticks):

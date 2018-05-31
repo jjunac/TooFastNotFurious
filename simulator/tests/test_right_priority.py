@@ -1,7 +1,7 @@
 import unittest
 
 from shared import Orientation
-from simulator.Car import Car
+from simulator.car import Car
 from simulator.path import Path
 from simulator.right_priority_node import RightPriorityNode
 from simulator.road_node import RoadNode
