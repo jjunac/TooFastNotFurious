@@ -7,9 +7,10 @@ from copy import deepcopy
 
 class EntryNode(TrafficNode):
 
-    def __init__(self, avg_car_per_tick):
+    def __init__(self, avg_car_per_tick, rate):
         super().__init__()
         self.avg_car_per_tick = avg_car_per_tick
+        self.rate = rate
         self.paths = {}
         self.to_spawn = 0
 
@@ -20,7 +21,7 @@ class EntryNode(TrafficNode):
 
     def compute_next(self):
         super().compute_next()
-        if random.random() <= 0.2:
+        if random.random() <= self.rate:
             self.to_spawn += 1
         if self.to_spawn > 0 and self.successors[0].current_car is None:
             probas = sorted(self.paths.keys())
