@@ -33,8 +33,8 @@ class TestRoadDraw(unittest.TestCase):
         # self.assertTrue(road in roads)
         # self.assertTrue(road2 in roads)
         # self.assertTrue(road3 in roads)
-        simulator = Simulator(nodes)
-        simulator.run_graphical(10)
+        #simulator = Simulator(nodes)
+        #simulator.run_graphical(10)
         # drawing = Drawing(nodes)
         # drawing.draw()
 
