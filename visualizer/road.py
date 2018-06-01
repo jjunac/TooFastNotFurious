@@ -49,7 +49,8 @@ class GraphicRoad(pygame.sprite.RenderClear):
         super().draw(surface)
         for i in range(0, len(self.road_cells)):
             if self.road_cells[i].current_car:
-                car = CarSprite(self.x + self.xi * i, self.y + self.yi * i, 30, 20, -self.angle * 180 / pi)
+                car = CarSprite(self.x + self.xi * i, self.y + self.yi * i, self.width, int(2 * self.height / 3),
+                                -self.angle * 180 / pi)
                 surface.blit(car.image, car.rect)
 
 
