@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class TrafficNode(ABC):
     def __init__(self):
         self.successors = []

@@ -45,3 +45,7 @@ class Simulation:
     def run_for(self, ticks):
         s = Simulator(self.nodes)
         s.run(ticks)
+
+    def run_graphical_for(self, ticks):
+        s = Simulator(self.nodes)
+        s.run_graphical(ticks)
