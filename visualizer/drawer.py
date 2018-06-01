@@ -4,7 +4,7 @@ from math import pi
 import pygame
 from pygame.locals import *
 
-from simulator import EntryNode, RoadNode
+from simulator import *
 from visualizer.road import GraphicRoad, rotate_point
 
 HEIGHT = 7
@@ -22,15 +22,16 @@ class Drawing:
         self.continue_drawing = 1
         self.fenetre = pygame.display.set_mode((1600, 900))
         self.nodes = simulator.nodes
+        self.fenetre.fill(WHITE)
         pygame.display.flip()
 
     def generateRoadAndDraw(self):
         entry_nodes = [n for n in self.nodes if type(n) is EntryNode]
         visited, roads = Drawing.depth_first_search(entry_nodes)
-        self.drawRoad(roads)
+        self.createGraphicRoads(roads)
         return roads
 
-    def drawRoad(self, roads):
+    def createGraphicRoads(self, roads):
         point = (500, 500)
         cell_length = 30
         height = 30
@@ -39,20 +40,21 @@ class Drawing:
         for road in roads:
             orientation = road["road"][0].orientation
             angle = orientation * pi / 180
+            road_length = len(road["road"])
             if road["entry"] in nodes:
-                point = nodes[road["entry"]]
-            if road["exit"] in nodes:
+                p = nodes[road["entry"]]
+                point = (p[0], p[1] - cell_length)
+            elif road["exit"] in nodes:
                 point = nodes[road["exit"]]
                 angle = angle + pi
-            road_length = len(road["road"])
+                xa, ya = rotate_point(angle, (point[0] + road_length * cell_length, point[1]), point)
+                graphic_road = GraphicRoad(xa, ya, point[0], point[1], road["road"], cell_length, height)
+                graphic_roads.append(graphic_road)
+                continue
             xa, ya = rotate_point(angle, (point[0] + road_length * cell_length, point[1]), point)
-
             nodes[road["exit"]] = (int(xa), int(ya))
             graphic_road = GraphicRoad(point[0], point[1], xa, ya, road["road"], cell_length, height)
             graphic_roads.append(graphic_road)
-            # graphic_road.update(road["road"])
-            # graphic_road.draw(self.fenetre)
-            # graphic_road.
         return graphic_roads
 
     @staticmethod
@@ -76,12 +78,16 @@ class Drawing:
 
     def draw(self):
         roads = self.generateRoadAndDraw()
-        graphic_roads = self.drawRoad(roads)
+        graphic_roads = self.createGraphicRoads(roads)
         while self.continue_drawing:
             self.simulator.tick()
             for graphic_road in graphic_roads:
                 graphic_road.update()
                 graphic_road.draw(self.fenetre)
+            nodes = set()
+
+
+
             time.sleep(1)
             pygame.display.flip()
             self.fenetre.fill(WHITE)

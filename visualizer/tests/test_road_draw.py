@@ -10,12 +10,12 @@ from visualizer.road import rotate_point
 class MyTestCase(unittest.TestCase):
 
     def test_search(self):
-        road = build_road(10, Orientation.EAST)
+        road = build_road(5, Orientation.EAST)
         road2 = build_road(5, Orientation.NORTH)
-        road3 = build_road(6, Orientation.NORTH)
-        entry = EntryNode(1, 0.4)
-        entry.paths[100] = Path([0] * 17)
-        entry2 = EntryNode(1, 0.2)
+        road3 = build_road(5, Orientation.NORTH)
+        entry = EntryNode(1, 0.3)
+        entry.paths[100] = Path([0] * 13)
+        entry2 = EntryNode(1, 0.1)
         entry2.paths[100] = Path([0] * 13)
         exit = ExitNode()
         link(entry, road[0])
