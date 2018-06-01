@@ -10,15 +10,12 @@ class Simulator:
     def tick(self):
         compute_next(self.nodes)
         apply_next(self.nodes)
-        print("[%s]" % "".join([str(n) for n in self.nodes]))
+        # print("[%s]" % "".join([str(n) for n in self.nodes]))
 
     def run(self, ticks):
         for _ in range(ticks):
             self.tick()
 
     def run_graphical(self, ticks):
-        drawing = Drawing(self.nodes)
-        for _ in range(ticks):
-            drawing.update()
-            drawing.draw()
-            self.tick()
+        drawing = Drawing(self)
+        drawing.draw()

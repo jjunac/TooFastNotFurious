@@ -10,15 +10,17 @@ def rotate_point(angle, point, origin=(0, 0)):
             sin(angle) * (point[0] - origin[0]) + cos(angle) * (point[1] - origin[1]) + origin[1])
 
 
-class GraphicRoad(pygame.sprite.Group):
+class GraphicRoad(pygame.sprite.RenderClear):
 
-    def __init__(self, x, y, xa, ya, car_group, length=30, height=30):
+    def __init__(self, x, y, xa, ya, road_cells, length=30, height=30):
         super().__init__()
+        if x > xa:
+            x, xa = xa, x
         self.x = x
         self.y = y
         self.xa = xa
         self.ya = ya
-        self.car_group = car_group
+        self.road_cells = road_cells
         self.width = length
         self.height = height
         vect = (self.xa - self.x, self.ya - self.y)
@@ -37,14 +39,22 @@ class GraphicRoad(pygame.sprite.Group):
             self.add(
                 RoadSprite(self.x + self.xi * i, self.y + self.yi * i, int(dist - i * length), height, angle_degree))
 
-    def update(self, road_cells):
+    def update(self):
         pass
+
+    def draw(self, surface):
+        super().draw(surface)
+        pygame.draw.circle(surface, (0, 255, 0), (int(self.xa), int(self.ya)), 10)
+        pygame.draw.circle(surface, (0, 255, 0), (int(self.x), int(self.y)), 10)
+        for i in range(len(self.road_cells)):
+            if self.road_cells[i].current_car:
+                car = CarSprite(self.x + self.xi * i, self.y + self.yi * i, 30, 20, -self.angle * 180 / pi)
+                surface.blit(car.image, car.rect)
 
 
 class MySprite(pygame.sprite.Sprite):
 
     def __init__(self, x=0, y=0, length=50, height=50, angle=0.0, image=None):
-        print(str(x) + " " + str(y) + str(angle))
         pygame.sprite.Sprite.__init__(self)
         if not image.get_alpha():
             image = pygame.Surface.convert_alpha(image)
