@@ -7,7 +7,7 @@ from visualizer.drawer import Drawing
 from visualizer.road import rotate_point
 
 
-class MyTestCase(unittest.TestCase):
+class TestRoadDraw(unittest.TestCase):
 
     def test_search(self):
         road = build_road(5, Orientation.EAST)
