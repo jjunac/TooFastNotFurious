@@ -14,8 +14,11 @@ class GraphicRoad(pygame.sprite.RenderClear):
 
     def __init__(self, x, y, xa, ya, road_cells, length=30, height=30):
         super().__init__()
-        if x > xa:
-            x, xa = xa, x
+        # if x > xa:
+        #     x, xa = xa, x
+        # elif x < xa:
+        #     x, xa = xa, x
+
         self.x = x
         self.y = y
         self.xa = xa
@@ -26,7 +29,7 @@ class GraphicRoad(pygame.sprite.RenderClear):
         vect = (self.xa - self.x, self.ya - self.y)
         dist = sqrt(vect[0] ** 2 + vect[1] ** 2)
         self.angle = atan2(vect[1], vect[0])
-        i = 1
+        i = 0
         xtmp, ytmp = rotate_point(self.angle, (self.x + length, self.y), (self.x, self.y))
         self.xi = int(xtmp - self.x)
         self.yi = int(ytmp - self.y)
@@ -44,9 +47,7 @@ class GraphicRoad(pygame.sprite.RenderClear):
 
     def draw(self, surface):
         super().draw(surface)
-        pygame.draw.circle(surface, (0, 255, 0), (int(self.xa), int(self.ya)), 10)
-        pygame.draw.circle(surface, (0, 255, 0), (int(self.x), int(self.y)), 10)
-        for i in range(len(self.road_cells)):
+        for i in range(0, len(self.road_cells)):
             if self.road_cells[i].current_car:
                 car = CarSprite(self.x + self.xi * i, self.y + self.yi * i, 30, 20, -self.angle * 180 / pi)
                 surface.blit(car.image, car.rect)
