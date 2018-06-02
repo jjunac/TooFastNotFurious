@@ -26,17 +26,13 @@ class TestRoadDraw(unittest.TestCase):
         link(road3[-1], priority_node)
         link(priority_node, road2[0])
         entry.successors.append(road[0])
-        nodes = [entry, entry2, exit, priority_node] + road + road2 + road3
+        nodes = road + road2 + road3
         visited, road_map = Drawing.depth_first_search([entry, entry2])
-        # self.assertEqual(set(nodes), visited)
+        self.assertEqual(set(nodes), visited)
         roads = [r["road"] for r in road_map]
-        # self.assertTrue(road in roads)
-        # self.assertTrue(road2 in roads)
-        # self.assertTrue(road3 in roads)
-        #simulator = Simulator(nodes)
-        #simulator.run_graphical(10)
-        # drawing = Drawing(nodes)
-        # drawing.draw()
+        self.assertTrue(road in roads)
+        self.assertTrue(road2 in roads)
+        self.assertTrue(road3 in roads)
 
     def test_rotate_point(self):
         self.assertEqual((10, 0), rotate_point(0, (10, 0)))
