@@ -3,4 +3,4 @@
 [![codecov](https://codecov.io/gh/Taken0711/TooFastNotFurious/branch/develop/graph/badge.svg)](https://codecov.io/gh/Taken0711/TooFastNotFurious)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=too-fast-not-furious&metric=alert_status)](https://sonarcloud.io/dashboard?id=too-fast-not-furious)
 
-![certifié La Rache](https://www.la-rache.com/img/logo.png)
+[![certifié La Rache](https://www.la-rache.com/img/logo.png)](https://www.la-rache.com/presentation.html)
