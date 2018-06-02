@@ -45,7 +45,7 @@ class TestRoad(unittest.TestCase):
         r3 = RoadNode(Orientation.EAST)
         nodes = [rp, r1, r2, r3]
         p = Path([0] * 3)
-        r1.current_car = Car(p, r1)
+        r1.current_car = Car(deepcopy(p), r1)
 
         link(r1, rp)
         link(r2, rp)
@@ -81,6 +81,7 @@ class TestRoad(unittest.TestCase):
         self.assertIsNotNone(r3.current_car)
 
     def test_for_3_input_for_the_priority(self):
+        #
         rp = RightPriorityNode()
         r1 = RoadNode(Orientation.NORTH)
         r2 = RoadNode(Orientation.WEST)
@@ -121,3 +122,44 @@ class TestRoad(unittest.TestCase):
         self.assertIsNone(r3.current_car)
         self.assertIsNotNone(rp.current_car)
         self.assertIsNone(r4.current_car)
+
+    def test_should_prioritize_the_car_on_the_left_of_the_exit_when_2_car_are_facing_each_others(self):
+        rp = RightPriorityNode()
+        entry1 = RoadNode(Orientation.EAST)
+        entry2 = RoadNode(Orientation.WEST)
+        exit = RoadNode(Orientation.NORTH)
+        nodes = [rp, entry1, entry2, exit]
+        p = Path([0] * 3)
+
+        entry1.current_car = Car(p, entry1)
+        entry2.current_car = Car(p, entry2)
+
+        link(entry1, rp)
+        link(entry2, rp)
+        link(rp, exit)
+
+        self.assertIsNotNone(entry1.current_car)
+        self.assertIsNotNone(entry2.current_car)
+        self.assertIsNone(exit.current_car)
+        self.assertIsNone(rp.current_car)
+
+        compute_next(nodes)
+        apply_next(nodes)
+        self.assertIsNotNone(entry1.current_car)
+        self.assertIsNone(entry2.current_car)
+        self.assertIsNone(exit.current_car)
+        self.assertIsNotNone(rp.current_car)
+
+        compute_next(nodes)
+        apply_next(nodes)
+        self.assertIsNotNone(entry1.current_car)
+        self.assertIsNone(entry2.current_car)
+        self.assertIsNotNone(exit.current_car)
+        self.assertIsNone(rp.current_car)
+
+        compute_next(nodes)
+        apply_next(nodes)
+        self.assertIsNone(entry1.current_car)
+        self.assertIsNone(entry2.current_car)
+        self.assertIsNone(exit.current_car)
+        self.assertIsNotNone(rp.current_car)
