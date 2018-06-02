@@ -7,32 +7,50 @@ from visualizer.drawer import Drawing
 from visualizer.road import rotate_point
 
 
+def find_road(road, road_map):
+    return [r for r in road_map if r["road"] == road][0]
+
+
 class TestRoadDraw(unittest.TestCase):
 
     def test_search(self):
         road = build_road(5, Orientation.EAST)
         road2 = build_road(5, Orientation.NORTH)
         road3 = build_road(5, Orientation.NORTH)
+        road4 = build_road(5, Orientation.EAST)
         entry = EntryNode(1, 0.3)
         entry.paths[100] = Path([0] * 13)
         entry2 = EntryNode(1, 0.1)
         entry2.paths[100] = Path([0] * 13)
-        exit = ExitNode()
+
+        exit1 = ExitNode()
+        exit2 = ExitNode()
         link(entry, road[0])
         link(entry2, road3[0])
-        link(road2[-1], exit)
+        link(road2[-1], exit1)
+        link(road4[-1], exit2)
         priority_node = RightPriorityNode()
         link(road[-1], priority_node)
         link(road3[-1], priority_node)
         link(priority_node, road2[0])
-        entry.successors.append(road[0])
-        nodes = road + road2 + road3
+        link(priority_node, road4[0])
+        nodes = road + road2 + road3 + road4
         visited, road_map = Drawing.depth_first_search([entry, entry2])
         self.assertEqual(set(nodes), visited)
         roads = [r["road"] for r in road_map]
         self.assertTrue(road in roads)
         self.assertTrue(road2 in roads)
         self.assertTrue(road3 in roads)
+        self.assertTrue(road4 in roads)
+        self.assert_correct_road_entry_and_exit(entry, road, priority_node, road_map)
+        self.assert_correct_road_entry_and_exit(entry2, road3, priority_node, road_map)
+        self.assert_correct_road_entry_and_exit(priority_node, road2, exit1, road_map)
+        self.assert_correct_road_entry_and_exit(priority_node, road4, exit2, road_map)
+
+    def assert_correct_road_entry_and_exit(self, entry, road, exit, road_map):
+        road_m = find_road(road, road_map)
+        self.assertEqual(entry, road_m["entry"])
+        self.assertEqual(exit, road_m["exit"])
 
     def test_rotate_point(self):
         self.assertEqual((10, 0), rotate_point(0, (10, 0)))
