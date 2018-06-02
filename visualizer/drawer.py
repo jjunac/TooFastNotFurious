@@ -27,13 +27,13 @@ class Drawing:
         self.screen.fill(WHITE)
         pygame.display.flip()
 
-    def generateRoadAndDraw(self):
+    def generate_road_and_draw(self):
         entry_nodes = [n for n in self.nodes if type(n) is EntryNode]
         visited, roads = Drawing.depth_first_search(entry_nodes)
-        self.createGraphicRoads(roads)
+        self.create_graphic_roads(roads)
         return roads
 
-    def createGraphicRoads(self, roads):
+    def create_graphic_roads(self, roads):
         point = (500, 500)
         nodes = {}
         graphic_roads = []
@@ -43,7 +43,7 @@ class Drawing:
             road_length = len(road["road"])
             if road["entry"] in nodes:
                 p = nodes[road["entry"]]
-                point = (p[0], p[1] - self.cell_length)
+                point = rotate_point(angle, (p[0] + self.cell_length, p[1]), p)
             elif road["exit"] in nodes:
                 point = nodes[road["exit"]]
                 angle = angle + pi
@@ -62,6 +62,7 @@ class Drawing:
         visited, stack = set(), start
         roads = []
         road = {"entry": None, "road": [], "exit": None}
+        junctions = []
         while stack:
             vertex = stack.pop()
             if vertex not in visited:
@@ -70,28 +71,43 @@ class Drawing:
                     road["road"].append(vertex)
                 else:
                     road["exit"] = vertex
+                    if len(junctions) > 0:
+                        road["entry"] = junctions[-1]
+                        if len(set(junctions[-1].successors) - visited) == 0:
+                            junctions.pop()
                     roads.append(road)
-                    road = {"entry": vertex, "road": [], "exit": None}
+                    road = {"entry": None, "road": [], "exit": None}
+                    if type(vertex) is not ExitNode:
+                        junctions.append(vertex)
                 stack.extend(set(vertex.successors) - visited)
 
         return visited, [r for r in roads if len(r["road"]) != 0]
 
+    @staticmethod
+    def get_road_orientation(road):
+        return road["road"].orientation
+
     def draw(self):
-        roads = self.generateRoadAndDraw()
-        graphic_roads, nodes = self.createGraphicRoads(roads)
+        roads = self.generate_road_and_draw()
+        graphic_roads, nodes = self.create_graphic_roads(roads)
         while self.continue_drawing:
             self.simulator.tick()
             for graphic_road in graphic_roads:
                 graphic_road.update()
                 graphic_road.draw(self.screen)
             for k, v in nodes.items():
-                surface = pygame.Surface((self.cell_length, self.height))
-                surface.fill((29, 17, 17))
-                my_sprite = MySprite(v[0], v[1], self.cell_length, self.height, image=surface)
-                self.screen.blit(my_sprite.image, my_sprite.rect)
-                if k.current_car:
-                    sprite = CarSprite(v[0], v[1], self.cell_length, int(2 * self.height / 3))
-                    self.screen.blit(sprite.image, sprite.rect)
+                if type(k) is not ExitNode and type(k) is not EntryNode:
+                    surface = pygame.Surface((self.cell_length, self.height))
+                    surface.fill((29, 17, 17))
+                    my_sprite = MySprite(v[0], v[1], self.cell_length, self.height, image=surface)
+                    self.screen.blit(my_sprite.image, my_sprite.rect)
+                    car = k.current_car
+                    if car:
+                        car_orientation = k.successors[car.get_way_index()].orientation
+                        print(car_orientation)
+                        sprite = CarSprite(v[0], v[1], self.cell_length, int(2 * self.height / 3),
+                                           angle=-car_orientation)
+                        self.screen.blit(sprite.image, sprite.rect)
             time.sleep(1)
             pygame.display.flip()
             self.screen.fill(WHITE)

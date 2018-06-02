@@ -28,5 +28,6 @@ def main():
 
     s.run_graphical_for(400)
 
+
 if __name__ == '__main__':
     main()
