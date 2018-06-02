@@ -1,19 +1,23 @@
+import simulator
+
 class Road:
 
-    def __init__(self):
+    def __init__(self, start, orientation_start):
         self.length = 0
-        self.start = None
+        self.start = start
         self.end = None
+        self.orientation_start = orientation_start
+        self.orientation_end = orientation_start.invert()
 
-    # TODO metaprograming to avoid repetition ?
     def with_length(self, length):
         self.length = length
         return self
 
-    def that_starts(self, start):
-        self.start = start
+    def to(self, destination):
+        self.end = destination
+        destination.entries[self.orientation_end] = self
         return self
 
-    def that_ends(self, end):
-        self.end = end
-        return self
+    def build(self):
+        self.start.possible_destinations[self.end] = (len(self.start.possible_destinations.items()), self.length)
+        return simulator.build_road(self.length, self.orientation_start)

@@ -1,0 +1,138 @@
+from modeler import *
+from shared import Orientation
+import unittest
+import random
+
+
+class TestRoadRightPriorities(unittest.TestCase):
+
+    def test_non_priority_cars_should_not_pass_when_there_is_a_continuous_car_flow_at_their_right(self):
+        s = new_simulation()
+
+        entry1 = entry_node().with_rate(1)
+        s.add_node(entry1)
+        entry2 = entry_node().with_rate(1)
+        s.add_node(entry2)
+        exit1 = exit_node()
+        s.add_node(exit1)
+        junction = right_priority_junction()
+        s.add_node(junction)
+
+        s.add_road(entry1.connect(Orientation.NORTH).to(junction).with_length(2))
+        s.add_road(entry2.connect(Orientation.WEST).to(junction).with_length(1))
+        s.add_road(junction.connect(Orientation.SOUTH).to(exit1).with_length(1))
+
+        s.add_path(entry1.go_through(junction, exit1).with_proportion(100))
+        s.add_path(entry2.go_through(junction, exit1).with_proportion(100))
+
+        s.run_for(500)
+        self.assertFalse(s.node_conversion[entry1] in s.node_conversion[exit1].departure_counter)
+
+    def test_right_priority_with_2_entries_2_exits(self):
+        s = new_simulation()
+
+        entry1 = entry_node().with_rate(0.2)
+        s.add_node(entry1)
+        entry2 = entry_node().with_rate(0.3)
+        s.add_node(entry2)
+        exit1 = exit_node()
+        s.add_node(exit1)
+        exit2 = exit_node()
+        s.add_node(exit2)
+        junction = right_priority_junction()
+        s.add_node(junction)
+
+        s.add_road(entry1.connect(Orientation.NORTH).to(junction).with_length(3))
+        s.add_road(entry2.connect(Orientation.WEST).to(junction).with_length(3))
+        s.add_road(junction.connect(Orientation.SOUTH).to(exit1).with_length(3))
+        s.add_road(junction.connect(Orientation.EAST).to(exit2).with_length(3))
+
+        s.add_path(entry1.go_through(junction, exit1).with_proportion(30))
+        s.add_path(entry1.go_through(junction, exit2).with_proportion(70))
+        s.add_path(entry2.go_through(junction, exit1).with_proportion(70))
+        s.add_path(entry2.go_through(junction, exit2).with_proportion(30))
+
+        random.seed(0)
+        s.run_for(507)
+        b_exit1 = s.node_conversion[exit1]
+        b_exit2 = s.node_conversion[exit2]
+        b_entry1 = s.node_conversion[entry1]
+        b_entry2 = s.node_conversion[entry2]
+        # TODO add some asserts here
+
+    def test_4_right_priority_with_4_entries_4_exits(self):
+        s = new_simulation()
+
+        entry1 = entry_node().with_rate(0.2)
+        s.add_node(entry1)
+        entry2 = entry_node().with_rate(0.3)
+        s.add_node(entry2)
+        entry3 = entry_node().with_rate(0.2)
+        s.add_node(entry3)
+        entry4 = entry_node().with_rate(0.3)
+        s.add_node(entry4)
+
+        exit1 = exit_node()
+        s.add_node(exit1)
+        exit2 = exit_node()
+        s.add_node(exit2)
+        exit3 = exit_node()
+        s.add_node(exit3)
+        exit4 = exit_node()
+        s.add_node(exit4)
+
+        junction1 = right_priority_junction()
+        s.add_node(junction1)
+        junction2 = right_priority_junction()
+        s.add_node(junction2)
+        junction3 = right_priority_junction()
+        s.add_node(junction3)
+        junction4 = right_priority_junction()
+        s.add_node(junction4)
+
+        s.add_road(entry1.connect(Orientation.SOUTH).to(junction1).with_length(3))
+        s.add_road(junction1.connect(Orientation.WEST).to(exit1).with_length(3))
+        s.add_road(junction1.connect(Orientation.EAST).to(junction2).with_length(7))
+
+        
+        s.add_road(entry2.connect(Orientation.WEST).to(junction2).with_length(3))
+        s.add_road(junction2.connect(Orientation.NORTH).to(exit2).with_length(3))
+        s.add_road(junction2.connect(Orientation.SOUTH).to(junction3).with_length(7))
+
+        s.add_road(entry3.connect(Orientation.NORTH).to(junction3).with_length(3))
+        s.add_road(junction3.connect(Orientation.EAST).to(exit3).with_length(3))
+        s.add_road(junction3.connect(Orientation.WEST).to(junction4).with_length(7))
+
+        s.add_road(entry4.connect(Orientation.EAST).to(junction4).with_length(3))
+        s.add_road(junction4.connect(Orientation.SOUTH).to(exit4).with_length(3))
+        s.add_road(junction4.connect(Orientation.NORTH).to(junction1).with_length(7))
+
+        s.add_path(entry1.go_through(junction1, exit1).with_proportion(25))
+        s.add_path(entry1.go_through(junction1, junction2, exit2).with_proportion(25))
+        s.add_path(entry1.go_through(junction1, junction2, junction3, exit3).with_proportion(25))
+        s.add_path(entry1.go_through(junction1, junction2, junction3, junction4, exit4).with_proportion(25))
+        
+        s.add_path(entry2.go_through(junction2, exit2).with_proportion(25))
+        s.add_path(entry2.go_through(junction2, junction3, exit3).with_proportion(25))
+        s.add_path(entry2.go_through(junction2, junction3, junction4, exit4).with_proportion(25))
+        s.add_path(entry2.go_through(junction2, junction3, junction4, junction1, exit1).with_proportion(25))
+        
+        s.add_path(entry3.go_through(junction3, exit3).with_proportion(25))
+        s.add_path(entry3.go_through(junction3, junction4, exit4).with_proportion(25))
+        s.add_path(entry3.go_through(junction3, junction4, junction1, exit1).with_proportion(25))
+        s.add_path(entry3.go_through(junction3, junction4, junction1, junction2, exit2).with_proportion(25))
+        
+        s.add_path(entry4.go_through(junction4, exit4).with_proportion(25))
+        s.add_path(entry4.go_through(junction4, junction1, exit1).with_proportion(25))
+        s.add_path(entry4.go_through(junction4, junction1, junction2, exit2).with_proportion(25))
+        s.add_path(entry4.go_through(junction4, junction1, junction2, junction3, exit3).with_proportion(25))
+
+        random.seed(0)
+        s.run_for(1000)
+        # TODO add some asserts here
+
+
+
+
+if __name__ == '__main__':
+    unittest.main()

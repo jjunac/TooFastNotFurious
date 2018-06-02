@@ -11,7 +11,8 @@ addons:
 install:
   - pip install -r requirements.txt
 script:
-  - python3 exemples/main.py
+  - nosetests --with-coverage --cover-xml --with-xunit
   - sonar-scanner
+  - bash <(curl -s https://codecov.io/bash)
 notifications:
   email: false

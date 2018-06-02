@@ -1,13 +1,26 @@
 from modeler.entry_node import EntryNode
 from modeler.exit_node import ExitNode
-from modeler.road import Road
+from modeler.path import Path
+from modeler.simulation import Simulation
+from modeler.right_priority_junction import RightPriorityJunction
 
+nodes = []
 
-def createEntryNode():
-    return EntryNode()
+def entry_node():
+    node = EntryNode()
+    nodes.append(node)
+    return node
 
-def createExitNode():
-    return ExitNode()
+def exit_node():
+    node = ExitNode()
+    nodes.append(node)
+    return node
 
-def createRoad():
-    return Road()
+def new_simulation():
+    return Simulation()
+
+def go_to(destination):
+    return Path(destination)
+
+def right_priority_junction():
+    return RightPriorityJunction()
