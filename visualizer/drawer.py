@@ -42,16 +42,19 @@ class Drawing:
             angle = orientation * pi / 180
             road_length = len(road["road"])
             if road["entry"] in nodes:
-                p = nodes[road["entry"]]
-                point = rotate_point(angle, (p[0] + self.cell_length, p[1]), p)
+                point = nodes[road["entry"]]
+
             elif road["exit"] in nodes:
                 point = nodes[road["exit"]]
                 angle = angle + pi
-                xa, ya = rotate_point(angle, (point[0] + road_length * self.cell_length, point[1]), point)
+                xa, ya = rotate_point(angle, (point[0] + road_length * self.cell_length + self.cell_length, point[1]),
+                                      point)
                 graphic_road = GraphicRoad(xa, ya, point[0], point[1], road["road"], self.cell_length, self.height)
+                nodes[road["entry"]] = (xa, ya)
                 graphic_roads.append(graphic_road)
                 continue
-            xa, ya = rotate_point(angle, (point[0] + road_length * self.cell_length, point[1]), point)
+            xa, ya = rotate_point(angle, (point[0] + road_length * self.cell_length + self.cell_length, point[1]),
+                                  point)
             nodes[road["exit"]] = (int(xa), int(ya))
             graphic_road = GraphicRoad(point[0], point[1], xa, ya, road["road"], self.cell_length, self.height)
             graphic_roads.append(graphic_road)
@@ -92,6 +95,13 @@ class Drawing:
         graphic_roads, nodes = self.create_graphic_roads(roads)
         while self.continue_drawing:
             self.simulator.tick()
+            lol = 6
+            length_ = self.cell_length * lol + 200
+            graphic_road = GraphicRoad(200, 200, length_, 200, [])
+            graphic_road.draw(self.screen)
+            for i in range(lol + 1):
+                print(i)
+                pygame.draw.circle(self.screen, (0, 255, 0), (self.cell_length * i + 200, 200), 10)
             for graphic_road in graphic_roads:
                 graphic_road.update()
                 graphic_road.draw(self.screen)

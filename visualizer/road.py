@@ -27,8 +27,11 @@ class GraphicRoad(pygame.sprite.RenderClear):
         self.width = length
         self.height = height
         vect = (self.xa - self.x, self.ya - self.y)
-        dist = sqrt(vect[0] ** 2 + vect[1] ** 2)
         self.angle = atan2(vect[1], vect[0])
+        self.x, self.y = rotate_point(self.angle, (self.x + length, self.y), (self.x, self.y))
+        self.xa, self.ya = rotate_point(self.angle, (self.xa, self.ya), (self.xa, self.ya))
+        vect = (self.xa - self.x, self.ya - self.y)
+        dist = sqrt(vect[0] ** 2 + vect[1] ** 2)
         i = 0
         xtmp, ytmp = rotate_point(self.angle, (self.x + length, self.y), (self.x, self.y))
         self.xi = int(xtmp - self.x)

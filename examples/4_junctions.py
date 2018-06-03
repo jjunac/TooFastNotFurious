@@ -70,5 +70,6 @@ def main():
 
     s.run_graphical_for(1000)
 
+
 if __name__ == '__main__':
     main()
