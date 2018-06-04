@@ -2,6 +2,7 @@ import unittest
 
 from shared import Orientation
 from simulator.car import Car
+from simulator.Road import  Road
 from simulator.path import Path
 from simulator.utils import *
 
@@ -89,6 +90,27 @@ class MyTestCase(unittest.TestCase):
         self.assertIsNone(road[0].current_car)
         self.assertIsNone(road[1].current_car)
         self.assertIsNone(road[2].current_car)
+
+    def test_a_road_with_3_ways(self):
+        e = Road(5, Orientation.NORTH, 3)
+        e.link_ways()
+        #first nodes of ways
+        self.assertIs(e.ways[0][0].successors[0], e.ways[0][1])
+        self.assertIs(e.ways[0][0].successors[1], e.ways[1][1])
+        self.assertIs(e.ways[1][0].successors[0], e.ways[1][1])
+        self.assertIs(e.ways[1][0].successors[1], e.ways[2][1])
+        self.assertIs(e.ways[1][0].successors[2], e.ways[0][1])
+        self.assertIs(e.ways[2][0].successors[0], e.ways[2][1])
+        self.assertIs(e.ways[2][0].successors[1], e.ways[1][1])
+
+        #last nodes of ways
+        self.assertIs(e.ways[0][3].successors[0], e.ways[0][4])
+        self.assertIs(e.ways[0][3].successors[1], e.ways[1][4])
+        self.assertIs(e.ways[1][3].successors[0], e.ways[1][4])
+        self.assertIs(e.ways[1][3].successors[1], e.ways[2][4])
+        self.assertIs(e.ways[1][3].successors[2], e.ways[0][4])
+        self.assertIs(e.ways[2][3].successors[0], e.ways[2][4])
+        self.assertIs(e.ways[2][3].successors[1], e.ways[1][4])
 
 
 if __name__ == '__main__':
