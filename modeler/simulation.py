@@ -9,8 +9,7 @@ class Simulation:
         self.nodes = []
         self.roads = []
         self.paths = []
-
-
+        self.dependencies = {}
 
 
     def __build_node(self, node):
@@ -28,6 +27,8 @@ class Simulation:
         # Link the end
         end_build = self.node_conversion[road.end]
         simulator.link(build[-1], end_build)
+
+
 
         self.built_nodes.remove(end_build)
         self.built_nodes.extend(build)
