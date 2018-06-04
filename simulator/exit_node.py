@@ -1,4 +1,4 @@
-from simulator import Statistics
+from simulator.statistics import Statistics
 from simulator.traffic_node import TrafficNode
 
 
@@ -21,7 +21,7 @@ class ExitNode(TrafficNode):
                 self.departure_counter[departure] = 0
             self.departure_counter[departure] += 1
             self.outflow += 1
-            self.statistics.add_travel_time(departure, self.current_car.tick)
+            self.statistics.add_travel_time(departure, self.current_car.time)
 
     def compute_average_time(self):
         average = []
