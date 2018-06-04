@@ -1,3 +1,4 @@
+from simulator import ExitNode
 from simulator.utils import *
 from visualizer.drawer import Drawing
 
@@ -19,3 +20,11 @@ class Simulator:
     def run_graphical(self, ticks):
         drawing = Drawing(self)
         drawing.draw()
+
+    def get_stats(self):
+        stats = {}
+        exit_nodes = [n for n in self.nodes if type(n) is ExitNode]
+        for node in exit_nodes:
+            stats[node] = node.get_stats()
+
+        return stats

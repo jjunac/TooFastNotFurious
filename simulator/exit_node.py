@@ -1,3 +1,4 @@
+from simulator.statistics import Statistics
 from simulator.traffic_node import TrafficNode
 
 
@@ -7,6 +8,7 @@ class ExitNode(TrafficNode):
         super().__init__()
         self.outflow = 0
         self.departure_counter = {}
+        self.statistics = Statistics()
 
     def can_move(self, node):
         return True
@@ -19,3 +21,7 @@ class ExitNode(TrafficNode):
                 self.departure_counter[departure] = 0
             self.departure_counter[departure] += 1
             self.outflow += 1
+            self.statistics.add_travel_time(self.current_car.departure, self.current_car.original_path, self.current_car.time)
+
+    def get_stats(self):
+        return self.statistics.list_time_travel
