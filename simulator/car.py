@@ -5,6 +5,7 @@ class Car:
 
     def __init__(self, path, departure):
         self.path = deepcopy(path)
+        self.original_path = path
         self.departure = departure
         self.time = 0
 

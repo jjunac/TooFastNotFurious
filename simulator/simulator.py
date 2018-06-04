@@ -21,7 +21,10 @@ class Simulator:
         drawing = Drawing(self)
         drawing.draw()
 
-    def compute_average_time(self):
+    def get_stats(self):
+        stats = {}
         exit_nodes = [n for n in self.nodes if type(n) is ExitNode]
         for node in exit_nodes:
-            node.compute_average_time()
+            stats[node] = node.get_stats()
+
+        return stats

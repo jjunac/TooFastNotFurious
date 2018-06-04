@@ -13,34 +13,28 @@ class TestStatistics(unittest.TestCase):
         entry2.to_spawn = 0
         entry3.to_spawn = 0
 
+        p = Path([0] * 6)
+        p2 = Path([0] * 7)
+
         stat = Statistics()
 
-        stat.add_travel_time(entry1, 100)
-        stat.add_travel_time(entry1, 200)
+        self.assertFalse(p in stat.list_time_travel)
+        self.assertFalse(p2 in stat.list_time_travel)
 
-        stat.add_travel_time(entry2, 200)
-        stat.add_travel_time(entry2, 400)
-        stat.add_travel_time(entry2, 400)
-        stat.add_travel_time(entry2, 800)
+        stat.add_travel_time(p, 100)
+        stat.add_travel_time(p, 200)
 
-        stat.add_travel_time(entry3, 600)
-        stat.add_travel_time(entry3, 800)
-        stat.add_travel_time(entry3, 1000)
+        stat.add_travel_time(p2, 600)
+        stat.add_travel_time(p2, 500)
+        stat.add_travel_time(p2, 800)
 
-        average = stat.compute_average(entry1, 2)
-        self.assertIsNotNone(stat.list_time_travel[entry1])
-        self.assertEqual(150, average)
-        self.assertNotEqual(800, average)
-        self.assertNotEqual(450, average)
+        self.assertEqual(100, stat.list_time_travel[p][0])
+        self.assertEqual(200, stat.list_time_travel[p][1])
 
-        average = stat.compute_average(entry2, 4)
-        self.assertIsNotNone(stat.list_time_travel[entry2])
-        self.assertEqual(450, average)
-        self.assertNotEqual(800, average)
-        self.assertNotEqual(150, average)
+        self.assertEqual(600, stat.list_time_travel[p2][0])
+        self.assertEqual(500, stat.list_time_travel[p2][1])
+        self.assertEqual(800, stat.list_time_travel[p2][2])
 
-        self.assertIsNotNone(stat.list_time_travel[entry3])
-        average = stat.compute_average(entry3, 3)
-        self.assertEqual(800, average)
-        self.assertNotEqual(150, average)
-        self.assertNotEqual(450, average)
+        self.assertEqual(2, len(stat.list_time_travel[p]))
+        self.assertEqual(3, len(stat.list_time_travel[p2]))
+
