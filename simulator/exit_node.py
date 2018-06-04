@@ -1,7 +1,7 @@
-from simulator.abstract_node import AbstractNode
+from simulator.node import Node
 
 
-class ExitNode(AbstractNode):
+class ExitNode(Node):
 
     def __init__(self):
         super().__init__()

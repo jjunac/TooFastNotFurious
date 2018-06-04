@@ -1,6 +1,6 @@
-from simulator import AbstractNode
+from simulator import Node
 
 
-class JunctionComposite(AbstractNode):
+class JunctionComposite(Node):
     def can_move(self, node):
         pass

@@ -2,30 +2,32 @@ from abc import ABC, abstractmethod
 
 
 class AbstractEntity(ABC):
-    def __init__(self):
-        self.successors = []
-        self.predecessors = []
+
+    def __init__(self, simulator):
+        self.simulator = simulator
+        self.predecessors = {}
+        self.successors = {}
+
+    def add_predecessor(self, orientation, predecessor):
+        self.predecessors[orientation] = predecessor
+        self.do_add_predecessor(orientation, predecessor)
 
     @abstractmethod
-    def can_move(self, node):
+    def do_add_predecessor(self, orientation, predecessor):
         pass
 
-    def compute_next(self):
-        if self.current_car is None:
-            return
-        if len(self.successors) == 0:
-            self.next_car = None
-            return
-        if self.successors[self.current_car.get_way_index()].can_move(self):
-            self.successors[self.current_car.get_way_index()].next_car = self.current_car
-            self.next_car = None
-            self.current_car.go_forward()
-        else:
-            self.next_car = self.current_car
+    def add_successor(self, orientation, successor):
+        self.successors[orientation] = successor
+        self.do_add_successor(orientation, successor)
 
-    def apply_next(self):
-        self.current_car = self.next_car
-        self.next_car = None
+    @abstractmethod
+    def do_add_successor(self, orientation, successor):
+        pass
 
-    def __str__(self):
-        return "#" if self.current_car else " "
+    @abstractmethod
+    def get_start(self, orientation):
+        pass
+
+    @abstractmethod
+    def get_end(self, orientation):
+        pass

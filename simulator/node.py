@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractNode(ABC):
+class Node(ABC):
     def __init__(self):
         self.successors = []
         self.predecessors = []

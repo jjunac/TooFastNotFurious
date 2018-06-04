@@ -1,4 +1,4 @@
-from simulator.abstract_node import AbstractNode
+from simulator.node import Node
 from simulator.abstract_entity import AbstractEntity
 from simulator.car import Car
 from simulator.entry_node import EntryNode

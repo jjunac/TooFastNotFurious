@@ -95,22 +95,42 @@ class MyTestCase(unittest.TestCase):
         e = Road(5, Orientation.NORTH, 3)
         e.link_ways()
         #first nodes of ways
-        self.assertIs(e.ways[0][0].successors[0], e.ways[0][1])
-        self.assertIs(e.ways[0][0].successors[1], e.ways[1][1])
-        self.assertIs(e.ways[1][0].successors[0], e.ways[1][1])
-        self.assertIs(e.ways[1][0].successors[1], e.ways[2][1])
-        self.assertIs(e.ways[1][0].successors[2], e.ways[0][1])
-        self.assertIs(e.ways[2][0].successors[0], e.ways[2][1])
-        self.assertIs(e.ways[2][0].successors[1], e.ways[1][1])
+        self.assertIs(e.nodes[0][0].successors[0], e.nodes[0][1])
+        self.assertIs(e.nodes[0][0].successors[1], e.nodes[1][1])
+        self.assertIs(e.nodes[1][0].successors[0], e.nodes[1][1])
+        self.assertIs(e.nodes[1][0].successors[1], e.nodes[2][1])
+        self.assertIs(e.nodes[1][0].successors[2], e.nodes[0][1])
+        self.assertIs(e.nodes[2][0].successors[0], e.nodes[2][1])
+        self.assertIs(e.nodes[2][0].successors[1], e.nodes[1][1])
 
         #last nodes of ways
-        self.assertIs(e.ways[0][3].successors[0], e.ways[0][4])
-        self.assertIs(e.ways[0][3].successors[1], e.ways[1][4])
-        self.assertIs(e.ways[1][3].successors[0], e.ways[1][4])
-        self.assertIs(e.ways[1][3].successors[1], e.ways[2][4])
-        self.assertIs(e.ways[1][3].successors[2], e.ways[0][4])
-        self.assertIs(e.ways[2][3].successors[0], e.ways[2][4])
-        self.assertIs(e.ways[2][3].successors[1], e.ways[1][4])
+        self.assertIs(e.nodes[0][3].successors[0], e.nodes[0][4])
+        self.assertIs(e.nodes[0][3].successors[1], e.nodes[1][4])
+        self.assertIs(e.nodes[1][3].successors[0], e.nodes[1][4])
+        self.assertIs(e.nodes[1][3].successors[1], e.nodes[2][4])
+        self.assertIs(e.nodes[1][3].successors[2], e.nodes[0][4])
+        self.assertIs(e.nodes[2][3].successors[0], e.nodes[2][4])
+        self.assertIs(e.nodes[2][3].successors[1], e.nodes[1][4])
+
+    def test__a_road_with_1_ways(self):
+        e = Road(5, Orientation.NORTH, 3)
+        #first nodes of ways
+        self.assertIs(e.nodes[0][0].successors[0], e.nodes[0][1])
+        self.assertIs(e.nodes[0][0].successors[1], e.nodes[1][1])
+        self.assertIs(e.nodes[1][0].successors[0], e.nodes[1][1])
+        self.assertIs(e.nodes[1][0].successors[1], e.nodes[2][1])
+        self.assertIs(e.nodes[1][0].successors[2], e.nodes[0][1])
+        self.assertIs(e.nodes[2][0].successors[0], e.nodes[2][1])
+        self.assertIs(e.nodes[2][0].successors[1], e.nodes[1][1])
+
+        #last nodes of ways
+        self.assertIs(e.nodes[0][3].successors[0], e.nodes[0][4])
+        self.assertIs(e.nodes[0][3].successors[1], e.nodes[1][4])
+        self.assertIs(e.nodes[1][3].successors[0], e.nodes[1][4])
+        self.assertIs(e.nodes[1][3].successors[1], e.nodes[2][4])
+        self.assertIs(e.nodes[1][3].successors[2], e.nodes[0][4])
+        self.assertIs(e.nodes[2][3].successors[0], e.nodes[2][4])
+        self.assertIs(e.nodes[2][3].successors[1], e.nodes[1][4])
 
 
 if __name__ == '__main__':
