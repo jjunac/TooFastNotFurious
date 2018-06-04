@@ -64,7 +64,9 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(0, entry2.current_car.time)
         self.assertEqual(0, entry3.current_car.time)
 
-        self.assertFalse(p in exit1.statistics.list_time_travel)
+        self.assertFalse((entry1, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry2, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry3, p) in exit1.statistics.list_time_travel)
 
         sim.tick()
         self.assertIsNone(entry1.current_car)
@@ -78,7 +80,9 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(1, road2[0].current_car.time)
         self.assertEqual(1, road3[0].current_car.time)
 
-        self.assertFalse(p in exit1.statistics.list_time_travel)
+        self.assertFalse((entry1, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry2, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry3, p) in exit1.statistics.list_time_travel)
 
         sim.tick()
         self.assertIsNone(road1[0].current_car)
@@ -92,7 +96,9 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(2, road2[1].current_car.time)
         self.assertEqual(2, road3[1].current_car.time)
 
-        self.assertFalse(p in exit1.statistics.list_time_travel)
+        self.assertFalse((entry1, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry2, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry3, p) in exit1.statistics.list_time_travel)
 
         # Cars are going one by one in the junction
         sim.tick()
@@ -105,7 +111,9 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(3, road2[1].current_car.time)
         self.assertEqual(3, rpn.current_car.time)
 
-        self.assertFalse(p in exit1.statistics.list_time_travel)
+        self.assertFalse((entry1, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry2, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry3, p) in exit1.statistics.list_time_travel)
 
         sim.tick()
         self.assertIsNotNone(road1[1].current_car)
@@ -118,7 +126,9 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(4, road2[1].current_car.time)
         self.assertEqual(4, road4[0].current_car.time)
 
-        self.assertFalse(p in exit1.statistics.list_time_travel)
+        self.assertFalse((entry1, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry2, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry3, p) in exit1.statistics.list_time_travel)
 
         sim.tick()
         self.assertIsNotNone(road1[1].current_car)
@@ -132,7 +142,9 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(5, road4[1].current_car.time)
         self.assertEqual(5, rpn.current_car.time)
 
-        self.assertFalse(p in exit1.statistics.list_time_travel)
+        self.assertFalse((entry1, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry2, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry3, p) in exit1.statistics.list_time_travel)
 
         sim.tick()
         self.assertIsNotNone(road1[1].current_car)
@@ -147,7 +159,9 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(6, road4[0].current_car.time)
         self.assertEqual(6, exit1.current_car.time)
 
-        self.assertFalse(p in exit1.statistics.list_time_travel)
+        self.assertFalse((entry1, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry2, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry3, p) in exit1.statistics.list_time_travel)
 
         sim.tick()
         self.assertIsNone(road1[1].current_car)
@@ -161,14 +175,17 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(7, road4[1].current_car.time)
         self.assertEqual(7, rpn.current_car.time)
 
-        self.assertTrue(p in exit1.statistics.list_time_travel)
+        self.assertFalse((entry1, p) in exit1.statistics.list_time_travel)
+        self.assertFalse((entry2, p) in exit1.statistics.list_time_travel)
 
-        self.assertEqual(6, exit1.statistics.list_time_travel[p][0])
+        self.assertTrue((entry3, p) in exit1.statistics.list_time_travel)
+
+        self.assertEqual(6, exit1.statistics.list_time_travel[(entry3, p)][0])
         self.assertEqual(1, len(exit1.statistics.list_time_travel))
-        self.assertEqual(1, len(exit1.statistics.list_time_travel[p]))
+        self.assertEqual(1, len(exit1.statistics.list_time_travel[(entry3, p)]))
 
-        self.assertEqual({p: [6]}, exit1.get_stats())
-        self.assertEqual({exit1: {p: [6]}}, sim.get_stats())
+        self.assertEqual({(entry3, p): [6]}, exit1.get_stats())
+        self.assertEqual({exit1: {(entry3, p): [6]}}, sim.get_stats())
 
     def test_integration_2_input_2_output_with_right_priority(self):
         entry1 = EntryNode(1, 0)
