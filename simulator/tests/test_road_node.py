@@ -2,7 +2,7 @@ import unittest
 
 from shared import Orientation
 from simulator.car import Car
-from simulator.Road import  Road
+from simulator.road import Road
 from simulator.path import Path
 from simulator.utils import *
 
