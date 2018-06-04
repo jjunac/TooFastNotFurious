@@ -2,10 +2,10 @@ import random
 from copy import deepcopy
 
 from simulator.car import Car
-from simulator.traffic_node import TrafficNode
+from simulator.abstract_node import AbstractNode
 
 
-class EntryNode(TrafficNode):
+class EntryNode(AbstractNode):
 
     def __init__(self, avg_car_per_tick, rate):
         super().__init__()

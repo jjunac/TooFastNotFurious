@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class TrafficNode(ABC):
+class AbstractNode(ABC):
     def __init__(self):
         self.successors = []
         self.predecessors = []

@@ -20,4 +20,4 @@ class Road:
 
     def build(self):
         self.start.possible_destinations[self.end] = (len(self.start.possible_destinations.items()), self.length)
-        return simulator.build_road(self.length, self.orientation_start)
+        return simulator.Road(self.length, self.start)

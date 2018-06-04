@@ -1,9 +1,9 @@
-from simulator.traffic_node import TrafficNode
+from simulator.abstract_node import AbstractNode
 
 
-class RightPriorityNode(TrafficNode):
+class RightPriorityNode(AbstractNode):
     def __init__(self):
-        TrafficNode.__init__(self)
+        AbstractNode.__init__(self)
         self.priority = None
 
     def can_move(self, node):

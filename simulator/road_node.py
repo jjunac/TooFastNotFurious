@@ -1,7 +1,7 @@
-from simulator.traffic_node import TrafficNode
+from simulator.abstract_node import AbstractNode
 
 
-class RoadNode(TrafficNode):
+class RoadNode(AbstractNode):
 
     def __init__(self, orientation):
         super().__init__()

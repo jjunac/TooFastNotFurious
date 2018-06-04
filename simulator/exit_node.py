@@ -1,7 +1,7 @@
-from simulator.traffic_node import TrafficNode
+from simulator.abstract_node import AbstractNode
 
 
-class ExitNode(TrafficNode):
+class ExitNode(AbstractNode):
 
     def __init__(self):
         super().__init__()
