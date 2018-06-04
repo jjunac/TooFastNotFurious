@@ -28,7 +28,8 @@ class Simulation:
         end_build = self.node_conversion[road.end]
         simulator.link(build[-1], end_build)
 
-
+        for i in range(len(build)-1):
+            self.dependencies.setdefault((build[i], build[i+1]), []).append(build[i+1])
 
         self.built_nodes.remove(end_build)
         self.built_nodes.extend(build)
