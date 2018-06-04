@@ -95,13 +95,6 @@ class Drawing:
         graphic_roads, nodes = self.create_graphic_roads(roads)
         while self.continue_drawing:
             self.simulator.tick()
-            lol = 6
-            length_ = self.cell_length * lol + 200
-            graphic_road = GraphicRoad(200, 200, length_, 200, [])
-            graphic_road.draw(self.screen)
-            for i in range(lol + 1):
-                print(i)
-                pygame.draw.circle(self.screen, (0, 255, 0), (self.cell_length * i + 200, 200), 10)
             for graphic_road in graphic_roads:
                 graphic_road.update()
                 graphic_road.draw(self.screen)
