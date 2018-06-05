@@ -4,7 +4,7 @@ from copy import copy
 import pygame
 from pygame.locals import *
 
-from simulator import Road
+from simulator.road import Road
 from visualizer.point import Point
 from visualizer.road import GraphicRoad
 

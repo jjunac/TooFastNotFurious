@@ -20,13 +20,12 @@ class MyTestCase(unittest.TestCase):
         junction.add_predecessor(Orientation.SOUTH, road3)
         road2.add_predecessor(Orientation.EAST, junction)
 
-        drawing = Drawer(simulator, cell_height=30, cell_length=30)
-        roads = drawing.create_graphic_roads(road, Point(200, 500))
+        cell_size = 30
+        drawing = Drawer(simulator, cell_height=cell_size, cell_length=cell_size)
+        roads = drawing.create_graphic_roads(road, Point(0, 0))
         graphic_road = roads[0]
-        # self.assertAlmostEqual(0, graphic_road.x)
-        # self.assertAlmostEqual(0, graphic_road.y)
-        drawing.init_screen()
-        drawing.draw()
+        self.assertEqual(Point(0, 0), graphic_road.start)
+        self.assertEqual(Point(0, -cell_size), graphic_road.fake_start)
 
 
 if __name__ == '__main__':

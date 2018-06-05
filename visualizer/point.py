@@ -22,6 +22,12 @@ class Point:
         return Point(cos(radian_angle) * (point.x - self.x) - sin(radian_angle) * (point.y - self.y) + self.x,
                      sin(radian_angle) * (point.x - self.x) + cos(radian_angle) * (point.y - self.y) + self.y)
 
+    def __eq__(self, o):
+        return o.x == self.x and o.y == self.y
+
+    def __str__(self) -> str:
+        return "({0},{1})".format(self.x, self.y)
+
 
 def to_radians(degree_angle):
     return degree_angle * pi / 180
