@@ -22,5 +22,4 @@ class TestRoad(unittest.TestCase):
             # Empty after the car
             for j in range(i + 1, road.length):
                 self.assertIsNone(road.nodes[0][j].current_car)
-            road.compute_next()
-            road.apply_next()
+            simulator.tick()

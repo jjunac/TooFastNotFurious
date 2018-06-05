@@ -21,7 +21,7 @@ class Road(AbstractEntity):
 
     def __init__(self, simulator,  length, orientation, n_of_ways):
         super().__init__(simulator)
-        self.nodes = [self.__build_road(length, orientation) for _ in range(n_of_ways)]
+        self.nodes = [self.__build_road(simulator, length) for _ in range(n_of_ways)]
         self.length = length
         self.n_of_ways = n_of_ways
         self.orientation = orientation
@@ -49,11 +49,12 @@ class Road(AbstractEntity):
         link(end, start)
         super().simulator.dependencies[(end, start)] = [start]
 
-    def __build_road(simulator, length, orientation):
+    def __build_road(self, simulator, length):
         res = [Node()]
-        for i in range(length - 1):
+        for _ in range(length - 1):
             res.append(Node())
             link(res[-2], res[-1])
+            simulator.dependencies[(res[-2], res[-1])] = [res[-1]]
         return res
 
 def link(predecessor, successor):
