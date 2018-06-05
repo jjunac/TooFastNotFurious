@@ -225,14 +225,14 @@ class TestRightPriority(unittest.TestCase):
         self.assertIsNone(rp.nodes[0].current_car)
 
         simulator.tick()
-        self.assertIsNotNone(entry1.nodes[0][0].current_car)
-        self.assertIsNone(entry2.nodes[0][0].current_car)
+        self.assertIsNone(entry1.nodes[0][0].current_car)
+        self.assertIsNotNone(entry2.nodes[0][0].current_car)
         self.assertIsNone(exit.nodes[0][0].current_car)
         self.assertIsNotNone(rp.nodes[0].current_car)
 
         simulator.tick()
-        self.assertIsNotNone(entry1.nodes[0][0].current_car)
-        self.assertIsNone(entry2.nodes[0][0].current_car)
+        self.assertIsNone(entry1.nodes[0][0].current_car)
+        self.assertIsNotNone(entry2.nodes[0][0].current_car)
         self.assertIsNotNone(exit.nodes[0][0].current_car)
         self.assertIsNone(rp.nodes[0].current_car)
 

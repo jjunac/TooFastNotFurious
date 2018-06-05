@@ -14,16 +14,11 @@ class RightPriorityJunction(AbstractEntity):
         start = self.get_start(orientation)
         link(end, start)
         self.simulator.dependencies[(end, start)] = [start]
-        """
-        if orientation.left() in self.predecessors:
-            self.simulator.dependencies.setdefault((end, start), []).append(self.predecessors[orientation.left()])
-        if orientation.right() in self.predecessors:
-            self.simulator.dependencies.setdefault((self.predecessors[orientation.right()], start), []).append(end)
-        """
         if orientation.left() in self.predecessors:
             self.simulator.dependencies[(end, start)].append(self.get_end_of_predecessor(orientation.left()))
         if orientation.right() in self.predecessors:
             self.simulator.dependencies[(self.get_end_of_predecessor(orientation.right()), start)].append(end)
+
 
     def get_end_of_predecessor(self, orientation):
         return self.predecessors[orientation].get_start(orientation)
