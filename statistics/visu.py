@@ -1,6 +1,8 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
 from random import randrange
 
+import datetime
+
 
 def create_graphic_report(stats):
     env = Environment(
@@ -39,11 +41,17 @@ def create_graphic_report(stats):
 
         for entry, val in value.items():
             background_color.append("rgba(" + str(randrange(255)) + ", " + str(
-                randrange(255)) + ", " + str(randrange(255)) + ", 0.2)")
+                randrange(255)) + ", " + str(randrange(255)) + ", 0.7)")
             dataset.append(val)
             labels.append(key + " - " + entry)
 
     template = env.get_template('bar_chart_template.html')
 
-    with open('../html/report.html', 'w+') as file:
+    now = datetime.datetime.now()
+
+    name = "../../html/report_" + now.strftime("%Y_%m_%d_%Hh%M") + ".html"
+
+    print("Name = ", name)
+
+    with open(name, 'w+') as file:
         file.write(template.render(labels=labels, data=dataset, backgroundColor=background_color))

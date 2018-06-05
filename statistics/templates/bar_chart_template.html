@@ -8,41 +8,58 @@
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="css/bootstrap-grid.css" rel="stylesheet" type="text/css" />
     <link href="css/bootstrap-reboot.css" rel="stylesheet" type="text/css" />
-    <title>Bar chart</title>
+    <title>Too Fast and not Furious</title>
 </head>
 
 <body>
 
-   <div class="container">
-        <canvas id="myChart" width="500" height="200"></canvas>
+    <div class="container">
+    <div class="row pt-4">
+        <div class="col-4">
+            <img alt="Baboulinet" src="images/baboulinet.png" height="100"/>
+        </div>
+        <div class="col-8 pt-4">
+            <h1>
+                <span>></span>
+                Simulation Report
+            </h1>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-12 pt-4">
+            <canvas id="myChart" width="500" height="200"></canvas>
+        </div>
+    </div>
+
+</div>
+
 
 </body>
 
 <script type="text/javascript">
-        var ctx = document.getElementById("myChart");
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
 
-                labels: {{labels | safe}},
-                datasets: [{
-                    label: 'Nb cars',
-                    data: {{data}},
-                    backgroundColor: {{backgroundColor | safe}}
+            labels: {{ labels | safe }},
+    datasets: [{
+        label: 'Nb cars',
+        data: {{ data }},
+        backgroundColor: {{ backgroundColor | safe }}
                 }]
             },
-            options: {
-                responsive: true,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+    options: {
+        responsive: true,
+            scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
                 }
-            }
+            }]
+        }
+    }
         });
-    </script>
+</script>
 
 </html>
