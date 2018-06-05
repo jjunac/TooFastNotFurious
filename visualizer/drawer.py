@@ -1,4 +1,3 @@
-import time
 from copy import copy
 
 import pygame
@@ -30,17 +29,17 @@ class Drawer:
         self.entities = []
 
     def init_screen(self):
-        self.screen = pygame.display.set_mode((self.height, self.width))
+        self.screen = pygame.display.set_mode((self.width, self.height))
         self.entities = self.simulator.entities
         self.screen.fill(WHITE)
         pygame.display.flip()
 
-    def create_graphic_roads(self, start, first_point=Point(200, 500)):
-        stack = [(start, first_point)]
+    def create_graphic_roads(self, start, first_point=Point(500, 300)):
+        stack = [(start, first_point, True)]
         visited = set()
         roads = []
         while stack:
-            entity, pos = stack.pop()
+            entity, pos, forward = stack.pop()
             res = copy(pos)
             if entity not in visited:
                 successors = entity.successors.values()
@@ -49,16 +48,20 @@ class Drawer:
                     print(entity.orientation.value)
                     res = pos.rotate_point(entity.orientation,
                                            Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
+                    if not forward:
+                        res = pos.rotate_point(entity.orientation + 180,
+                                               Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
+                        pos, res = res, pos
                     roads.append(GraphicRoad(pos, res, entity.nodes))
                 visited.add(entity)
-                next_entities = [(r, res) for r in set(successors) - visited]
-                next_entities.extend([(r, pos) for r in set(predecessors) - visited])
+                next_entities = [(r, pos, False) for r in set(predecessors) - visited]
+                next_entities.extend([(r, res, True) for r in set(successors) - visited])
                 stack.extend(next_entities)
 
         return roads
 
     def draw(self):
-        graphic_roads = self.create_graphic_roads(self.entities[0])
+        graphic_roads = self.create_graphic_roads(self.entities[1])
         for graphic_road in graphic_roads:
             graphic_road.create_sprites()
         while self.continue_drawing:
@@ -66,7 +69,6 @@ class Drawer:
             for graphic_road in graphic_roads:
                 graphic_road.update()
                 graphic_road.draw(self.screen)
-            time.sleep(1)
             pygame.display.flip()
             self.screen.fill(WHITE)
             for event in pygame.event.get():

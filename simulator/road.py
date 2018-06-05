@@ -1,4 +1,5 @@
-from simulator import AbstractEntity, Node
+from simulator import AbstractEntity
+from simulator.node import Node
 
 
 class Road(AbstractEntity):

@@ -1,4 +1,4 @@
-from math import sqrt, cos, sin, pi
+from math import sqrt, cos, sin, pi, isclose
 
 
 class Point:
@@ -23,10 +23,13 @@ class Point:
                      sin(radian_angle) * (point.x - self.x) + cos(radian_angle) * (point.y - self.y) + self.y)
 
     def __eq__(self, o):
-        return o.x == self.x and o.y == self.y
+        return isclose(o.x, self.x, abs_tol=1e-09) and isclose(o.y, self.y, abs_tol=1e-09)
 
     def __str__(self) -> str:
         return "({0},{1})".format(self.x, self.y)
+
+    def __neg__(self):
+        return Point(-self.x, self.y)
 
 
 def to_radians(degree_angle):

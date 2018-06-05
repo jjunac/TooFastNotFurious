@@ -1,6 +1,6 @@
 from simulator.abstract_entity import AbstractEntity
-from simulator.simulator import link
 from simulator.node import Node
+from simulator.road import link
 
 
 class Exit(AbstractEntity):

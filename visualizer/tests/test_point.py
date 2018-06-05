@@ -1,5 +1,5 @@
 import unittest
-from math import pi
+from math import pi, sqrt
 
 from visualizer.point import Point, to_radians, to_degrees
 
@@ -71,6 +71,12 @@ class TestPoint(unittest.TestCase):
     def assertAlmostEqualPoint(self, point, res):
         self.assertAlmostEqual(point.x, res.x)
         self.assertAlmostEqual(point.y, res.y)
+
+    def test_length(self):
+        self.assertEqual(5, Point(0, 5).length())
+        self.assertEqual(sqrt(50), Point(5, 5).length())
+        self.assertEqual(5, Point(-3, 4).length())
+        self.assertEqual(5, Point(3, -4).length())
 
     def test_conversions(self):
         self.assertAlmostEqual(pi, to_radians(180))

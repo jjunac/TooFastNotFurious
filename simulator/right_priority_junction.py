@@ -1,6 +1,6 @@
 from simulator.abstract_entity import AbstractEntity
 from simulator.node import Node
-from simulator.simulator import link
+from simulator.road import link
 
 
 class RightPriorityJunction(AbstractEntity):
@@ -20,7 +20,6 @@ class RightPriorityJunction(AbstractEntity):
             self.simulator.dependencies[(end, start)].append(self.get_end_of_predecessor(orientation.left()))
         if orientation.right() in self.predecessors:
             self.simulator.dependencies[(self.get_end_of_predecessor(orientation.right()), start)].append(end)
-
 
     def get_end_of_predecessor(self, orientation):
         return self.predecessors[orientation].get_end(orientation)
