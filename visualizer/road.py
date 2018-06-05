@@ -1,85 +1,34 @@
-from math import sqrt, cos, sin, atan2, pi
+from math import atan2
 
 import pygame
 
-from resources import CAR_IMAGE, ROAD_IMAGE
-
-
-def rotate_point(angle, point, origin=(0, 0)):
-    return (cos(angle) * (point[0] - origin[0]) - sin(angle) * (point[1] - origin[1]) + origin[0],
-            sin(angle) * (point[0] - origin[0]) + cos(angle) * (point[1] - origin[1]) + origin[1])
+from visualizer.my_sprite import RoadSprite
+from visualizer.point import Point, to_degrees
 
 
 class GraphicRoad(pygame.sprite.RenderClear):
 
-    def __init__(self, x, y, xa, ya, road_cells, length=30, height=30):
+    def __init__(self, start, end, road_cells, cell_length=30, cell_height=30):
         super().__init__()
-        # if x > xa:
-        #     x, xa = xa, x
-        # elif x < xa:
-        #     x, xa = xa, x
-
-        self.x = x
-        self.y = y
-        self.xa = xa
-        self.ya = ya
+        self.start = start
+        self.end = end
         self.road_cells = road_cells
-        self.width = length
-        self.height = height
-        vect = (self.xa - self.x, self.ya - self.y)
-        self.angle = atan2(vect[1], vect[0])
-        self.x, self.y = rotate_point(self.angle, (self.x + length, self.y), (self.x, self.y))
-        self.xa, self.ya = rotate_point(self.angle, (self.xa, self.ya), (self.xa, self.ya))
-        vect = (self.xa - self.x, self.ya - self.y)
-        dist = sqrt(vect[0] ** 2 + vect[1] ** 2)
+        self.cell_length = cell_length
+        self.cell_height = cell_height
+        self.angle = to_degrees(atan2(self.end.y - self.start.y, self.end.x - self.start.x))
+        self.fake_start = start.rotate_point(self.angle, Point(self.start.x + self.cell_length, self.start.y))
+        tmp = self.fake_start.rotate_point(self.angle, Point(self.fake_start.x + self.cell_length, self.fake_start.y))
+        self.pos_i = tmp - self.fake_start
+
+    def create_sprites(self):
+        vector = self.end - self.fake_start
+        dist = vector.length()
         i = 0
-        xtmp, ytmp = rotate_point(self.angle, (self.x + length, self.y), (self.x, self.y))
-        self.xi = int(xtmp - self.x)
-        self.yi = int(ytmp - self.y)
-        angle_degree = self.angle * 180 / pi
-        while i < int(dist / length):
-            road_portion = RoadSprite(self.x + self.xi * i, self.y + self.yi * i, length, height, angle_degree)
+        while i < int(dist / self.cell_length):
+            road_portion = RoadSprite(Point(self.fake_start.x + self.pos_i.x * i, self.fake_start.y + self.pos_i.y * i),
+                                      self.cell_length, self.cell_height, self.angle)
             self.add(road_portion)
             i += 1
-        if dist / length - i > 1:
-            self.add(
-                RoadSprite(self.x + self.xi * i, self.y + self.yi * i, int(dist - i * length), height, angle_degree))
 
     def update(self):
         pass
-
-    def draw(self, surface):
-        super().draw(surface)
-        for i in range(0, len(self.road_cells)):
-            if self.road_cells[i].current_car:
-                car = CarSprite(self.x + self.xi * i, self.y + self.yi * i, self.width, int(2 * self.height / 3),
-                                -self.angle * 180 / pi)
-                surface.blit(car.image, car.rect)
-
-
-class MySprite(pygame.sprite.Sprite):
-
-    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0, image=None):
-        pygame.sprite.Sprite.__init__(self)
-        if not image.get_alpha():
-            image = pygame.Surface.convert_alpha(image)
-        image = pygame.transform.scale(image, (length, height))
-        rect = image.get_rect().move(x - image.get_rect().width / 2, y - image.get_rect().height / 2)
-        self.image, self.rect = MySprite.rotate(image, rect, angle)
-
-    @staticmethod
-    def rotate(image, rect, angle):
-        """Rotate the image while keeping its center."""
-        new_image = pygame.transform.rotate(image, angle)
-        rect = new_image.get_rect(center=rect.center)
-        return new_image, rect
-
-
-class RoadSprite(MySprite):
-    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0):
-        super().__init__(x, y, length, height, angle, ROAD_IMAGE)
-
-
-class CarSprite(MySprite):
-    def __init__(self, x=0, y=0, length=50, height=50, angle=0.0):
-        super().__init__(x, y, length, height, angle, CAR_IMAGE)

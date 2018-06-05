@@ -2,7 +2,7 @@ from enum import IntEnum
 
 
 class Orientation(IntEnum):
-    NORTH = 270
+    NORTH = -90
     EAST = 0
     SOUTH = 90
     WEST = 180

@@ -1,9 +1,8 @@
 import unittest
-from math import pi
 
 from shared.orientation import Orientation
 from simulator import *
-from visualizer.drawer import Drawing
+from visualizer.drawer import Drawer
 from visualizer.road import rotate_point
 
 
@@ -35,7 +34,7 @@ class TestRoadDraw(unittest.TestCase):
         link(priority_node, road2[0])
         link(priority_node, road4[0])
         nodes = road + road2 + road3 + road4
-        visited, road_map = Drawing.depth_first_search([entry, entry2])
+        visited, road_map = Drawer.depth_first_search([entry, entry2])
         self.assertEqual(set(nodes), visited)
         roads = [r["road"] for r in road_map]
         self.assertTrue(road in roads)
@@ -55,43 +54,43 @@ class TestRoadDraw(unittest.TestCase):
     def test_rotate_point(self):
         self.assertEqual((10, 0), rotate_point(0, (10, 0)))
         point = (0, -10)
-        res = rotate_point(-pi / 2, (10, 0))
+        res = rotate_point(-180 / 2, (10, 0))
         self.assertAlmostEqualTuple(point, res)
 
         point = (0, 10)
-        res = rotate_point(pi / 2, (10, 0))
+        res = rotate_point(180 / 2, (10, 0))
         self.assertAlmostEqualTuple(point, res)
 
         point = (-10, 0)
-        res = rotate_point(pi, (10, 0))
+        res = rotate_point(180, (10, 0))
         self.assertAlmostEqualTuple(point, res)
 
         point = (0, -10)
-        res = rotate_point(3 * pi / 2, (10, 0))
+        res = rotate_point(3 * 180 / 2, (10, 0))
         self.assertAlmostEqualTuple(point, res)
 
         point = (7.0710678, 7.0710678)
-        res = rotate_point(pi / 4, (10, 0))
+        res = rotate_point(180 / 4, (10, 0))
         self.assertAlmostEqualTuple(point, res)
 
         point = (5, 5)
-        res = rotate_point(pi / 2, (10, 0), (5, 0))
+        res = rotate_point(180 / 2, (10, 0), (5, 0))
         self.assertAlmostEqualTuple(point, res)
 
         point = (5, -5)
-        res = rotate_point(-pi / 2, (10, 0), (5, 0))
+        res = rotate_point(-180 / 2, (10, 0), (5, 0))
         self.assertAlmostEqualTuple(point, res)
 
         point = (5, -5)
-        res = rotate_point(3 * pi / 2, (10, 0), (5, 0))
+        res = rotate_point(3 * 180 / 2, (10, 0), (5, 0))
         self.assertAlmostEqualTuple(point, res)
 
         point = (3, 8)
-        res = rotate_point(pi / 2, (10, 5), (5, 3))
+        res = rotate_point(180 / 2, (10, 5), (5, 3))
         self.assertAlmostEqualTuple(point, res)
 
         point = (5, -5)
-        res = rotate_point(pi / 2, (15, 5), (15, -5))
+        res = rotate_point(180 / 2, (15, 5), (15, -5))
         self.assertAlmostEqualTuple(point, res)
 
     def assertAlmostEqualTuple(self, point, res):
