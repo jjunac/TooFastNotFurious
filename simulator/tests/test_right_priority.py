@@ -46,9 +46,9 @@ class TestRightPriority(unittest.TestCase):
         p = Path([0] * 3)
         r1.nodes[0][0].current_car = Car(deepcopy(p), r1)
 
-        r1.add_predecessor(Orientation.NORTH, rp)
-        r2.add_predecessor(Orientation.WEST, rp)
-        rp.add_predecessor(Orientation.EAST, r3)
+        rp.add_predecessor(Orientation.NORTH, r1)
+        rp.add_predecessor(Orientation.WEST, r2)
+        r3.add_predecessor(Orientation.EAST, rp)
 
         simulator.tick()
 
@@ -68,9 +68,9 @@ class TestRightPriority(unittest.TestCase):
         r1.nodes[0][0].current_car = Car(p, r1)
         rp.nodes[0].current_car = Car(p, rp)
 
-        r1.add_predecessor(Orientation.NORTH, rp)
-        r2.add_predecessor(Orientation.WEST, rp)
-        rp.add_predecessor(Orientation.EAST, r3)
+        rp.add_predecessor(Orientation.NORTH, r1)
+        rp.add_predecessor(Orientation.WEST, r2)
+        r3.add_predecessor(Orientation.EAST, rp)
 
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
@@ -92,10 +92,10 @@ class TestRightPriority(unittest.TestCase):
         r2.nodes[0][0].current_car = Car(p, r2)
         r3.nodes[0][0].current_car = Car(p, r3)
 
-        r1.add_predecessor(Orientation.NORTH, rp)
-        r2.add_predecessor(Orientation.WEST, rp)
-        r3.add_predecessor(Orientation.SOUTH, rp)
-        rp.add_predecessor(Orientation.EAST, r4)
+        rp.add_predecessor(Orientation.NORTH, r1)
+        rp.add_predecessor(Orientation.WEST, r2)
+        rp.add_predecessor(Orientation.SOUTH, r3)
+        r4.add_predecessor(Orientation.EAST, rp)
 
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
@@ -132,10 +132,10 @@ class TestRightPriority(unittest.TestCase):
         entryW.nodes[0][0].current_car = Car(p, entryW)
         entryS.nodes[0][0].current_car = Car(p, entryS)
 
-        entryN.add_predecessor(Orientation.NORTH, rp)
-        entryW.add_predecessor(Orientation.WEST, rp)
-        entryS.add_predecessor(Orientation.SOUTH, rp)
-        rp.add_predecessor(Orientation.WEST, exitW)
+        rp.add_predecessor(Orientation.NORTH, entryN)
+        rp.add_predecessor(Orientation.WEST, entryW)
+        rp.add_predecessor(Orientation.SOUTH, entryS)
+        exitW.add_predecessor(Orientation.WEST, rp)
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
@@ -170,10 +170,10 @@ class TestRightPriority(unittest.TestCase):
         entryW.nodes[0][0].current_car = Car(Path([0] * 3), entryW)
         entryN.nodes[0][0].current_car = Car(Path([0, 1, 0]), entryN)
 
-        entryW.add_predecessor(Orientation.NORTH, rp)
-        entryN.add_predecessor(Orientation.WEST, rp)
-        rp.add_predecessor(Orientation.WEST, exitW)
-        rp.add_predecessor(Orientation.NORTH, exitN)
+        rp.add_predecessor(Orientation.NORTH, entryN)
+        rp.add_predecessor(Orientation.WEST, entryW)
+        exitW.add_predecessor(Orientation.WEST, rp)
+        exitN.add_predecessor(Orientation.NORTH, rp)
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
@@ -215,9 +215,9 @@ class TestRightPriority(unittest.TestCase):
         entry1.nodes[0][0].current_car = Car(p, entry1)
         entry2.nodes[0][0].current_car = Car(p, entry2)
 
-        entry1.add_predecessor(Orientation.EAST, rp)
-        entry2.add_predecessor(Orientation.WEST, rp)
-        rp.add_predecessor(Orientation.NORTH, exit)
+        rp.add_predecessor(Orientation.EAST, entry1)
+        rp.add_predecessor(Orientation.WEST, entry2)
+        exit.add_predecessor(Orientation.NORTH, rp)
 
         self.assertIsNotNone(entry1.nodes[0][0].current_car)
         self.assertIsNotNone(entry2.nodes[0][0].current_car)
