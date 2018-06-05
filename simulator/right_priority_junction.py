@@ -1,6 +1,6 @@
 from simulator.abstract_entity import AbstractEntity
 from simulator.node import Node
-from simulator.simulator import link
+from simulator.utils import link
 
 
 class RightPriorityJunction(AbstractEntity):

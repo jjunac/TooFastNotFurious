@@ -1,5 +1,6 @@
+from simulator.statistics import Statistics
 from simulator.abstract_entity import AbstractEntity
-from simulator.simulator import link
+from simulator.utils import link
 from simulator.node import Node
 
 
@@ -10,6 +11,7 @@ class Exit(AbstractEntity):
         self.outflow = 0
         self.departure_counter = {}
         self.nodes = [Node()]
+        self.statistics = Statistics()
 
     def compute_next(self):
         if self.nodes[0].current_car:
@@ -32,3 +34,6 @@ class Exit(AbstractEntity):
 
     def apply_next(self):
         self.nodes[0].apply_next()
+
+    def get_stats(self):
+        return self.statistics.list_time_travel
