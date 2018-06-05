@@ -27,6 +27,8 @@ class Entry(AbstractEntity):
             n.apply_next()
 
     def compute_next(self):
+        for n in self.nodes:
+            n.compute_next(self.simulator)
         if random.random() <= self.rate:
             self.to_spawn += 1
         if self.to_spawn > 0 and not self.nodes[0].current_car:
