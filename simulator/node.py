@@ -22,7 +22,7 @@ class Node():
     def __can_move_to(self, destination, simulator):
         dependencies = simulator.dependencies[(self, destination)]
         for d in dependencies:
-            if self.current_car:
+            if d.current_car:
                 return False
         return True
 

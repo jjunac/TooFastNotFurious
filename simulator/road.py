@@ -3,6 +3,14 @@ from simulator import AbstractEntity, Node
 
 class Road(AbstractEntity):
 
+    def __init__(self, simulator,  length, orientation, n_of_ways):
+        super().__init__(simulator)
+        self.nodes = [self.__build_road(simulator, length) for _ in range(n_of_ways)]
+        self.length = length
+        self.n_of_ways = n_of_ways
+        self.orientation = orientation
+        self.__link_ways()
+
     def get_start(self, orientation):
         return self.nodes[0][0]
 
@@ -18,14 +26,6 @@ class Road(AbstractEntity):
         for l in self.nodes:
             for n in l:
                 n.apply_next()
-
-    def __init__(self, simulator,  length, orientation, n_of_ways):
-        super().__init__(simulator)
-        self.nodes = [self.__build_road(simulator, length) for _ in range(n_of_ways)]
-        self.length = length
-        self.n_of_ways = n_of_ways
-        self.orientation = orientation
-        self.__link_ways()
 
     def __link_ways(self):
         # TODO link dependencies when we decide multiple ways
@@ -56,7 +56,7 @@ class Road(AbstractEntity):
             link(res[-2], res[-1])
             simulator.dependencies[(res[-2], res[-1])] = [res[-1]]
         return res
-
+# FIXME remove and use import
 def link(predecessor, successor):
     predecessor.successors.append(successor)
     successor.predecessors.append(predecessor)
