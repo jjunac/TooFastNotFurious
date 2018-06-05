@@ -31,6 +31,8 @@ class Node:
     def apply_next(self):
         self.current_car = self.next_car
         self.next_car = None
+        if self.current_car:
+            self.current_car.tick()
 
     def __str__(self):
         return "#" if self.current_car else " "
