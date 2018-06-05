@@ -1,14 +1,10 @@
-from abc import ABC, abstractmethod
-
-
-class Node(ABC):
+class Node():
     def __init__(self):
         self.successors = []
         self.predecessors = []
         self.current_car = None
         self.next_car = None
 
-    @abstractmethod
     def can_move(self, node):
         pass
 

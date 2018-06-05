@@ -10,18 +10,11 @@ class AbstractEntity(ABC):
 
     def add_predecessor(self, orientation, predecessor):
         self.predecessors[orientation] = predecessor
+        predecessor.successors[orientation] = self
         self.do_add_predecessor(orientation, predecessor)
 
     @abstractmethod
     def do_add_predecessor(self, orientation, predecessor):
-        pass
-
-    def add_successor(self, orientation, successor):
-        self.successors[orientation] = successor
-        self.do_add_successor(orientation, successor)
-
-    @abstractmethod
-    def do_add_successor(self, orientation, successor):
         pass
 
     @abstractmethod

@@ -1,4 +1,4 @@
-from simulator import build_road, link, AbstractEntity
+from simulator import link, AbstractEntity
 
 class Road(AbstractEntity):
 
@@ -28,7 +28,11 @@ class Road(AbstractEntity):
         end = predecessor.get_end(orientation)
         start = self.get_start(orientation)
         link(end, start)
-        super().simulator.dependencies[(end, start)] = start
+        super().simulator.dependencies[(end, start)] = [start]
 
-    def do_add_successor(self, orientation, successor):
-        link(successor.get_start(orientation), self.get_end(orientation))
+    def __build_road(simulator, length, orientation):
+        res = [RoadNode(orientation)]
+        for i in range(length - 1):
+            res.append(RoadNode(orientation))
+            link(res[-2], res[-1])
+        return res
