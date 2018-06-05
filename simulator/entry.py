@@ -2,6 +2,7 @@ import random
 
 from simulator.node import Node
 from simulator.abstract_entity import AbstractEntity
+from simulator.car import Car
 
 
 class Entry(AbstractEntity):

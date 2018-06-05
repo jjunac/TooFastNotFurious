@@ -1,5 +1,5 @@
 from modeler.node import Node
-from simulator import RightPriorityNode
+import simulator
 
 
 class RightPriorityJunction(Node):
@@ -7,5 +7,6 @@ class RightPriorityJunction(Node):
     def __init__(self):
         super().__init__()
 
-    def build(self):
-        return RightPriorityNode()
+
+    def build(self, sim):
+        return simulator.RightPriorityJunction(sim, 1, 1)

@@ -6,5 +6,5 @@ class ExitNode(Node):
     def __init__(self):
         super().__init__()
 
-    def build(self):
-        return simulator.ExitNode()
+    def build(self, sim):
+        return simulator.Exit(sim)

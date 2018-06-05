@@ -2,12 +2,11 @@ import simulator
 
 class Road:
 
-    def __init__(self, start, orientation_start):
+    def __init__(self, start, orientation):
         self.length = 0
         self.start = start
         self.end = None
-        self.orientation_start = orientation_start
-        self.orientation_end = orientation_start.invert()
+        self.orientation = orientation
 
     def with_length(self, length):
         self.length = length
@@ -15,9 +14,9 @@ class Road:
 
     def to(self, destination):
         self.end = destination
-        destination.entries[self.orientation_end] = self
+        destination.entries[self.orientation] = self
         return self
 
-    def build(self):
+    def build(self, sim):
         self.start.possible_destinations[self.end] = (len(self.start.possible_destinations.items()), self.length)
-        return simulator.Road(self.length, self.orientation_start, 1)
+        return simulator.Road(sim, self.length, self.orientation, 1)

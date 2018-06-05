@@ -1,5 +1,4 @@
-from simulator import ExitNode
-from simulator.utils import *
+from simulator.exit import Exit
 from visualizer.drawer import Drawing
 
 
@@ -23,7 +22,7 @@ class Simulator:
 
     def get_stats(self):
         stats = {}
-        exit_nodes = [n for n in self.nodes if type(n) is ExitNode]
+        exit_nodes = [n for n in self.entities if type(n) is Exit]
         for node in exit_nodes:
             stats[node] = node.get_stats()
 

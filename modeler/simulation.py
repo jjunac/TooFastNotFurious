@@ -4,36 +4,34 @@ from simulator.simulator import Simulator
 class Simulation:
 
     def __init__(self):
-        self.built_nodes = []
+        self.built_entities = []
         self.node_conversion = {}
         self.nodes = []
         self.roads = []
         self.paths = []
-        self.dependencies = {}
+        self.simulator = Simulator()
+
 
 
     def __build_node(self, node):
-        build = node.build()
+        build = node.build(self.simulator)
         self.node_conversion[node] = build
-        self.built_nodes.append(build)
+        self.built_entities.append(build)
 
 
     def __build_road(self, road):
-        build = road.build()
+        build = road.build(self.simulator)
 
         # Link the start
         start_build = self.node_conversion[road.start]
-        simulator.link(start_build, build[0])
+        build.add_predecessor(road.orientation, start_build)
         # Link the end
         end_build = self.node_conversion[road.end]
-        simulator.link(build[-1], end_build)
+        end_build.add_predecessor(road.orientation, build)
 
-        for i in range(len(build)-1):
-            self.dependencies.setdefault((build[i], build[i+1]), []).append(build[i+1])
-
-        self.built_nodes.remove(end_build)
-        self.built_nodes.extend(build)
-        self.built_nodes.append(end_build)
+        self.built_entities.remove(end_build)
+        self.built_entities.append(build)
+        self.built_entities.append(end_build)
 
 
     def __build_path(self, path):
@@ -70,12 +68,10 @@ class Simulation:
 
     def run_for(self, ticks):
         self.__build_all()
-        s = Simulator(self.built_nodes)
-        s.run(ticks)
+        self.simulator.run(ticks)
 
 
     def run_graphical_for(self, ticks):
         self.__build_all()
-        s = Simulator(self.built_nodes)
-        s.run_graphical(ticks)
+        self.simulator.run_graphical(ticks)
 
