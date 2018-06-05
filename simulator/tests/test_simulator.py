@@ -177,7 +177,7 @@ class TestRoad(unittest.TestCase):
 
         self.assertTrue((entry3, p) in exit1.statistics.list_time_travel)
 
-        self.assertEqual(6, exit1.statistics.list_time_travel[(entry3, p)][0])
+        self.assertEqual([6], exit1.statistics.list_time_travel[(entry3, p)])
 
         self.assertEqual(1, len(exit1.statistics.list_time_travel))
         self.assertEqual(1, len(exit1.statistics.list_time_travel[(entry3, p)]))

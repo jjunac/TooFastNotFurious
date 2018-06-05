@@ -6,9 +6,11 @@ from simulator import *
 class TestStatistics(unittest.TestCase):
 
     def test_add_travel_time(self):
-        entry1 = EntryNode(1, 0)
-        entry2 = EntryNode(1, 0)
-        entry3 = EntryNode(1, 0)
+        simulator = Simulator()
+        entry1 = Entry(simulator, 0)
+        entry2 = Entry(simulator, 0)
+        entry3 = Entry(simulator, 0)
+
         entry1.to_spawn = 0
         entry2.to_spawn = 0
         entry3.to_spawn = 0

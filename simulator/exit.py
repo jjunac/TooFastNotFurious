@@ -20,6 +20,8 @@ class Exit(AbstractEntity):
                 self.departure_counter[departure] = 0
             self.departure_counter[departure] += 1
             self.outflow += 1
+            self.statistics.add_travel_time(self.nodes[0].current_car.departure, self.nodes[0].current_car.original_path,
+                                            self.nodes[0].current_car.time)
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation)
