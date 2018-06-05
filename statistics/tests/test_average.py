@@ -1,6 +1,7 @@
 import unittest
 
-from simulator import *
+from simulator import EntryNode, Path, ExitNode
+from statistics import *
 
 
 class TestAverage(unittest.TestCase):
@@ -22,3 +23,4 @@ class TestAverage(unittest.TestCase):
         res = compute_average_per_exit(stats)
 
         self.assertEqual({exit1: {entry1: 7.0, entry2: 9.6}, exit2: {entry3: 10.272727272727273}}, res)
+

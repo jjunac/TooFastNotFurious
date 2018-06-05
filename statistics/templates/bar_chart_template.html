@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/Chart.bundle.js"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.js"></script>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="css/bootstrap-grid.css" rel="stylesheet" type="text/css" />
+    <link href="css/bootstrap-reboot.css" rel="stylesheet" type="text/css" />
+    <title>Bar chart</title>
+</head>
+
+<body>
+
+   <div class="container">
+        <canvas id="myChart" width="500" height="200"></canvas>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+
+                labels: {{labels | safe}},
+                datasets: [{
+                    label: 'Nb cars',
+                    data: {{data}},
+                    backgroundColor: {{backgroundColor | safe}}
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+</html>
