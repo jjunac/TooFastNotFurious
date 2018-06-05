@@ -47,7 +47,7 @@ class Road(AbstractEntity):
         end = predecessor.get_end(orientation)
         start = self.get_start(orientation)
         link(end, start)
-        super().simulator.dependencies[(end, start)] = [start]
+        self.simulator.dependencies[(end, start)] = [start]
 
     def __build_road(self, simulator, length):
         res = [Node()]

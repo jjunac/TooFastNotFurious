@@ -1,9 +1,10 @@
 import unittest
 
 from shared import Orientation
+from simulator import Road, Simulator
 from simulator.car import Car
 from simulator.path import Path
-from simulator.right_priority_node import RightPriorityNode
+from simulator.right_priority_junction import RightPriorityJunction
 from simulator.utils import *
 from copy import deepcopy
 
@@ -11,32 +12,30 @@ from copy import deepcopy
 class TestRoad(unittest.TestCase):
 
     def test_should_go_when_there_is_no_right_priority(self):
-        rp = RightPriorityNode()
-        r1 = RoadNode(Orientation.NORTH)
-        r2 = RoadNode(Orientation.WEST)
-        r3 = RoadNode(Orientation.EAST)
-        nodes = [rp, r1, r2, r3]
+        simulator  = Simulator()
+        rp = RightPriorityJunction(simulator, 1, 1)
+        r1 = Road(simulator, 1, Orientation.NORTH, 1)
+        r2 = Road(simulator, 1, Orientation.WEST, 1)
+        r3 = Road(simulator, 1, Orientation.EAST, 1)
         p = Path([0] * 3)
-        r1.current_car = Car(deepcopy(p), r1)
-        r2.current_car = Car(deepcopy(p), r2)
+        r1.nodes[0][0].current_car = Car(p, r1.nodes[0][0])
+        r2.nodes[0][0].current_car = Car(p, r2.nodes[0][0])
 
-        link(r1, rp)
-        link(r2, rp)
-        link(rp, r3)
+        rp.add_predecessor(Orientation.NORTH, r1)
+        rp.add_predecessor(Orientation.WEST, r2)
+        r3.add_predecessor(Orientation.EAST, rp)
 
-        compute_next(nodes)
-        apply_next(nodes)
-        self.assertIsNotNone(r1.current_car)
-        self.assertIsNone(r2.current_car)
-        self.assertIsNotNone(rp.current_car)
-        self.assertIsNone(r3.current_car)
+        simulator.tick()
+        self.assertIsNotNone(r1.nodes[0][0].current_car)
+        self.assertIsNone(r2.nodes[0][0].current_car)
+        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNone(r3.nodes[0][0].current_car)
 
-        compute_next(nodes)
-        apply_next(nodes)
-        self.assertIsNotNone(r1.current_car)
-        self.assertIsNone(r2.current_car)
-        self.assertIsNone(rp.current_car)
-        self.assertIsNotNone(r3.current_car)
+        simulator.tick()
+        self.assertIsNotNone(r1.nodes[0][0].current_car)
+        self.assertIsNone(r2.nodes[0][0].current_car)
+        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(r3.nodes[0][0].current_car)
 
     def test_should_go_when_there_is_right_priority_and_no_car_present(self):
         rp = RightPriorityNode()
