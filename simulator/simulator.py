@@ -1,23 +1,28 @@
 from simulator.exit import Exit
-from visualizer.drawer import Drawing
+from visualizer.drawer import Drawer
 
 
 class Simulator:
 
-    def __init__(self, nodes):
-        self.nodes = nodes
+    def __init__(self):
+        self.entities = []
+        self.dependencies = {}
+
+    def add_entities(self, entity):
+        self.entities.append(entity)
 
     def tick(self):
-        compute_next(self.nodes)
-        apply_next(self.nodes)
-        # print("[%s]" % "".join([str(n) for n in self.nodes]))
+        for e in self.entities:
+            e.compute_next()
+        for e in self.entities:
+            e.apply_next()
 
     def run(self, ticks):
         for _ in range(ticks):
             self.tick()
 
     def run_graphical(self, ticks):
-        drawing = Drawing(self)
+        drawing = Drawer(self)
         drawing.draw()
 
     def get_stats(self):

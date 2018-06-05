@@ -45,7 +45,6 @@ class Drawer:
                 successors = entity.successors.values()
                 predecessors = entity.predecessors.values()
                 if type(entity) is Road:
-                    print(entity.orientation.value)
                     res = pos.rotate_point(entity.orientation,
                                            Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
                     if not forward:
