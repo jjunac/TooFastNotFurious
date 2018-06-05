@@ -15,7 +15,7 @@ class Road(AbstractEntity):
         return self.nodes[0][0]
 
     def get_end(self, orientation):
-        return self.nodes[-1][0]
+        return self.nodes[0][-1]
 
     def compute_next(self):
         for l in self.nodes:

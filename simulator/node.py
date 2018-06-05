@@ -6,7 +6,7 @@ class Node():
         self.next_car = None
 
     def compute_next(self, simulator):
-        if self.current_car is None:
+        if not self.current_car:
             return
         if len(self.successors) == 0:
             self.next_car = None
@@ -20,6 +20,8 @@ class Node():
             self.next_car = self.current_car
 
     def __can_move_to(self, destination, simulator):
+        if destination.next_car:
+            return False
         dependencies = simulator.dependencies[(self, destination)]
         for d in dependencies:
             if d.current_car:
