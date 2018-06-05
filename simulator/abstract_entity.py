@@ -5,6 +5,7 @@ class AbstractEntity(ABC):
 
     def __init__(self, simulator):
         self.simulator = simulator
+        self.simulator.add_entities(self)
         self.predecessors = {}
         self.successors = {}
 
@@ -23,4 +24,12 @@ class AbstractEntity(ABC):
 
     @abstractmethod
     def get_end(self, orientation):
+        pass
+
+    @abstractmethod
+    def compute_next(self):
+        pass
+
+    @abstractmethod
+    def apply_next(self):
         pass

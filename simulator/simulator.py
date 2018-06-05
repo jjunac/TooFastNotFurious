@@ -4,13 +4,18 @@ from visualizer.drawer import Drawing
 
 class Simulator:
 
-    def __init__(self, nodes):
-        self.nodes = nodes
+    def __init__(self):
+        self.entities = []
         self.dependencies = {}
 
+    def add_entities(self, entity):
+        self.entities.append(entity)
+
     def tick(self):
-        compute_next(self.nodes)
-        apply_next(self.nodes)
+        for e in self.entities:
+            e.compute_next()
+        for e in self.entities:
+            e.apply_next()
 
     def run(self, ticks):
         for _ in range(ticks):
