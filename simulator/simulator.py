@@ -1,17 +1,21 @@
-from simulator import ExitNode
-from simulator.utils import *
+from simulator.exit import Exit
 from visualizer.drawer import Drawing
 
 
 class Simulator:
 
-    def __init__(self, nodes):
-        self.nodes = nodes
+    def __init__(self):
+        self.entities = []
+        self.dependencies = {}
+
+    def add_entities(self, entity):
+        self.entities.append(entity)
 
     def tick(self):
-        compute_next(self.nodes)
-        apply_next(self.nodes)
-        # print("[%s]" % "".join([str(n) for n in self.nodes]))
+        for e in self.entities:
+            e.compute_next()
+        for e in self.entities:
+            e.apply_next()
 
     def run(self, ticks):
         for _ in range(ticks):
@@ -23,7 +27,7 @@ class Simulator:
 
     def get_stats(self):
         stats = {}
-        exit_nodes = [n for n in self.nodes if type(n) is ExitNode]
+        exit_nodes = [n for n in self.entities if type(n) is Exit]
         for node in exit_nodes:
             stats[node] = node.get_stats()
 

@@ -4,6 +4,6 @@ class Statistics:
         self.list_time_travel = {}
 
     def add_travel_time(self, departure, path, time):
-        if not path in self.list_time_travel:
+        if not (departure, path) in self.list_time_travel:
             self.list_time_travel[(departure, path)] = []
         self.list_time_travel[(departure, path)].append(time)

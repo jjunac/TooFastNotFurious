@@ -1,29 +1,32 @@
-from abc import ABC, abstractmethod
-
-
-class TrafficNode(ABC):
+class Node():
     def __init__(self):
         self.successors = []
         self.predecessors = []
         self.current_car = None
         self.next_car = None
 
-    @abstractmethod
-    def can_move(self, node):
-        pass
-
-    def compute_next(self):
-        if self.current_car is None:
+    def compute_next(self, simulator):
+        if not self.current_car:
             return
         if len(self.successors) == 0:
             self.next_car = None
             return
-        if self.successors[self.current_car.get_way_index()].can_move(self):
-            self.successors[self.current_car.get_way_index()].next_car = self.current_car
+        destination = self.successors[self.current_car.get_way_index()]
+        if self.__can_move_to(destination, simulator):
+            destination.next_car = self.current_car
             self.next_car = None
             self.current_car.go_forward()
         else:
             self.next_car = self.current_car
+
+    def __can_move_to(self, destination, simulator):
+        if destination.next_car:
+            return False
+        dependencies = simulator.dependencies[(self, destination)]
+        for d in dependencies:
+            if d.current_car:
+                return False
+        return True
 
     def apply_next(self):
         self.current_car = self.next_car

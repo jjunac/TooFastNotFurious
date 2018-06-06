@@ -20,5 +20,5 @@ class EntryNode(Node):
         return p
 
 
-    def build(self):
-        return simulator.EntryNode(0.5, self.rate)
+    def build(self, sim):
+        return simulator.Entry(sim, self.rate)
