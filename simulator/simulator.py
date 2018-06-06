@@ -1,4 +1,5 @@
 from simulator.exit import Exit
+from statistics.analytics import Analytics
 from visualizer.drawer import Drawer
 
 
@@ -20,16 +21,10 @@ class Simulator:
     def run(self, ticks):
         for _ in range(ticks):
             self.tick()
+        analytics = Analytics(self.entities)
+        analytics.generate_report_average()
 
     def run_graphical(self, ticks):
         drawing = Drawer(self)
         drawing.init_screen()
         drawing.draw()
-
-    def get_stats(self):
-        stats = {}
-        exit_nodes = [n for n in self.entities if type(n) is Exit]
-        for node in exit_nodes:
-            stats[node] = node.get_stats()
-
-        return stats

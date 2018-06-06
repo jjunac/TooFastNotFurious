@@ -1,5 +1,4 @@
 from simulator.abstract_entity import AbstractEntity
-from simulator.average import *
 from simulator.car import Car
 from simulator.entry import Entry
 from simulator.exit import Exit

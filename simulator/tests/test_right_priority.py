@@ -28,13 +28,13 @@ class TestRightPriority(unittest.TestCase):
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
         self.assertIsNone(r2.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
         self.assertIsNone(r3.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
         self.assertIsNone(r2.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNone(rp.nodes[0][0].current_car)
         self.assertIsNotNone(r3.nodes[0][0].current_car)
 
     def test_should_go_when_there_is_right_priority_and_no_car_present(self):
@@ -54,7 +54,7 @@ class TestRightPriority(unittest.TestCase):
 
         self.assertIsNone(r1.nodes[0][0].current_car)
         self.assertIsNone(r2.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
         self.assertIsNone(r3.nodes[0][0].current_car)
 
     def test_should_not_go_when_there_is_someone_in_junction_and_no_one_in_priority_road(self):
@@ -66,7 +66,7 @@ class TestRightPriority(unittest.TestCase):
         nodes = [rp, r1, r2, r3]
         p = Path([0] * 3)
         r1.nodes[0][0].current_car = Car(p, r1)
-        rp.nodes[0].current_car = Car(p, rp)
+        rp.nodes[0][0].current_car = Car(p, rp)
 
         rp.add_predecessor(Orientation.NORTH, r1)
         rp.add_predecessor(Orientation.WEST, r2)
@@ -75,7 +75,7 @@ class TestRightPriority(unittest.TestCase):
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
         self.assertIsNone(r2.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNone(rp.nodes[0][0].current_car)
         self.assertIsNotNone(r3.nodes[0][0].current_car)
 
     def test_should_respect_right_priority_when_there_are_3_inputs_and_an_exit_with_double_way_road(self):
@@ -101,21 +101,21 @@ class TestRightPriority(unittest.TestCase):
         self.assertIsNotNone(r1.nodes[0][0].current_car)
         self.assertIsNotNone(r2.nodes[0][0].current_car)
         self.assertIsNone(r3.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
         self.assertIsNone(r4.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
         self.assertIsNotNone(r2.nodes[0][0].current_car)
         self.assertIsNone(r3.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNone(rp.nodes[0][0].current_car)
         self.assertIsNotNone(r4.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
         self.assertIsNone(r2.nodes[0][0].current_car)
         self.assertIsNone(r3.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
         self.assertIsNone(r4.nodes[0][0].current_car)
 
     def test_should_respect_right_priority_when_there_are_3_inputs(self):
@@ -141,21 +141,21 @@ class TestRightPriority(unittest.TestCase):
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
         self.assertIsNotNone(entryW.nodes[0][0].current_car)
         self.assertIsNone(entryS.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
         self.assertIsNone(exitW.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
         self.assertIsNotNone(entryW.nodes[0][0].current_car)
         self.assertIsNone(entryS.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNone(rp.nodes[0][0].current_car)
         self.assertIsNotNone(exitW.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
         self.assertIsNone(entryW.nodes[0][0].current_car)
         self.assertIsNone(entryS.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
         self.assertIsNone(exitW.nodes[0][0].current_car)
 
     def test_should_respect_right_priority_when_there_are_2_inputs_and_2_output(self):
@@ -178,28 +178,28 @@ class TestRightPriority(unittest.TestCase):
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
         self.assertIsNone(entryW.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
         self.assertIsNone(exitW.nodes[0][0].current_car)
         self.assertIsNone(exitN.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
         self.assertIsNone(entryW.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNone(rp.nodes[0][0].current_car)
         self.assertIsNotNone(exitW.nodes[0][0].current_car)
         self.assertIsNone(exitN.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNone(entryN.nodes[0][0].current_car)
         self.assertIsNone(entryW.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
         self.assertIsNone(exitW.nodes[0][0].current_car)
         self.assertIsNone(exitN.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNone(entryN.nodes[0][0].current_car)
         self.assertIsNone(entryW.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNone(rp.nodes[0][0].current_car)
         self.assertIsNone(exitW.nodes[0][0].current_car)
         self.assertIsNotNone(exitN.nodes[0][0].current_car)
 
@@ -222,22 +222,22 @@ class TestRightPriority(unittest.TestCase):
         self.assertIsNotNone(entry1.nodes[0][0].current_car)
         self.assertIsNotNone(entry2.nodes[0][0].current_car)
         self.assertIsNone(exit.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNone(rp.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNone(entry1.nodes[0][0].current_car)
         self.assertIsNotNone(entry2.nodes[0][0].current_car)
         self.assertIsNone(exit.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNone(entry1.nodes[0][0].current_car)
         self.assertIsNotNone(entry2.nodes[0][0].current_car)
         self.assertIsNotNone(exit.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0].current_car)
+        self.assertIsNone(rp.nodes[0][0].current_car)
 
         simulator.tick()
         self.assertIsNone(entry1.nodes[0][0].current_car)
         self.assertIsNone(entry2.nodes[0][0].current_car)
         self.assertIsNone(exit.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0].current_car)
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
