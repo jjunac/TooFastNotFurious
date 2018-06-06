@@ -6,8 +6,7 @@ from simulator.utils import link
 class Road(AbstractEntity):
 
     def __init__(self, simulator,  length, orientation, n_of_ways):
-        super().__init__(simulator)
-        self.nodes = [self.__build_road(simulator, length) for _ in range(n_of_ways)]
+        super().__init__(simulator, [self.__build_road(simulator, length) for _ in range(n_of_ways)])
         self.length = length
         self.n_of_ways = n_of_ways
         self.orientation = orientation

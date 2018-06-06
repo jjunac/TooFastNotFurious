@@ -45,7 +45,7 @@ class Simulation:
         node.paths[total_proportion + path.proportion] = simulator.Path(directions)
 
 
-    def __build_all(self):
+    def build_all(self):
         for n in self.nodes:
             self.__build_node(n)
         for r in self.roads:
@@ -67,11 +67,11 @@ class Simulation:
 
 
     def run_for(self, ticks):
-        self.__build_all()
+        self.build_all()
         self.simulator.run(ticks)
 
 
     def run_graphical_for(self, ticks):
-        self.__build_all()
+        self.build_all()
         self.simulator.run_graphical(ticks)
 

@@ -3,11 +3,12 @@ from abc import ABC, abstractmethod
 
 class AbstractEntity(ABC):
 
-    def __init__(self, simulator):
+    def __init__(self, simulator, nodes):
         self.simulator = simulator
         self.simulator.add_entities(self)
         self.predecessors = {}
         self.successors = {}
+        self.nodes = nodes
 
     def add_predecessor(self, orientation, predecessor):
         self.predecessors[orientation] = predecessor

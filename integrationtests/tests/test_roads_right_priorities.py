@@ -3,6 +3,8 @@ from shared import Orientation
 import unittest
 import random
 
+from simulator import Entry, Exit
+
 
 class TestRoadRightPriorities(unittest.TestCase):
 
@@ -25,7 +27,29 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_path(entry1.go_through(junction, exit1).with_proportion(100))
         s.add_path(entry2.go_through(junction, exit1).with_proportion(100))
 
-        s.run_for(500)
+        random.seed(0)
+
+        s.build_all()
+
+        # --- Assertions ---
+        simulator = s.simulator
+        number_of_car = 0
+        entry_nodes = [n for e in simulator.entities if type(e) is Entry for row in e.nodes for n in row]
+        exit_nodes = [n for e in simulator.entities if type(e) is Exit for row in e.nodes for n in row]
+
+        blocked_entry_nodes = set([])
+
+        for _ in range(1000):
+            # Subtracts cars that exit this turn
+            number_of_car -= len([n for n in exit_nodes if n.current_car])
+            simulator.tick()
+            # Adds cars that appeared this turn
+            entry_node_with_car = set([n for n in entry_nodes if n.current_car])
+            number_of_car += len(entry_node_with_car - blocked_entry_nodes)
+            blocked_entry_nodes = entry_node_with_car
+            actual_number_of_car = len([n for e in simulator.entities for row in e.nodes for n in row if n.current_car])
+            self.assertEqual(number_of_car, actual_number_of_car)
+
         self.assertFalse(s.node_conversion[entry1] in s.node_conversion[exit1].departure_counter)
 
     def test_right_priority_with_2_entries_2_exits(self):
@@ -53,12 +77,27 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_path(entry2.go_through(junction, exit2).with_proportion(30))
 
         random.seed(0)
-        s.run_for(507)
-        b_exit1 = s.node_conversion[exit1]
-        b_exit2 = s.node_conversion[exit2]
-        b_entry1 = s.node_conversion[entry1]
-        b_entry2 = s.node_conversion[entry2]
-        # TODO add some asserts here
+
+        s.build_all()
+
+        # --- Assertions ---
+        simulator = s.simulator
+        number_of_car = 0
+        entry_nodes = [n for e in simulator.entities if type(e) is Entry for row in e.nodes for n in row]
+        exit_nodes = [n for e in simulator.entities if type(e) is Exit for row in e.nodes for n in row]
+
+        blocked_entry_nodes = set([])
+
+        for _ in range(1000):
+            # Subtracts cars that exit this turn
+            number_of_car -= len([n for n in exit_nodes if n.current_car])
+            simulator.tick()
+            # Adds cars that appeared this turn
+            entry_node_with_car = set([n for n in entry_nodes if n.current_car])
+            number_of_car += len(entry_node_with_car - blocked_entry_nodes)
+            blocked_entry_nodes = entry_node_with_car
+            actual_number_of_car = len([n for e in simulator.entities for row in e.nodes for n in row if n.current_car])
+            self.assertEqual(number_of_car, actual_number_of_car)
 
     def test_4_right_priority_with_4_entries_4_exits(self):
         s = new_simulation()
@@ -128,8 +167,27 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_path(entry4.go_through(junction4, junction1, junction2, junction3, exit3).with_proportion(25))
 
         random.seed(0)
-        s.run_for(1000)
-        # TODO add some asserts here
+
+        s.build_all()
+
+        # --- Assertions ---
+        simulator = s.simulator
+        number_of_car = 0
+        entry_nodes = [n for e in simulator.entities if type(e) is Entry for row in e.nodes for n in row]
+        exit_nodes = [n for e in simulator.entities if type(e) is Exit for row in e.nodes for n in row]
+
+        blocked_entry_nodes = set([])
+
+        for _ in range(1000):
+            # Subtracts cars that exit this turn
+            number_of_car -= len([n for n in exit_nodes if n.current_car])
+            simulator.tick()
+            # Adds cars that appeared this turn
+            entry_node_with_car = set([n for n in entry_nodes if n.current_car])
+            number_of_car += len(entry_node_with_car - blocked_entry_nodes)
+            blocked_entry_nodes = entry_node_with_car
+            actual_number_of_car = len([n for e in simulator.entities for row in e.nodes for n in row if n.current_car])
+            self.assertEqual(number_of_car, actual_number_of_car)
 
 
 
