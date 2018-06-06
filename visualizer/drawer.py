@@ -60,7 +60,7 @@ class Drawer:
         return roads
 
     def draw(self):
-        graphic_roads = self.create_graphic_roads(self.entities[1])
+        graphic_roads = self.create_graphic_roads(self.simulator.entities[0])
         for graphic_road in graphic_roads:
             graphic_road.create_sprites()
         while self.continue_drawing:

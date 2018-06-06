@@ -23,6 +23,7 @@ class Simulator:
 
     def run_graphical(self, ticks):
         drawing = Drawer(self)
+        drawing.init_screen()
         drawing.draw()
 
     def get_stats(self):
