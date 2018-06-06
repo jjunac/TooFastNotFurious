@@ -32,7 +32,7 @@ class Node:
         self.current_car = self.next_car
         self.next_car = None
         if self.current_car:
-            self.current_car.tick()
+            self.current_car.tick(self)
 
     def __str__(self):
         return "#" if self.current_car else " "
