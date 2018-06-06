@@ -14,9 +14,8 @@ class EntryNode(Node):
         return self
 
 
-    def go_through(self, *junctions):
-        p = Path(self)
-        p.junctions = junctions
+    def to(self, destination):
+        p = Path(self, destination)
         return p
 
 

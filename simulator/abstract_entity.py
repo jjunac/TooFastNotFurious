@@ -40,3 +40,6 @@ class AbstractEntity(ABC):
     @abstractmethod
     def apply_next(self):
         pass
+
+    def __str__(self):
+        return [n.__repr__() for n in self.get_nodes()]

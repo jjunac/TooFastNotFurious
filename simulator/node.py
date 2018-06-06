@@ -11,7 +11,7 @@ class Node:
         if len(self.successors) == 0:
             self.next_car = None
             return
-        destination = self.successors[self.current_car.get_way_index()]
+        destination = self.current_car.get_next_node()
         if self.__can_move_to(destination, simulator):
             destination.next_car = self.current_car
             self.next_car = None
@@ -33,6 +33,3 @@ class Node:
         self.next_car = None
         if self.current_car:
             self.current_car.tick(self)
-
-    def __str__(self):
-        return "#" if self.current_car else " "
