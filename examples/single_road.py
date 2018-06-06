@@ -14,7 +14,7 @@ def main():
 
     s.add_path(e1.go_through(e2).with_proportion(100))
 
-    s.run_graphical_for(50)
+    s.run_for(50)
 
 
 if __name__ == '__main__':
