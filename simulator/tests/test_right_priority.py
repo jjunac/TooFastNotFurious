@@ -42,8 +42,7 @@ class TestRightPriority(unittest.TestCase):
         r1 = Road(simulator, 1, Orientation.NORTH, 1)
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.EAST, 1)
-        p = Path([0] * 3)
-        r1.nodes[0][0].current_car = Car(deepcopy(p), r1)
+        r1.nodes[0][0].current_car = Car(Path([rp.nodes[0][0], r3.nodes[0][0]]), r1)
 
         rp.add_predecessor(Orientation.NORTH, r1)
         rp.add_predecessor(Orientation.WEST, r2)
@@ -62,10 +61,8 @@ class TestRightPriority(unittest.TestCase):
         r1 = Road(simulator, 1, Orientation.NORTH, 1)
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.EAST, 1)
-        nodes = [rp, r1, r2, r3]
-        p = Path([0] * 3)
-        r1.nodes[0][0].current_car = Car(p, r1)
-        rp.nodes[0][0].current_car = Car(p, rp)
+        r1.nodes[0][0].current_car = Car(Path([rp.nodes[0][0], r3.nodes[0][0]]), r1)
+        rp.nodes[0][0].current_car = Car(Path([r3.nodes[0][0]]), rp)
 
         rp.add_predecessor(Orientation.NORTH, r1)
         rp.add_predecessor(Orientation.WEST, r2)
@@ -84,9 +81,8 @@ class TestRightPriority(unittest.TestCase):
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.SOUTH, 1)
         r4 = Road(simulator, 1, Orientation.EAST, 1)
-        nodes = [rp, r1, r2, r3, r4]
-        p = Path([0] * 3)
 
+        p = Path([rp.nodes[0][0], r4.nodes[0][0]])
         r1.nodes[0][0].current_car = Car(p, r1)
         r2.nodes[0][0].current_car = Car(p, r2)
         r3.nodes[0][0].current_car = Car(p, r3)
@@ -124,9 +120,8 @@ class TestRightPriority(unittest.TestCase):
         entryW = Road(simulator, 1, Orientation.WEST, 1)
         entryS = Road(simulator, 1, Orientation.SOUTH, 1)
         exitW = Road(simulator, 1, Orientation.WEST, 1)
-        nodes = [rp, entryN, entryW, entryS, exitW]
-        p = Path([0] * 3)
 
+        p = Path([rp.nodes[0][0], exitW.nodes[0][0]])
         entryN.nodes[0][0].current_car = Car(p, entryN)
         entryW.nodes[0][0].current_car = Car(p, entryW)
         entryS.nodes[0][0].current_car = Car(p, entryS)
@@ -164,10 +159,9 @@ class TestRightPriority(unittest.TestCase):
         entryW = Road(simulator, 1, Orientation.WEST, 1)
         exitW = Road(simulator, 1, Orientation.WEST, 1)
         exitN = Road(simulator, 1, Orientation.NORTH, 1)
-        nodes = [rp, entryN, entryW, exitW, exitN]
 
-        entryW.nodes[0][0].current_car = Car(Path([0] * 3), entryW)
-        entryN.nodes[0][0].current_car = Car(Path([0, 1, 0]), entryN)
+        entryW.nodes[0][0].current_car = Car(Path([rp.nodes[0][0], exitW.nodes[0][0]]), entryW)
+        entryN.nodes[0][0].current_car = Car(Path([rp.nodes[0][0], exitN.nodes[0][0]]), entryN)
 
         rp.add_predecessor(Orientation.NORTH, entryN)
         rp.add_predecessor(Orientation.WEST, entryW)
@@ -208,8 +202,7 @@ class TestRightPriority(unittest.TestCase):
         entry1 = Road(simulator, 1, Orientation.EAST, 1)
         entry2 = Road(simulator, 1, Orientation.WEST, 1)
         exit = Road(simulator, 1, Orientation.NORTH, 1)
-        nodes = [rp, entry1, entry2, exit]
-        p = Path([0] * 3)
+        p = Path([rp.nodes[0][0], exit.nodes[0][0]])
 
         entry1.nodes[0][0].current_car = Car(p, entry1)
         entry2.nodes[0][0].current_car = Car(p, entry2)

@@ -38,4 +38,7 @@ def reconstruct_path(paths, source, destination):
     while d != source:
         nodes.append(d)
         d = paths[d]
-    return nodes
+    return reversed(nodes)
+
+def dijkstra_with_path(nodes, source, destination):
+    return reconstruct_path(dijkstra(nodes, source), source, destination)
