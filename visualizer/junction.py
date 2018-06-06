@@ -22,7 +22,7 @@ class GraphicJunction:
             surface = pygame.Surface((self.cell_length, self.cell_height))
             surface.fill((29, 17, 17))
             self.group.add(MySprite(self.position, self.cell_length, self.cell_height, image=surface))
-        self.node_pos.append((self.entity.nodes[0], self.position))
+        self.node_pos.append((self.entity.nodes[0][0], self.position))
 
     def draw(self, surface):
         self.group.draw(surface)

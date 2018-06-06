@@ -91,8 +91,11 @@ class Drawer:
                         if sprite:
                             car_group.remove(sprite)
             car_group.draw(self.screen)
+            pygame.display.get_surface().get_rect().move(78, 500)
             pygame.display.flip()
             self.screen.fill(WHITE)
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.continue_drawing = 0
+
+    # def interpolate(self, start, end, time_max, tick):
