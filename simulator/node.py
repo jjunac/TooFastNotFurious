@@ -1,4 +1,4 @@
-class Node():
+class Node:
     def __init__(self):
         self.successors = []
         self.predecessors = []

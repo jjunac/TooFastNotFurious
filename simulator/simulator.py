@@ -1,5 +1,5 @@
 from simulator.exit import Exit
-from visualizer.drawer import Drawing
+from visualizer.drawer import Drawer
 
 
 class Simulator:
@@ -22,7 +22,8 @@ class Simulator:
             self.tick()
 
     def run_graphical(self, ticks):
-        drawing = Drawing(self)
+        drawing = Drawer(self)
+        drawing.init_screen()
         drawing.draw()
 
     def get_stats(self):

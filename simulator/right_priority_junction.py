@@ -6,8 +6,7 @@ from simulator.utils import link
 class RightPriorityJunction(AbstractEntity):
 
     def __init__(self, simulator, size_north_south, size_east_west):
-        super().__init__(simulator)
-        self.nodes = [Node() for _ in range(size_north_south * size_east_west)]
+        super().__init__(simulator, [[Node() for _ in range(size_north_south * size_east_west)]])
         self.size_north_south = size_north_south
         self.size_east_west = size_east_west
 
@@ -26,15 +25,17 @@ class RightPriorityJunction(AbstractEntity):
         return self.predecessors[orientation].get_end(orientation)
 
     def compute_next(self):
-        for n in self.nodes:
-            n.compute_next(self.simulator)
+        for row in self.nodes:
+            for n in row:
+                n.compute_next(self.simulator)
 
     def apply_next(self):
-        for n in self.nodes:
-            n.apply_next()
+        for row in self.nodes:
+            for n in row:
+                n.apply_next()
 
     def get_start(self, orientation):
-        return self.nodes[0]
+        return self.nodes[0][0]
 
     def get_end(self, orientation):
-        return self.nodes[0]
+        return self.nodes[0][0]
