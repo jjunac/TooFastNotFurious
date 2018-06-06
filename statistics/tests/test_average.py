@@ -24,8 +24,6 @@ class TestAverage(unittest.TestCase):
 
         res = compute_average_per_exit(stats)
 
-        create_graphic_report_average_car_per_exit(res)
-
         self.assertEqual({exit1: {entry1: 7.0, entry2: 9.6}, exit2: {entry3: 10.272727272727273}}, res)
 
 

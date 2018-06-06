@@ -1,6 +1,6 @@
 from simulator.exit import Exit
 from statistics.analytics import Analytics
-from visualizer.drawer import Drawing
+from visualizer.drawer import Drawer
 
 
 class Simulator:
@@ -25,5 +25,6 @@ class Simulator:
         analytics.generate_report_average()
 
     def run_graphical(self, ticks):
-        drawing = Drawing(self)
+        drawing = Drawer(self)
+        drawing.init_screen()
         drawing.draw()

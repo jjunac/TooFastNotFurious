@@ -37,9 +37,9 @@ class TestAnalytics(unittest.TestCase):
         entry3.paths[100] = deepcopy(p)
 
         rpn = RightPriorityJunction(simulator, 1, 1)
-        entry1.nodes[0].current_car = Car(p, entry1)
-        entry2.nodes[0].current_car = Car(p, entry2)
-        entry3.nodes[0].current_car = Car(p, entry3)
+        entry1.nodes[0][0].current_car = Car(p, entry1)
+        entry2.nodes[0][0].current_car = Car(p, entry2)
+        entry3.nodes[0][0].current_car = Car(p, entry3)
 
         exit1 = Exit(simulator)
 
@@ -62,7 +62,6 @@ class TestAnalytics(unittest.TestCase):
         road4 = Road(simulator, 2, Orientation.EAST, 1)
         exit1.add_predecessor(Orientation.EAST, road4)
         road4.add_predecessor(Orientation.EAST, rpn)
-
         simulator.tick()
         simulator.tick()
         simulator.tick()
