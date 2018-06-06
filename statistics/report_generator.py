@@ -23,25 +23,22 @@ def create_graphic_report_average_car_per_exit(stats):
 
     for key, value in stats.items():
 
-        # if not key.__hash__() in explored_exit:
-        #     explored_exit[key.__hash__()] = exit_name + str(index_exit)
-        #     index_exit += 1
-        key_exit = exit_name + str(index_exit)
-        if not key_exit in stats_string:
-            stats_string[key_exit] = {}
+        if not key.__hash__() in explored_exit:
+            explored_exit[key.__hash__()] = exit_name + str(index_exit)
+            index_exit += 1
+
+        if not explored_exit[key.__hash__()] in stats_string:
+            stats_string[explored_exit[key.__hash__()]] = {}
 
         for entry, val in value.items():
 
-            # if not entry.__hash__() in explored_entry:
-            #     explored_entry[entry.__hash__()] = entry_name + str(index_entry)
+            if not entry.__hash__() in explored_entry:
+                explored_entry[entry.__hash__()] = entry_name + str(index_entry)
+                index_entry += 1
 
-            key_entry = entry_name + str(index_entry)
-            if not key_entry in stats_string[key_exit]:
-                stats_string[key_exit][key_entry] = {}
-                stats_string[key_exit][key_entry] = val
-            index_entry += 1
-            print(entry.__hash__())
-        index_exit += 1
+            if not explored_exit[key.__hash__()] in stats_string[explored_exit[key.__hash__()]]:
+                stats_string[explored_exit[key.__hash__()]][explored_entry[entry.__hash__()]] = {}
+                stats_string[explored_exit[key.__hash__()]][explored_entry[entry.__hash__()]] = val
 
     dataset = []
     background_color = []
@@ -59,7 +56,7 @@ def create_graphic_report_average_car_per_exit(stats):
 
     now = datetime.datetime.now()
 
-    name = "report_" + now.strftime("%Y_%m_%d_%Hh%M") + ".html"
+    name = "report_" + now.strftime("%Y_%m_%d_%Hh%Mm%S") + ".html"
 
     with open(name, 'w+') as file:
         file.write(template.render(labels=labels, data=dataset, backgroundColor=background_color))

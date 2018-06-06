@@ -68,7 +68,7 @@ def main():
     s.add_path(entry4.go_through(junction4, junction1, junction2, exit2).with_proportion(25))
     s.add_path(entry4.go_through(junction4, junction1, junction2, junction3, exit3).with_proportion(25))
 
-    s.run_for(1000)
+    s.run_graphical_for(1000)
 
 
 if __name__ == '__main__':
