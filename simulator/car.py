@@ -8,6 +8,7 @@ class Car:
         self.original_path = path
         self.departure = departure
         self.time = 0
+        self.visited_nodes = []
 
     def get_way_index(self):
         return self.path.next_direction()
@@ -15,5 +16,7 @@ class Car:
     def go_forward(self):
         self.path.pop_direction()
 
-    def tick(self):
+    def tick(self, node):
+        # TODO remove time and use len on the visited_nodes
+        self.visited_nodes.append(node)
         self.time += 1
