@@ -2,3 +2,4 @@ nose
 codecov
 wheel
 pygame
+jinja2

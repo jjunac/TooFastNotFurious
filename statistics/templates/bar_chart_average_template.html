@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+            crossorigin="anonymous"></script>
+    <!--<link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>-->
+    <!--<link href="css/bootstrap-grid.css" rel="stylesheet" type="text/css"/>-->
+    <title>Too Fast and not Furious</title>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-4">
+            <img alt="Baboulinet"
+                 src="https://l7moyg.dm.files.1drv.com/y4mUyxqg-2t7vE4Zx8zZQ3uSeLaDcyOGJkHCcRGiSn416JRYwoKE-dyFBn6_6PKscGl7A-hdzHe1RLLW2g33Ax7b_CODlqlG5Jb2Mb4ZZr3dvpIvbgpEtdNejD-oNc-zzRG846TUmkAHXSCmphnnFlBPyVZ-jb7LWheYmRTY8Ue7PPanmxe9kwzeeKhVFKQiSAPqMJLZK-36s8gj03MyAUvZw"
+                 height="100"/>
+        </div>
+        <div class="col-8 pt-4">
+            <h1>
+                <span>></span>
+                Simulation Report
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 pt-4">
+            <canvas id="myChart" width="500" height="200"></canvas>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+
+<script type="text/javascript">
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+
+            labels: {{ labels | safe }},
+    datasets: [{
+        label: 'Nb cars',
+        data: {{ data }},
+        backgroundColor: {{ backgroundColor | safe }}
+                }]
+            },
+    options: {
+        responsive: true,
+            scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+        });
+</script>
+
+</html>
