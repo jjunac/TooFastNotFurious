@@ -1,3 +1,4 @@
+from shared import Orientation
 from simulator.abstract_entity import AbstractEntity
 from simulator.node import Node
 from simulator.utils import link
@@ -5,10 +6,11 @@ from simulator.utils import link
 
 class RightPriorityJunction(AbstractEntity):
 
-    def __init__(self, simulator, size_north_south, size_east_west):
-        super().__init__(simulator, [[Node() for _ in range(size_north_south * size_east_west)]])
-        self.size_north_south = size_north_south
-        self.size_east_west = size_east_west
+    def __init__(self, simulator, io_roads):
+        self.io_roads = io_roads
+        size_north_south = io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1]
+        size_east_west = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
+        super().__init__(simulator, [[Node() for i in range(size_east_west)] for j in range(size_north_south)])
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation)
@@ -19,7 +21,6 @@ class RightPriorityJunction(AbstractEntity):
             self.simulator.dependencies[(end, start)].append(self.get_end_of_predecessor(orientation.left()))
         if orientation.right() in self.predecessors:
             self.simulator.dependencies[(self.get_end_of_predecessor(orientation.right()), start)].append(end)
-
 
     def get_end_of_predecessor(self, orientation):
         return self.predecessors[orientation].get_end(orientation)
