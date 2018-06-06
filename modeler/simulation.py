@@ -11,7 +11,8 @@ class Simulation:
         self.paths = []
         self.simulator = Simulator()
 
-
+    def with_report(self):
+        self.simulator.generate_report()
 
     def __build_node(self, node):
         build = node.build(self.simulator)
