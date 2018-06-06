@@ -17,9 +17,8 @@ class TestRightPriority(unittest.TestCase):
         r1 = Road(simulator, 1, Orientation.NORTH, 1)
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.EAST, 1)
-        p = Path([0] * 3)
-        r1.nodes[0][0].current_car = Car(p, r1.nodes[0][0])
-        r2.nodes[0][0].current_car = Car(p, r2.nodes[0][0])
+        r1.nodes[0][0].current_car = Car(Path([rp.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0])
+        r2.nodes[0][0].current_car = Car(Path([rp.nodes[0][0], r3.nodes[0][0]]), r2.nodes[0][0])
 
         rp.add_predecessor(Orientation.NORTH, r1)
         rp.add_predecessor(Orientation.WEST, r2)
