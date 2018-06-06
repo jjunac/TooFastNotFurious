@@ -1,6 +1,8 @@
 import unittest
 
-from simulator import *
+from statistics.average import compute_average_per_exit
+from simulator import Path, Simulator, Entry, Exit
+from statistics.report_generator import create_graphic_report_average_car_per_exit
 
 
 class TestAverage(unittest.TestCase):
@@ -23,3 +25,7 @@ class TestAverage(unittest.TestCase):
         res = compute_average_per_exit(stats)
 
         self.assertEqual({exit1: {entry1: 7.0, entry2: 9.6}, exit2: {entry3: 10.272727272727273}}, res)
+
+
+if __name__ == '__main__':
+    unittest.main()
