@@ -3,6 +3,7 @@ import random
 import pygame
 
 from resources import ROAD_IMAGE, CAR_IMAGES
+from visualizer.point import Point
 
 
 class MySprite(pygame.sprite.Sprite):
@@ -13,9 +14,9 @@ class MySprite(pygame.sprite.Sprite):
             image = pygame.Surface.convert_alpha(image)
         self.image = pygame.transform.scale(image, (width, height))
         self.rect = self.image.get_rect()
-        self.move(pos)
         self.angle = 0
         self.rotate(angle)
+        self.move_to(pos)
 
     def rotate(self, angle):
         """Rotate the image while keeping its center."""
@@ -23,9 +24,12 @@ class MySprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.rect.center)
         self.angle = angle
 
-    def move(self, pos):
+    def move_to(self, pos):
         self.rect = self.rect.move(round(pos.x - self.image.get_rect().width / 2 - self.rect.x),
                                    round(pos.y - self.image.get_rect().height / 2 - self.rect.y))
+
+    def move(self, pos):
+        self.rect = self.rect.move(pos.x, pos.y)
 
 
 class RoadSprite(MySprite):
@@ -34,30 +38,28 @@ class RoadSprite(MySprite):
 
 
 class CarSprite(MySprite):
-    max_time = 1000
-    current_time = 0
 
     def __init__(self, pos, car, length=50, height=50, angle=0.0):
         super().__init__(pos, length, height, angle, random.choice(CAR_IMAGES))
         self.car = car
         self.destination = None
-
-    @staticmethod
-    def color_surface(surface, red, green, blue):
-        arr = pygame.surfarray.pixels3d(surface)
-        for i in arr:
-            for j in i:
-                if red:
-                    j[0] = red
-                elif green:
-                    j[1] = green
-                if blue:
-                    j[2] = blue
+        self.max_time = 15
+        self.current_time = 0
 
     def update(self, *args):
         if self.destination:
             tick = args[0]
-            self.rect.move()
+            self.current_time += 1
+            if self.current_time >= self.max_time:
+                print(self.rect, self.destination)
+                # self.move_to(self.destination)²
+                self.current_time = 0
+                self.destination = None
+            else:
+                x = (self.destination.x - self.image.get_rect().width / 2 - self.rect.x) / self.max_time
+                y = (self.destination.y - self.image.get_rect().height / 2 - self.rect.y) / self.max_time
+                point = Point(x, y)
+                self.move_to(point)
 
-    def interpolate(self, destination):
+    def interpolate(self, start, destination):
         self.destination = destination
