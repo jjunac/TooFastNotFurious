@@ -183,8 +183,6 @@ class TestRoad(unittest.TestCase):
         self.assertEqual(1, len(exit1.statistics.list_time_travel[(entry3, p)]))
 
         self.assertEqual({(entry3, p): [6]}, exit1.get_stats())
-        self.assertEqual({exit1: {(entry3, p): [6]}}, simulator.get_stats())
-
 
     def test_integration_2_input_2_output_with_right_priority(self):
         simulator = Simulator()
@@ -267,8 +265,6 @@ class TestRoad(unittest.TestCase):
         self.assertIsNone(rpn.nodes[0].current_car)
         self.assertIsNotNone(road3.nodes[0][0].current_car)
         self.assertIsNone(road4.nodes[0][0].current_car)
-
-        self.assertEqual({exit1: {}, exit2: {}}, simulator.get_stats())
 
 
 if __name__ == '__main__':

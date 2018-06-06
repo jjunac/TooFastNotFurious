@@ -11,7 +11,6 @@ def compute_average_per_exit(stats):
             average[entry[0]] += val
 
         for entry, val in average.items():
-            print(entry)
             average[entry] = sum(val) / len(val)
 
         result[key] = average
