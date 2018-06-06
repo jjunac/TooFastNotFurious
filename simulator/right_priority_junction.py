@@ -5,11 +5,11 @@ from simulator.utils import link
 
 class RightPriorityJunction(AbstractEntity):
 
-    def __init__(self, simulator, n_of_entry, n_of_exit):
+    def __init__(self, simulator, size_north_south, size_east_west):
         super().__init__(simulator)
-        self.nodes = [Node()]
-        self.n_of_entry = n_of_entry
-        self.n_of_exit = n_of_exit
+        self.nodes = [Node() for _ in range(size_north_south * size_east_west)]
+        self.size_north_south = size_north_south
+        self.size_east_west = size_east_west
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation)
