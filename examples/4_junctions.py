@@ -5,13 +5,13 @@ from shared import Orientation
 def main():
     s = new_simulation()
 
-    entry1 = entry_node().with_rate(0.2)
+    entry1 = entry_node().with_rate(0.8)
     s.add_node(entry1)
-    entry2 = entry_node().with_rate(0.3)
+    entry2 = entry_node().with_rate(0.8)
     s.add_node(entry2)
-    entry3 = entry_node().with_rate(0.2)
+    entry3 = entry_node().with_rate(0.8)
     s.add_node(entry3)
-    entry4 = entry_node().with_rate(0.3)
+    entry4 = entry_node().with_rate(0.8)
     s.add_node(entry4)
 
     exit1 = exit_node()
