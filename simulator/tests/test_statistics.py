@@ -7,9 +7,9 @@ class TestStatistics(unittest.TestCase):
 
     def test_add_travel_time(self):
         simulator = Simulator()
-        entry1 = Entry(simulator, 0)
-        entry2 = Entry(simulator, 0)
-        entry3 = Entry(simulator, 0)
+        entry1 = Entry(simulator, 0, 1)
+        entry2 = Entry(simulator, 0, 1)
+        entry3 = Entry(simulator, 0, 1)
 
         entry1.to_spawn = 0
         entry2.to_spawn = 0
