@@ -10,12 +10,12 @@ class TestAnalytics(unittest.TestCase):
 
     def test_simple_test_get_exit_nodes(self):
         s = Simulator()
-        Entry(s, 0)
-        Entry(s, 0)
-        Entry(s, 0)
+        Entry(s, 0, 1)
+        Entry(s, 0, 1)
+        Entry(s, 0, 1)
 
-        exit1 = Exit(s)
-        exit2 = Exit(s)
+        exit1 = Exit(s, 1)
+        exit2 = Exit(s, 1)
 
         ana = Analytics(s.entities)
 
@@ -23,14 +23,14 @@ class TestAnalytics(unittest.TestCase):
 
     def test_complex_test_get_stats_exit_nodes(self):
         simulator = Simulator()
-        entry1 = Entry(simulator, 0)
-        entry2 = Entry(simulator, 0)
-        entry3 = Entry(simulator, 0)
+        entry1 = Entry(simulator, 0, 1)
+        entry2 = Entry(simulator, 0, 1)
+        entry3 = Entry(simulator, 0, 1)
         entry1.to_spawn = 0
         entry2.to_spawn = 0
         entry3.to_spawn = 0
-        rpn = RightPriorityJunction(simulator, 1, 1)
-        exit1 = Exit(simulator)
+        rpn = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1), Orientation.WEST: (1, 0)})
+        exit1 = Exit(simulator, 1)
 
         # road to south
         road1 = Road(simulator, 2, Orientation.SOUTH, 1)
