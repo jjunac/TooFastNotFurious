@@ -30,3 +30,6 @@ class Simulator:
     def generate_report(self):
         analytics = Analytics(self.entities)
         analytics.generate_report_average()
+
+    def get_nodes(self):
+        return [n for e in self.entities for n in e.get_nodes()]

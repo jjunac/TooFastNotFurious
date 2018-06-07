@@ -21,10 +21,10 @@ def main():
     s.add_road(junction.connect(Orientation.NORTH).to(exit1).with_length(3))
     s.add_road(junction.connect(Orientation.WEST).to(exit2).with_length(3))
 
-    s.add_path(entry1.go_through(junction, exit1).with_proportion(30))
-    s.add_path(entry1.go_through(junction, exit2).with_proportion(70))
-    s.add_path(entry2.go_through(junction, exit1).with_proportion(70))
-    s.add_path(entry2.go_through(junction, exit2).with_proportion(30))
+    s.add_path(entry1.to(exit1).with_proportion(30))
+    s.add_path(entry1.to(exit2).with_proportion(70))
+    s.add_path(entry2.to(exit1).with_proportion(70))
+    s.add_path(entry2.to(exit2).with_proportion(30))
 
     s.run_graphical_for(400)
 

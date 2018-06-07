@@ -15,12 +15,12 @@ class TestSingleRoad(unittest.TestCase):
 
         s.add_road(e1.connect(Orientation.NORTH).to(e2).with_length(20))
 
-        s.add_path(e1.go_through(e2).with_proportion(100))
+        s.add_path(e1.to(e2).with_proportion(100))
 
         random.seed(0)
         # With seed 0, 32 cars are generated in 200 tick, plus 21 tick to reach the end
         s.run_for(221)
-        self.assertEqual(32, s.node_conversion[e2].outflow)
+        self.assertEqual(32, s.entity_conversion[e2].outflow)
 
     def test_double_road(self):
         s = new_simulation()

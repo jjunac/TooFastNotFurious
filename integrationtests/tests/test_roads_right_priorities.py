@@ -24,8 +24,8 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_road(entry2.connect(Orientation.WEST).to(junction).with_length(1))
         s.add_road(junction.connect(Orientation.SOUTH).to(exit1).with_length(1))
 
-        s.add_path(entry1.go_through(junction, exit1).with_proportion(100))
-        s.add_path(entry2.go_through(junction, exit1).with_proportion(100))
+        s.add_path(entry1.to(exit1).with_proportion(100))
+        s.add_path(entry2.to(exit1).with_proportion(100))
 
         random.seed(0)
 
@@ -50,7 +50,7 @@ class TestRoadRightPriorities(unittest.TestCase):
             actual_number_of_car = len([n for e in simulator.entities for row in e.nodes for n in row if n.current_car])
             self.assertEqual(number_of_car, actual_number_of_car)
 
-        self.assertFalse(s.node_conversion[entry1] in s.node_conversion[exit1].departure_counter)
+        self.assertFalse(s.entity_conversion[entry1] in s.entity_conversion[exit1].departure_counter)
 
     def test_right_priority_with_2_entries_2_exits(self):
         s = new_simulation()
@@ -71,10 +71,10 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_road(junction.connect(Orientation.SOUTH).to(exit1).with_length(3))
         s.add_road(junction.connect(Orientation.EAST).to(exit2).with_length(3))
 
-        s.add_path(entry1.go_through(junction, exit1).with_proportion(30))
-        s.add_path(entry1.go_through(junction, exit2).with_proportion(70))
-        s.add_path(entry2.go_through(junction, exit1).with_proportion(70))
-        s.add_path(entry2.go_through(junction, exit2).with_proportion(30))
+        s.add_path(entry1.to(exit1).with_proportion(30))
+        s.add_path(entry1.to(exit2).with_proportion(70))
+        s.add_path(entry2.to(exit1).with_proportion(70))
+        s.add_path(entry2.to(exit2).with_proportion(30))
 
         random.seed(0)
 
@@ -146,25 +146,25 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_road(junction4.connect(Orientation.SOUTH).to(exit4).with_length(3))
         s.add_road(junction4.connect(Orientation.NORTH).to(junction1).with_length(7))
 
-        s.add_path(entry1.go_through(junction1, exit1).with_proportion(25))
-        s.add_path(entry1.go_through(junction1, junction2, exit2).with_proportion(25))
-        s.add_path(entry1.go_through(junction1, junction2, junction3, exit3).with_proportion(25))
-        s.add_path(entry1.go_through(junction1, junction2, junction3, junction4, exit4).with_proportion(25))
+        s.add_path(entry1.to(exit1).with_proportion(25))
+        s.add_path(entry1.to(exit2).with_proportion(25))
+        s.add_path(entry1.to(exit3).with_proportion(25))
+        s.add_path(entry1.to(exit4).with_proportion(25))
         
-        s.add_path(entry2.go_through(junction2, exit2).with_proportion(25))
-        s.add_path(entry2.go_through(junction2, junction3, exit3).with_proportion(25))
-        s.add_path(entry2.go_through(junction2, junction3, junction4, exit4).with_proportion(25))
-        s.add_path(entry2.go_through(junction2, junction3, junction4, junction1, exit1).with_proportion(25))
+        s.add_path(entry2.to(exit2).with_proportion(25))
+        s.add_path(entry2.to(exit3).with_proportion(25))
+        s.add_path(entry2.to(exit4).with_proportion(25))
+        s.add_path(entry2.to(exit1).with_proportion(25))
         
-        s.add_path(entry3.go_through(junction3, exit3).with_proportion(25))
-        s.add_path(entry3.go_through(junction3, junction4, exit4).with_proportion(25))
-        s.add_path(entry3.go_through(junction3, junction4, junction1, exit1).with_proportion(25))
-        s.add_path(entry3.go_through(junction3, junction4, junction1, junction2, exit2).with_proportion(25))
+        s.add_path(entry3.to(exit3).with_proportion(25))
+        s.add_path(entry3.to(exit4).with_proportion(25))
+        s.add_path(entry3.to(exit1).with_proportion(25))
+        s.add_path(entry3.to(exit2).with_proportion(25))
         
-        s.add_path(entry4.go_through(junction4, exit4).with_proportion(25))
-        s.add_path(entry4.go_through(junction4, junction1, exit1).with_proportion(25))
-        s.add_path(entry4.go_through(junction4, junction1, junction2, exit2).with_proportion(25))
-        s.add_path(entry4.go_through(junction4, junction1, junction2, junction3, exit3).with_proportion(25))
+        s.add_path(entry4.to(exit4).with_proportion(25))
+        s.add_path(entry4.to(exit1).with_proportion(25))
+        s.add_path(entry4.to(exit2).with_proportion(25))
+        s.add_path(entry4.to(exit3).with_proportion(25))
 
         random.seed(0)
 

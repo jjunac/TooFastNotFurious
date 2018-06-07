@@ -26,8 +26,8 @@ def main():
     s.add_road(junction2.connect(Orientation.NORTH).to(junction).with_length(3))
     s.add_road(junction.connect(Orientation.EAST).to(exit1).with_length(5))
 
-    s.add_path(entry1.go_through(junction, exit1).with_proportion(100))
-    s.add_path(entry2.go_through(junction3, junction2, junction, exit1).with_proportion(100))
+    s.add_path(entry1.to(exit1).with_proportion(100))
+    s.add_path(entry2.to(exit1).with_proportion(100))
 
     s.run_graphical_for(400)
 

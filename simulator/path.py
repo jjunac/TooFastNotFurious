@@ -3,13 +3,13 @@ from collections import deque
 
 class Path:
 
-    def __init__(self, directions):
-        self.directions = deque(directions)
+    def __init__(self, nodes):
+        self.nodes = deque(nodes)
 
 
-    def next_direction(self):
-        return self.directions[0]
+    def next_node(self):
+        return self.nodes[0]
 
 
-    def pop_direction(self):
-        return self.directions.popleft()
+    def pop_node(self):
+        return self.nodes.popleft()
