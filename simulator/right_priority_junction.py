@@ -37,22 +37,36 @@ class RightPriorityJunction(AbstractEntity):
                 n.apply_next()
 
     def get_start(self, orientation):
-        # if orientation == Orientation.NORTH:
-        #     return self.nodes[self.io_roads[orientation][1]:self.size_north_south][0]
-        # if orientation == Orientation.SOUTH:
-        #     return self.nodes[0:self.io_roads[orientation][1]-1][-1]
-        # if orientation == Orientation.EAST:
-        #
-        #     for i in range(self.io_roads[orientation][0])
-        #
-        #     return self.nodes[self.io_roads[orientation]]
-        # if orientation == Orientation.WEST:
-        #     return self.nodes[self.io_roads[orientation]]
-
-        return self.nodes[0][0]
+        if orientation == Orientation.NORTH:
+            return self.nodes[0][self.io_roads[orientation][1]:self.size_north_south]
+        if orientation == Orientation.SOUTH:
+            return self.nodes[-1][0:self.io_roads[orientation][1]-1]
+        if orientation == Orientation.EAST:
+            res = []
+            for i in range(self.io_roads[orientation][0]):
+                res.append(self.nodes[0][i])
+            return res
+        if orientation == Orientation.WEST:
+            res = []
+            for i in range(self.io_roads[orientation][0],self.size_east_west):
+                res.append(self.nodes[-1][i])
+            return res
 
     def get_end(self, orientation):
-        return self.nodes[0][0]
+        if orientation == Orientation.NORTH:
+            return self.nodes[-1][self.io_roads[orientation][1]:self.size_north_south]
+        if orientation == Orientation.SOUTH:
+            return self.nodes[0][0:self.io_roads[orientation][1]-1]
+        if orientation == Orientation.EAST:
+            res = []
+            for i in range(self.io_roads[orientation][0]):
+                res.append(self.nodes[-1][i])
+            return res
+        if orientation == Orientation.WEST:
+            res = []
+            for i in range(self.io_roads[orientation][0],self.size_east_west):
+                res.append(self.nodes[0][i])
+            return res
 
     def __link_nodes(self):
         #North entry
