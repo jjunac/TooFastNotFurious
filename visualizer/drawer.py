@@ -70,13 +70,6 @@ class Drawer:
         car_group = pygame.sprite.RenderClear()
         accumulator = 0
         car_updates = 0
-
-        offset_x = 0
-        offset_y = 0
-
-        origin_x = 0
-        origin_y = 0
-
         while self.continue_drawing:
             tick = clock.tick()
             accumulator += tick
@@ -92,15 +85,14 @@ class Drawer:
                 accumulator = 0
                 for graphic_road in graphic_roads:
                     for node, pos in graphic_road.node_pos:
-                        p = Point(pos.x + offset_x, pos.y + offset_y)
                         if node.current_car and type(graphic_road.entity) is not Exit and type(
                                 graphic_road.entity) is not Entry:
                             sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
                             if sprite:
-                                sprite.interpolate(p)
+                                sprite.interpolate(pos)
                                 # sprite.rotate(-graphic_road.angle)
                             else:
-                                car_group.add(CarSprite(p, node.current_car, 30, 20, -graphic_road.angle))
+                                car_group.add(CarSprite(pos, node.current_car, 30, 20, -graphic_road.angle))
                         elif node.current_car and type(graphic_road.entity) == Exit:
                             sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
                             if sprite:
@@ -110,53 +102,5 @@ class Drawer:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.continue_drawing = 0
-
-                if event.type == MOUSEBUTTONDOWN:
-                    origin_x = pygame.mouse.get_pos()[0]
-                    origin_y = pygame.mouse.get_pos()[1]
-
-                if event.type == MOUSEBUTTONUP:
-                    res_x = pygame.mouse.get_pos()[0] - origin_x
-                    res_y = pygame.mouse.get_pos()[1] - origin_y
-                    offset_x += res_x
-                    offset_y += res_y
-                    for i in graphic_roads:
-                        for sprite in i.group:
-                            sprite.rect.x += res_x
-                            sprite.rect.y += res_y
-
-                if event.type == KEYDOWN:
-
-                    if event.key == K_UP:
-
-                        for i in graphic_roads:
-                            for sprite in i.group:
-                                sprite.rect.y -= 5
-
-                        offset_y -= 5
-
-                    if event.key == K_LEFT:
-
-                        for i in graphic_roads:
-                            for sprite in i.group:
-                                sprite.rect.x -= 5
-
-                        offset_x -= 5
-
-                    if event.key == K_RIGHT:
-
-                        for i in graphic_roads:
-                            for sprite in i.group:
-                                sprite.rect.x += 5
-
-                        offset_x += 5
-
-                    if event.key == K_DOWN:
-
-                        for i in graphic_roads:
-                            for sprite in i.group:
-                                sprite.rect.y += 5
-
-                        offset_y += 5
 
     # def interpolate(self, start, end, time_max, tick):
