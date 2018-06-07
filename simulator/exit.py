@@ -26,8 +26,8 @@ class Exit(AbstractEntity):
                                                     self.nodes[0][0].current_car.time)
 
     def do_add_predecessor(self, orientation, predecessor):
-        end = predecessor.get_end(orientation)
-        start = self.get_start(orientation)
+        end = predecessor.get_end(orientation.invert())
+        start = self.get_start(orientation.invert())
         for i in range(self.n_of_ways):
             link(end[i], start[i])
             self.simulator.dependencies[(end[i], start[i])] = [start[i]]

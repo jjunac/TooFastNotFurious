@@ -32,7 +32,7 @@ class TestSingleRoad(unittest.TestCase):
 
         s.add_road(e1.connect(Orientation.NORTH).to(e2).with_length(20).with_n_ways(2))
 
-        s.add_path(e1.go_through(e2).with_proportion(100))
+        s.add_path(e1.to(e2).with_proportion(100))
 
         random.seed(0)
         # With seed 0, 32 cars are generated in 200 tick, plus 21 tick to reach the end

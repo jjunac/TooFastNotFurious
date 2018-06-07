@@ -222,14 +222,14 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_road(junction.connect(Orientation.SOUTH).to(exit3).with_length(3).with_n_ways(3))
         s.add_road(junction.connect(Orientation.EAST).to(exit4).with_length(3).with_n_ways(3))
 
-        s.add_path(entry1.go_through(junction, exit1).with_proportion(30))
-        s.add_path(entry1.go_through(junction, exit2).with_proportion(70))
-        s.add_path(entry2.go_through(junction, exit1).with_proportion(70))
-        s.add_path(entry2.go_through(junction, exit2).with_proportion(30))
-        s.add_path(entry3.go_through(junction, exit1).with_proportion(30))
-        s.add_path(entry3.go_through(junction, exit2).with_proportion(70))
-        s.add_path(entry4.go_through(junction, exit1).with_proportion(70))
-        s.add_path(entry4.go_through(junction, exit2).with_proportion(30))
+        s.add_path(entry1.to(exit1).with_proportion(30))
+        s.add_path(entry1.to(exit2).with_proportion(70))
+        s.add_path(entry2.to(exit1).with_proportion(70))
+        s.add_path(entry2.to(exit2).with_proportion(30))
+        s.add_path(entry3.to(exit1).with_proportion(30))
+        s.add_path(entry3.to(exit2).with_proportion(70))
+        s.add_path(entry4.to(exit1).with_proportion(70))
+        s.add_path(entry4.to(exit2).with_proportion(30))
 
         random.seed(0)
 
