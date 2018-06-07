@@ -18,15 +18,15 @@ class TestReportGenerator(unittest.TestCase):
 
     def test_should_a_correct_report(self):
         s = Simulator()
-        entry1 = Entry(s, 0)
-        entry2 = Entry(s, 0)
-        entry3 = Entry(s, 0)
+        entry1 = Entry(s, 0, 1)
+        entry2 = Entry(s, 0, 1)
+        entry3 = Entry(s, 0, 1)
 
         p1 = Path([0] * 6)
         p2 = Path([0] * 8)
 
-        exit1 = Exit(s)
-        exit2 = Exit(s)
+        exit1 = Exit(s, 1)
+        exit2 = Exit(s, 1)
 
         stats = {exit1: {(entry1, p1): [6, 8, 5, 9], (entry2, p2): [8, 4, 6, 23, 7]},
                  exit2: {(entry3, p1): [5, 6, 5, 7, 2], (entry3, p2): [8, 7, 4, 56, 6, 7]}}
