@@ -11,10 +11,6 @@ class TestStatistics(unittest.TestCase):
         entry2 = Entry(simulator, 0, 1)
         entry3 = Entry(simulator, 0, 1)
 
-        entry1.to_spawn = 0
-        entry2.to_spawn = 0
-        entry3.to_spawn = 0
-
         p = Path([])
         p2 = Path([])
 

@@ -35,10 +35,6 @@ class TestRoad(unittest.TestCase):
         exit1.add_predecessor(Orientation.EAST, road4)
         road4.add_predecessor(Orientation.EAST, rpn)
 
-        entry1.to_spawn = 0
-        entry2.to_spawn = 0
-        entry3.to_spawn = 0
-
         p1 = Path(dijkstra_with_path(simulator.get_nodes(), entry1.nodes[0][0], exit1.nodes[0][0]))
         p2 = Path(dijkstra_with_path(simulator.get_nodes(), entry2.nodes[0][0], exit1.nodes[0][0]))
         p3 = Path(dijkstra_with_path(simulator.get_nodes(), entry3.nodes[0][0], exit1.nodes[0][0]))
@@ -189,8 +185,6 @@ class TestRoad(unittest.TestCase):
         simulator = Simulator()
         entry1 = Entry(simulator, 0, 1)
         entry2 = Entry(simulator, 0, 1)
-        entry1.to_spawn = 0
-        entry2.to_spawn = 0
 
         rpn = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1), Orientation.WEST: (1, 0)})
         exit1 = Exit(simulator, 1)
