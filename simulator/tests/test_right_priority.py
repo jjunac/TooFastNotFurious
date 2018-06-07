@@ -11,9 +11,45 @@ from copy import deepcopy
 
 class TestRightPriority(unittest.TestCase):
 
+    def test_should_connect_correctly_when_a_road_is_link_to_a_right_priority_junction(self):
+        simulator = Simulator()
+        rp = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1), Orientation.WEST: (1, 0)})
+        self.assertEqual(1, len(rp.nodes))
+        self.assertEqual(1, len(rp.nodes[0]))
+
+        self.assertEqual(1, len(rp.get_start(Orientation.NORTH)))
+        self.assertEqual(0, len(rp.get_start(Orientation.SOUTH)))
+        self.assertEqual(1, len(rp.get_start(Orientation.WEST)))
+        self.assertEqual(0, len(rp.get_start(Orientation.EAST)))
+
+        self.assertEqual(0, len(rp.get_end(Orientation.NORTH)))
+        self.assertEqual(1, len(rp.get_end(Orientation.SOUTH)))
+        self.assertEqual(0, len(rp.get_end(Orientation.WEST)))
+        self.assertEqual(1, len(rp.get_end(Orientation.EAST)))
+
+        r1 = Road(simulator, 1, Orientation.NORTH, 1)
+        r2 = Road(simulator, 1, Orientation.WEST, 1)
+        r3 = Road(simulator, 1, Orientation.EAST, 1)
+        r4 = Road(simulator, 1, Orientation.SOUTH, 1)
+
+        rp.add_predecessor(Orientation.NORTH, r1)
+        rp.add_predecessor(Orientation.WEST, r2)
+        r3.add_predecessor(Orientation.EAST, rp)
+        r4.add_predecessor(Orientation.SOUTH, rp)
+
+        self.assertEqual({rp.nodes[0][0]}, set(r1.nodes[0][0].successors))
+        self.assertEqual({rp.nodes[0][0]}, set(r2.nodes[0][0].successors))
+        self.assertEqual({r3.nodes[0][0], r4.nodes[0][0]}, set(rp.nodes[0][0].successors))
+
+        self.assertEqual({rp.nodes[0][0], r2.nodes[0][0]}, set(simulator.dependencies[(r1.nodes[0][0], rp.nodes[0][0])]))
+        self.assertEqual({rp.nodes[0][0]}, set(simulator.dependencies[(r2.nodes[0][0], rp.nodes[0][0])]))
+        self.assertEqual({r3.nodes[0][0]}, set(simulator.dependencies[(rp.nodes[0][0], r3.nodes[0][0])]))
+        self.assertEqual({r4.nodes[0][0]}, set(simulator.dependencies[(rp.nodes[0][0], r4.nodes[0][0])]))
+
+
     def test_should_go_when_there_is_no_right_priority(self):
         simulator = Simulator()
-        rp = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1)})
+        rp = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1), Orientation.WEST: (1, 0)})
         r1 = Road(simulator, 1, Orientation.NORTH, 1)
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.EAST, 1)

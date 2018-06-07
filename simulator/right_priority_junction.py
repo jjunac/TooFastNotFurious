@@ -8,10 +8,12 @@ class RightPriorityJunction(AbstractEntity):
 
     def __init__(self, simulator, io_roads):
         self.io_roads = io_roads
+        if io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1] != io_roads[Orientation.SOUTH][0] + io_roads[Orientation.SOUTH][1]\
+            or io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1] != io_roads[Orientation.WEST][0] + io_roads[Orientation.WEST][1]:
+            raise RuntimeError("in/out of North/South and East/West must be coherent")
         self.size_north_south = io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1]
         self.size_east_west = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
-        super().__init__(simulator,
-                         [[Node() for i in range(self.size_north_south)] for j in range(self.size_east_west)])
+        super().__init__(simulator, [[Node() for i in range(self.size_north_south)] for j in range(self.size_east_west)])
         self.__link_nodes()
 
     def do_add_predecessor(self, orientation, predecessor):
@@ -42,30 +44,26 @@ class RightPriorityJunction(AbstractEntity):
                 n.apply_next()
 
     def get_start(self, orientation):
-        n_ways = self.io_roads.get(orientation, [None])[0]
-        if not n_ways:
-            n_ways = self.io_roads.get(orientation.invert())[1]
+        in_ways = self.io_roads[orientation][0]
         if orientation == Orientation.NORTH:
-            return self.nodes[0][n_ways:]
+            return self.nodes[0][:in_ways]
         if orientation == Orientation.SOUTH:
-            return self.nodes[-1][:n_ways]
+            return self.nodes[-1][:in_ways]
         if orientation == Orientation.EAST:
-            return [row[0] for row in self.nodes[n_ways:]]
+            return [row[0] for row in self.nodes[:in_ways]]
         if orientation == Orientation.WEST:
-            return [row[-1] for row in self.nodes[:n_ways]]
+            return [row[-1] for row in self.nodes[:in_ways]]
 
     def get_end(self, orientation):
-        n_ways = self.io_roads.get(orientation, [None])[0]
-        if not n_ways:
-            n_ways = self.io_roads.get(orientation.invert())[1]
+        out_ways = self.io_roads[orientation][1]
         if orientation == Orientation.NORTH:
-            return self.nodes[-1][n_ways:]
+            return self.nodes[-1][:out_ways]
         if orientation == Orientation.SOUTH:
-            return self.nodes[0][:n_ways]
+            return self.nodes[0][:out_ways]
         if orientation == Orientation.EAST:
-            return [row[-1] for row in self.nodes[n_ways:]]
+            return [row[-1] for row in self.nodes[:out_ways]]
         if orientation == Orientation.WEST:
-            return [row[0] for row in self.nodes[:n_ways]]
+            return [row[0] for row in self.nodes[:out_ways]]
 
     def __link_nodes(self):
         #North entry
