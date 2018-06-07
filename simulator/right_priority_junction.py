@@ -42,26 +42,30 @@ class RightPriorityJunction(AbstractEntity):
                 n.apply_next()
 
     def get_start(self, orientation):
-        in_way = self.io_roads.get(orientation, self.io_roads.get(orientation.invert()))[0]
+        n_ways = self.io_roads.get(orientation, [None])[0]
+        if not n_ways:
+            n_ways = self.io_roads.get(orientation.invert())[1]
         if orientation == Orientation.NORTH:
-            return self.nodes[0][in_way:]
+            return self.nodes[0][n_ways:]
         if orientation == Orientation.SOUTH:
-            return self.nodes[-1][:in_way]
+            return self.nodes[-1][:n_ways]
         if orientation == Orientation.EAST:
-            return [row[0] for row in self.nodes[in_way:]]
+            return [row[0] for row in self.nodes[n_ways:]]
         if orientation == Orientation.WEST:
-            return [row[-1] for row in self.nodes[:in_way]]
+            return [row[-1] for row in self.nodes[:n_ways]]
 
     def get_end(self, orientation):
-        out_way = self.io_roads.get(orientation, self.io_roads.get(orientation.invert()))[1]
+        n_ways = self.io_roads.get(orientation, [None])[0]
+        if not n_ways:
+            n_ways = self.io_roads.get(orientation.invert())[1]
         if orientation == Orientation.NORTH:
-            return self.nodes[-1][out_way:]
+            return self.nodes[-1][n_ways:]
         if orientation == Orientation.SOUTH:
-            return self.nodes[0][:out_way]
+            return self.nodes[0][:n_ways]
         if orientation == Orientation.EAST:
-            return [row[-1] for row in self.nodes[out_way:]]
+            return [row[-1] for row in self.nodes[n_ways:]]
         if orientation == Orientation.WEST:
-            return [row[0] for row in self.nodes[:out_way]]
+            return [row[0] for row in self.nodes[:n_ways]]
 
     def __link_nodes(self):
         #North entry
