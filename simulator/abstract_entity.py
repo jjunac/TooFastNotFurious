@@ -11,7 +11,7 @@ class AbstractEntity(ABC):
         self.nodes = nodes
 
     def add_predecessor(self, orientation, predecessor):
-        self.predecessors[orientation] = predecessor
+        self.predecessors[orientation.invert()] = predecessor
         predecessor.successors[orientation] = self
         self.do_add_predecessor(orientation, predecessor)
 

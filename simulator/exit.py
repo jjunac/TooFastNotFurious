@@ -6,8 +6,9 @@ from simulator.node import Node
 
 class Exit(AbstractEntity):
 
-    def __init__(self, simulator):
+    def __init__(self, simulator, n_of_ways):
         super().__init__(simulator, [[Node()]])
+        self.n_of_ways = n_of_ways
         self.outflow = 0
         self.departure_counter = {}
         self.statistics = Statistics()
@@ -27,14 +28,15 @@ class Exit(AbstractEntity):
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation)
         start = self.get_start(orientation)
-        link(end, start)
-        self.simulator.dependencies[(end, start)] = [start]
+        for i in range(self.n_of_ways):
+            link(end[i], start[i])
+            self.simulator.dependencies[(end[i], start[i])] = [start[i]]
 
     def get_start(self, orientation):
-        return self.nodes[0][0]
+        return [row[0] for row in self.nodes]
 
     def get_end(self, orientation):
-        return self.nodes[0][0]
+        return [row[0] for row in self.nodes]
 
     def apply_next(self):
         for row in self.nodes:

@@ -1,6 +1,7 @@
 import simulator
+from simulator import Path
 from simulator.simulator import Simulator
-from shared import dijkstra_with_path
+from shared import dijkstra, reconstruct_path
 
 class Simulation:
 
@@ -34,11 +35,14 @@ class Simulation:
         entry = self.entity_conversion[path.departure]
         exit = self.entity_conversion[path.destination]
 
-        # TODO adapt to multi way
-        res = dijkstra_with_path(self.simulator.get_nodes(), entry.nodes[0][0], exit.nodes[0][0])
+        paths = []
+
+        for n in entry.get_nodes():
+            res = dijkstra(self.simulator.get_nodes(), n)
+            paths.append(Path(reconstruct_path(res, n, min(exit.get_nodes(), key=lambda e:res[e]))))
 
         total_proportion = max(entry.paths.keys()) if len(entry.paths) >= 1 else 0
-        entry.paths[total_proportion + path.proportion] = simulator.Path(res)
+        entry.paths[total_proportion + path.proportion] = paths
 
 
     def build_all(self):

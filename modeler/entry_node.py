@@ -20,4 +20,4 @@ class EntryNode(Node):
 
 
     def build(self, sim):
-        return simulator.Entry(sim, self.rate)
+        return simulator.Entry(sim, self.rate, list(self.exits.values())[0].n_ways)
