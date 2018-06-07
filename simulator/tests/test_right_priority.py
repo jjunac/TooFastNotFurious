@@ -13,7 +13,7 @@ class TestRightPriority(unittest.TestCase):
 
     def test_should_go_when_there_is_no_right_priority(self):
         simulator = Simulator()
-        rp = RightPriorityJunction(simulator, 1, 1)
+        rp = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (1, 0)})
         r1 = Road(simulator, 1, Orientation.NORTH, 1)
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.EAST, 1)

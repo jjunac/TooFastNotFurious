@@ -24,8 +24,9 @@ class RightPriorityJunction(AbstractEntity):
             for i in range(len(start)):
                 self.simulator.dependencies[(end[i], start[i])].extend(self.get_end_of_predecessor(orientation.left()))
         if orientation.right() in self.predecessors:
-            for i in range(len(start)):
-                self.simulator.dependencies[(self.get_end_of_predecessor(orientation.right()), start[i])].append(end[i])
+            end_of_predecessor = self.get_end_of_predecessor(orientation.right())
+            for i in range(len(end_of_predecessor)):
+                self.simulator.dependencies[(end_of_predecessor[i], self.get_start(orientation.right())[i])].extend(end)
 
     def get_end_of_predecessor(self, orientation):
         return self.predecessors[orientation].get_end(orientation)

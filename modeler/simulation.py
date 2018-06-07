@@ -1,4 +1,5 @@
 import simulator
+from simulator import Path
 from simulator.simulator import Simulator
 from shared import dijkstra, reconstruct_path
 
@@ -36,12 +37,12 @@ class Simulation:
 
         paths = []
 
-        for n in entry:
+        for n in entry.get_nodes():
             res = dijkstra(self.simulator.get_nodes(), n)
-            paths.append(reconstruct_path(res, n, min(exit.get_nodes(), key=lambda e:res[e])))
+            paths.append(Path(reconstruct_path(res, n, min(exit.get_nodes(), key=lambda e:res[e]))))
 
         total_proportion = max(entry.paths.keys()) if len(entry.paths) >= 1 else 0
-        entry.paths[total_proportion + path.proportion] = simulator.Path(paths)
+        entry.paths[total_proportion + path.proportion] = paths
 
 
     def build_all(self):
