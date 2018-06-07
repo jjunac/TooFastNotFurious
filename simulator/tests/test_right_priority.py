@@ -12,7 +12,7 @@ from copy import deepcopy
 class TestRightPriority(unittest.TestCase):
 
     def test_should_go_when_there_is_no_right_priority(self):
-        simulator  = Simulator()
+        simulator = Simulator()
         rp = RightPriorityJunction(simulator, 1, 1)
         r1 = Road(simulator, 1, Orientation.NORTH, 1)
         r2 = Road(simulator, 1, Orientation.WEST, 1)
@@ -233,3 +233,41 @@ class TestRightPriority(unittest.TestCase):
         self.assertIsNone(entry2.nodes[0][0].current_car)
         self.assertIsNone(exit.nodes[0][0].current_car)
         self.assertIsNotNone(rp.nodes[0][0].current_car)
+
+    def test_should_return_start_nodes_when_get_start_is_called(self):
+        simulator = Simulator()
+        dictionnary = {
+            Orientation.NORTH: (3, 2),
+            Orientation.EAST: (3, 2)
+        }
+        rp = RightPriorityJunction(simulator, dictionnary)
+        self.assertEqual(len(rp.get_start(Orientation.NORTH)), 3)
+        self.assertEqual(len(rp.get_start(Orientation.SOUTH)), 2)
+        self.assertEqual(len(rp.get_start(Orientation.EAST)), 3)
+        self.assertEqual(len(rp.get_start(Orientation.WEST)), 2)
+
+    def test_should_create_intern_mesh_when_junction_is_created(self):
+        simulator = Simulator()
+        dictionnary = {
+            Orientation.NORTH: (3, 2),
+            Orientation.EAST: (3, 2)
+        }
+        rp = RightPriorityJunction(simulator, dictionnary)
+        print()
+        self.assertEqual(len(rp.nodes[1][3].successors), 2)
+        self.assertEqual(len(rp.nodes[-2][0].successors), 2)
+        self.assertEqual(len(rp.nodes[1][1].successors), 2)
+        self.assertEqual(len(rp.nodes[-2][3].successors), 2)
+
+        for i in range(1, rp.size_north_south - 1):
+            for j in range(1, rp.size_east_west - 1):
+                if i < dictionnary[Orientation.NORTH][1]:
+                    self.assertIn(rp.nodes[j][i+1], rp.nodes[i][j].successors)
+                else:
+                    self.assertIn(rp.nodes[j][i - 1], rp.nodes[i][j].successors)
+                if j < dictionnary[Orientation.EAST][0]:
+                    self.assertIn(rp.nodes[j - 1][i], rp.nodes[i][j].successors)
+                else:
+                    self.assertIn(rp.nodes[j + 1][i], rp.nodes[i][j].successors)
+
+        # self.assertEqual(rp.nodes[-1][0].successors[1], rp.nodes[-2][0])

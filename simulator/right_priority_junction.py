@@ -12,6 +12,7 @@ class RightPriorityJunction(AbstractEntity):
         self.size_east_west = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
         super().__init__(simulator,
                          [[Node() for i in range(self.size_north_south)] for j in range(self.size_east_west)])
+        self.__link_nodes()
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation)
@@ -63,17 +64,16 @@ class RightPriorityJunction(AbstractEntity):
         out_NS = self.io_roads[Orientation.NORTH][1]
         for i in range(out_NS, self.size_north_south):
             for j in range(self.size_east_west - 1):
-                link(self.nodes[i][j], self.nodes[i][j+1])
+                link(self.nodes[j][i], self.nodes[j+1][i])
         #South exit
         for i in range(out_NS):
-            for j in range(1, self.size_east_west):
-                link(self.nodes[i][j], self.nodes[i][j-1])
+            for j in range( self.size_east_west):
+                link(self.nodes[j][i], self.nodes[j-1][i])
         #East entry
-        out_WE = self.io_roads[Orientation.EAST][1]
-        for i in range(out_WE, self.size_east_west):
+        for i in range(self.io_roads[Orientation.EAST][0]):
             for j in range(self.size_north_south - 1):
                 link(self.nodes[i][j], self.nodes[i][j+1])
         #West exit
-        for i in range(out_WE):
-            for j in range(1, self.size_north_south):
+        for i in range(self.io_roads[Orientation.EAST][0],self.size_east_west):
+            for j in range( self.size_north_south):
                 link(self.nodes[i][j], self.nodes[i][j-1])
