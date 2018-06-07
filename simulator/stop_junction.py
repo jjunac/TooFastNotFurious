@@ -23,6 +23,7 @@ class StopJunction(RightPriorityJunction):
         # This car needs to leave the priority to the car on the right (so heading left)
         if orientation.left() in self.predecessors:
             end_of_predecessor = self.get_end_of_predecessor(orientation.left())
+            print(end_of_predecessor)
             for i in range(len(end_of_predecessor)):
                 self.simulator.dependencies[(end_of_predecessor[i], self.get_start(orientation.left())[i])].extend(end)
 
