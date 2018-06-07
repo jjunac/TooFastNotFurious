@@ -76,7 +76,7 @@ class Drawer:
             car_updates += tick
             for graphic_road in graphic_roads:
                 graphic_road.draw(self.screen)
-            if car_updates >= 20:
+            if car_updates >= 30:
                 car_group.update(tick)
                 car_updates = 0
             car_group.draw(self.screen)
@@ -89,8 +89,8 @@ class Drawer:
                                 graphic_road.entity) is not Entry:
                             sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
                             if sprite:
-                                sprite.interpolate(accumulator, pos)
-                                sprite.rotate(-graphic_road.angle)
+                                sprite.interpolate(pos)
+                                # sprite.rotate(-graphic_road.angle)
                             else:
                                 car_group.add(CarSprite(pos, node.current_car, 30, 20, -graphic_road.angle))
                         elif node.current_car and type(graphic_road.entity) == Exit:

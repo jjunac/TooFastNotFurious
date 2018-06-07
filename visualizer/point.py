@@ -15,6 +15,12 @@ class Point:
         point = Point(self.x - other.x, self.y - other.y)
         return point
 
+    def __mul__(self, other):
+        return Point(self.x * other, self.y * other)
+
+    def __truediv__(self, other):
+        return Point(self.x / other, self.y / other)
+
     def length(self):
         return sqrt(self.x ** 2 + self.y ** 2)
 
