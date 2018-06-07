@@ -12,7 +12,6 @@ class TestPoint(unittest.TestCase):
 
     def test_rotate_point(self):
         origin = Point(0, 0)
-        print(origin)
         base_point = Point(10, 0)
         self.assertEqual(base_point, origin.rotate_point(0, base_point))
         point = Point(0, -10)

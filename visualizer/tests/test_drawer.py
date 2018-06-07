@@ -38,11 +38,11 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(road0_end, graphic_road.end)
         self.assertEqual(Point(5 * cell_size, 0), graphic_road.sprite_end)
 
-        self.assertEqual(road0_end, roads[1].start)
-        self.assertEqual(road0_end + Point(cell_size, 0), roads[1].sprite_start)
+        self.assertEqual(road0_end, roads[2].start)
+        self.assertEqual(road0_end + Point(cell_size, 0), roads[2].sprite_start)
         size_ = road0_end + Point(3 * cell_size, 0)
-        self.assertEqual(size_, roads[1].end)
-        self.assertEqual(road0_end + Point(2 * cell_size, 0), roads[1].sprite_end)
+        self.assertEqual(size_, roads[2].end)
+        self.assertEqual(road0_end + Point(2 * cell_size, 0), roads[2].sprite_end)
 
         # TODO continue test
 
