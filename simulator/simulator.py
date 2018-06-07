@@ -21,10 +21,15 @@ class Simulator:
     def run(self, ticks):
         for _ in range(ticks):
             self.tick()
-        analytics = Analytics(self.entities)
-        analytics.generate_report_average()
 
     def run_graphical(self, ticks):
         drawing = Drawer(self)
         drawing.init_screen()
         drawing.draw()
+
+    def generate_report(self):
+        analytics = Analytics(self.entities)
+        analytics.generate_report_average()
+
+    def get_nodes(self):
+        return [n for e in self.entities for n in e.get_nodes()]

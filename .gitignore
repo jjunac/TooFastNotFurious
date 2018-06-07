@@ -178,3 +178,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+**/report_*.html

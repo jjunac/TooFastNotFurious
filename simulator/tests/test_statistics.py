@@ -15,8 +15,8 @@ class TestStatistics(unittest.TestCase):
         entry2.to_spawn = 0
         entry3.to_spawn = 0
 
-        p = Path([0] * 6)
-        p2 = Path([0] * 7)
+        p = Path([])
+        p2 = Path([])
 
         stat = Statistics()
 

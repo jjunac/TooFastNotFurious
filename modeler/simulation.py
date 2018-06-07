@@ -1,48 +1,44 @@
 import simulator
 from simulator.simulator import Simulator
+from shared import dijkstra_with_path
 
 class Simulation:
 
     def __init__(self):
-        self.built_entities = []
-        self.node_conversion = {}
+        self.entity_conversion = {}
         self.nodes = []
         self.roads = []
         self.paths = []
         self.simulator = Simulator()
 
-
+    def with_report(self):
+        self.simulator.generate_report()
 
     def __build_node(self, node):
         build = node.build(self.simulator)
-        self.node_conversion[node] = build
-        self.built_entities.append(build)
+        self.entity_conversion[node] = build
 
 
     def __build_road(self, road):
         build = road.build(self.simulator)
 
         # Link the start
-        start_build = self.node_conversion[road.start]
+        start_build = self.entity_conversion[road.start]
         build.add_predecessor(road.orientation, start_build)
         # Link the end
-        end_build = self.node_conversion[road.end]
+        end_build = self.entity_conversion[road.end]
         end_build.add_predecessor(road.orientation, build)
-
-        self.built_entities.remove(end_build)
-        self.built_entities.append(build)
-        self.built_entities.append(end_build)
 
 
     def __build_path(self, path):
-        node = self.node_conversion[path.departure]
-        directions = [0] * (path.departure.possible_destinations[path.junctions[0]][1] + 1)
-        for i in range(len(path.junctions) - 1):
-            index, length = path.junctions[i].possible_destinations[path.junctions[i + 1]]
-            directions.append(index)
-            directions.extend([0] * length)
-        total_proportion = max(node.paths.keys()) if len(node.paths) >= 1 else 0
-        node.paths[total_proportion + path.proportion] = simulator.Path(directions)
+        entry = self.entity_conversion[path.departure]
+        exit = self.entity_conversion[path.destination]
+
+        # TODO adapt to multi way
+        res = dijkstra_with_path(self.simulator.get_nodes(), entry.nodes[0][0], exit.nodes[0][0])
+
+        total_proportion = max(entry.paths.keys()) if len(entry.paths) >= 1 else 0
+        entry.paths[total_proportion + path.proportion] = simulator.Path(res)
 
 
     def build_all(self):
