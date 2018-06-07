@@ -7,7 +7,7 @@ from simulator.node import Node
 class Exit(AbstractEntity):
 
     def __init__(self, simulator, n_of_ways):
-        super().__init__(simulator, [[Node()]])
+        super().__init__(simulator, [[Node()] for _ in range(n_of_ways)])
         self.n_of_ways = n_of_ways
         self.outflow = 0
         self.departure_counter = {}
