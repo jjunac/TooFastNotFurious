@@ -12,7 +12,7 @@ def main():
 
     s.add_road(e1.connect(Orientation.NORTH).to(e2).with_length(20))
 
-    s.add_path(e1.go_through(e2).with_proportion(100))
+    s.add_path(e1.to(e2).with_proportion(100))
 
     s.run_for(50)
 
