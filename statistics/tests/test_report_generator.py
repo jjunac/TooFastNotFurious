@@ -55,7 +55,6 @@ class TestReportGenerator(unittest.TestCase):
 
         j = json.loads(demjson.encode(demjson.decode(script.replace('var myChart = new Chart(ctx, data);', ''))))
 
-        # print(j['data']['labels'])
         self.assertEqual(['exit1 - entry1', 'exit1 - entry2', 'exit2 - entry3'], j['data']['labels'])
         self.assertEqual([7.0, 9.6, 10.272727272727273], j['data']['datasets'][0]['data'])
         pattern = 'rgba\([1-2]?[0-9]?[0-9], [1-2]?[0-9]?[0-9], [1-2]?[0-9]?[0-9], 0.7\)'
