@@ -8,9 +8,10 @@ class RightPriorityJunction(AbstractEntity):
 
     def __init__(self, simulator, io_roads):
         self.io_roads = io_roads
-        size_north_south = io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1]
-        size_east_west = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
-        super().__init__(simulator, [[Node() for i in range(size_east_west)] for j in range(size_north_south)])
+        self.size_north_south = io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1]
+        self.size_east_west = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
+        super().__init__(simulator,
+                         [[Node() for i in range(self.size_north_south)] for j in range(self.size_east_west)])
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation)
@@ -36,7 +37,37 @@ class RightPriorityJunction(AbstractEntity):
                 n.apply_next()
 
     def get_start(self, orientation):
+        # if orientation == Orientation.NORTH:
+        #     return self.nodes[self.io_roads[orientation][1]:self.size_north_south][0]
+        # if orientation == Orientation.SOUTH:
+        #     return self.nodes[0:self.io_roads[orientation][1]-1][-1]
+        # if orientation == Orientation.EAST:
+        #
+        #     for i in range(self.io_roads[orientation][0])
+        #
+        #     return self.nodes[self.io_roads[orientation]]
+        # if orientation == Orientation.WEST:
+        #     return self.nodes[self.io_roads[orientation]]
+
         return self.nodes[0][0]
 
     def get_end(self, orientation):
         return self.nodes[0][0]
+
+    def __link_nodes(self):
+        #North entry
+        for i in range(self.io_roads[Orientation.NORTH][1], self.size_north_south):
+            for j in range(self.size_east_west - 1):
+                link(self.nodes[i][j], self.nodes[i][j+1])
+        #South exit
+        for i in range(self.io_roads[Orientation.NORTH][1]):
+            for j in range(1, self.size_east_west):
+                link(self.nodes[i][j], self.nodes[i][j-1])
+        #East entry
+        for i in range(self.io_roads[Orientation.EAST][1], self.size_east_west):
+            for j in range(self.size_north_south - 1):
+                link(self.nodes[i][j], self.nodes[i][j+1])
+        #West exit
+        for i in range(self.io_roads[Orientation.EAST][1]):
+            for j in range(1, self.size_north_south):
+                link(self.nodes[i][j], self.nodes[i][j-1])
