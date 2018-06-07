@@ -271,3 +271,12 @@ class TestRightPriority(unittest.TestCase):
                     self.assertIn(rp.nodes[j + 1][i], rp.nodes[i][j].successors)
 
         # self.assertEqual(rp.nodes[-1][0].successors[1], rp.nodes[-2][0])
+
+    def test_should_create_intern_mesh_when_a_3_3_junction_is_created(self):
+        simulator = Simulator()
+        dictionary = {
+            Orientation.NORTH: (3, 3),
+            Orientation.EAST: (3, 3)
+        }
+        rp = RightPriorityJunction(simulator, dictionary)
+        self.assertEquals({rp.nodes[0][1]}, set(rp.nodes[0][0].successors))

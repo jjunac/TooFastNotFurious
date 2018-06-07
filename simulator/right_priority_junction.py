@@ -67,13 +67,14 @@ class RightPriorityJunction(AbstractEntity):
                 link(self.nodes[j][i], self.nodes[j+1][i])
         #South exit
         for i in range(out_NS):
-            for j in range( self.size_east_west):
-                link(self.nodes[j][i], self.nodes[j-1][i])
+            for j in range(self.size_east_west - 1):
+                link(self.nodes[j+1][i], self.nodes[j][i])
         #East entry
-        for i in range(self.io_roads[Orientation.EAST][0]):
+        out_EW = self.io_roads[Orientation.EAST][1]
+        for i in range(out_EW):
             for j in range(self.size_north_south - 1):
                 link(self.nodes[i][j], self.nodes[i][j+1])
         #West exit
-        for i in range(self.io_roads[Orientation.EAST][0],self.size_east_west):
-            for j in range( self.size_north_south):
-                link(self.nodes[i][j], self.nodes[i][j-1])
+        for i in range(out_EW, self.size_east_west):
+            for j in range(self.size_north_south -1):
+                link(self.nodes[i][j], self.nodes[i][j+1])
