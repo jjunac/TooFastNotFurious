@@ -10,8 +10,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
             crossorigin="anonymous"></script>
-    <!--<link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>-->
-    <!--<link href="css/bootstrap-grid.css" rel="stylesheet" type="text/css"/>-->
     <title>Too Fast and not Furious</title>
 </head>
 
@@ -44,7 +42,8 @@
 
 <script type="text/javascript">
     var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
+
+    var data = {
         type: 'bar',
         data: {
 
@@ -65,7 +64,9 @@
             }]
         }
     }
-        });
+        }
+
+    var myChart = new Chart(ctx, data);
 </script>
 
 </html>

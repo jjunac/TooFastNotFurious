@@ -69,29 +69,34 @@ class Drawer:
         clock = pygame.time.Clock()
         car_group = pygame.sprite.RenderClear()
         accumulator = 0
+        car_updates = 0
         while self.continue_drawing:
             tick = clock.tick()
             accumulator += tick
+            car_updates += tick
+            for graphic_road in graphic_roads:
+                graphic_road.draw(self.screen)
+            if car_updates >= 30:
+                car_group.update(tick)
+                car_updates = 0
+            car_group.draw(self.screen)
             if accumulator > 1000:
                 self.simulator.tick()
                 accumulator = 0
-            for graphic_road in graphic_roads:
-                graphic_road.draw(self.screen)
-                for node, pos in graphic_road.node_pos:
-                    if node.current_car and type(graphic_road.entity) is not Exit and type(
-                            graphic_road.entity) is not Entry:
-                        sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
-                        if sprite:
-                            sprite.move(pos)
-                            sprite.rotate(-graphic_road.angle)
-                        else:
-                            car_group.add(CarSprite(pos, node.current_car, 30, 20, -graphic_road.angle))
-                    elif node.current_car and type(graphic_road.entity) == Exit:
-                        sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
-                        if sprite:
-                            car_group.remove(sprite)
-            car_group.draw(self.screen)
-            pygame.display.get_surface().get_rect().move(78, 500)
+                for graphic_road in graphic_roads:
+                    for node, pos in graphic_road.node_pos:
+                        if node.current_car and type(graphic_road.entity) is not Exit and type(
+                                graphic_road.entity) is not Entry:
+                            sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
+                            if sprite:
+                                sprite.interpolate(pos)
+                                # sprite.rotate(-graphic_road.angle)
+                            else:
+                                car_group.add(CarSprite(pos, node.current_car, 30, 20, -graphic_road.angle))
+                        elif node.current_car and type(graphic_road.entity) == Exit:
+                            sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
+                            if sprite:
+                                car_group.remove(sprite)
             pygame.display.flip()
             self.screen.fill(WHITE)
             for event in pygame.event.get():
