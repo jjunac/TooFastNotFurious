@@ -13,10 +13,10 @@ class Road(AbstractEntity):
         self.__link_ways()
 
     def get_start(self, orientation):
-        return self.nodes[0][0]
+        return [row[0] for row in self.nodes]
 
     def get_end(self, orientation):
-        return self.nodes[0][-1]
+        return [row[-1] for row in self.nodes]
 
     def compute_next(self):
         for l in self.nodes:
@@ -29,26 +29,34 @@ class Road(AbstractEntity):
                 n.apply_next()
 
     def __link_ways(self):
-        # TODO link dependencies when we add overtaking
         if self.n_of_ways < 2:
             return
         for i in range(self.n_of_ways):
             if i == 0:
                 for j in range(self.length - 1):
                     link(self.nodes[i][j], self.nodes[i + 1][j + 1])
+                    self.simulator.dependencies[(self.nodes[i][j], self.nodes[i + 1][j + 1])] = \
+                        [self.nodes[i + 1][j + 1], self.nodes[i + 1][j]]
             elif i == self.n_of_ways - 1:
                 for j in range(self.length - 1):
                     link(self.nodes[i][j], self.nodes[i - 1][j + 1])
+                    self.simulator.dependencies[(self.nodes[i][j], self.nodes[i - 1][j + 1])] = \
+                        [self.nodes[i - 1][j + 1], self.nodes[i - 1][j]]
             else:
                 for j in range(self.length - 1):
                     link(self.nodes[i][j], self.nodes[i + 1][j + 1])
+                    self.simulator.dependencies[(self.nodes[i][j], self.nodes[i + 1][j + 1])] = \
+                        [self.nodes[i + 1][j + 1], self.nodes[i + 1][j]]
                     link(self.nodes[i][j], self.nodes[i - 1][j + 1])
+                    self.simulator.dependencies[(self.nodes[i][j], self.nodes[i - 1][j + 1])] = \
+                        [self.nodes[i + 1][j + 1], self.nodes[i - 1][j]]
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation)
         start = self.get_start(orientation)
-        link(end, start)
-        self.simulator.dependencies[(end, start)] = [start]
+        for i in range(self.n_of_ways):
+            link(end[i], start[i])
+            self.simulator.dependencies[(end[i], start[i])] = [start]
 
     def __build_road(self, simulator, length):
         res = [Node()]
