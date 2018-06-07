@@ -44,7 +44,8 @@
 
 <script type="text/javascript">
     var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
+
+    var data = {
         type: 'bar',
         data: {
 
@@ -65,7 +66,9 @@
             }]
         }
     }
-        });
+        }
+
+    var myChart = new Chart(ctx, data);
 </script>
 
 </html>

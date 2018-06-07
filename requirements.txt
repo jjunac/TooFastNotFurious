@@ -3,3 +3,4 @@ codecov
 wheel
 pygame
 jinja2
+demjson
