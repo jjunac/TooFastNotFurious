@@ -13,12 +13,12 @@ class TestSingleRoad(unittest.TestCase):
         e2 = exit_node()
         s.add_node(e2)
 
-        s.add_road(e1.connect(Orientation.NORTH).to(e2).with_length(18))
+        s.add_road(e1.connect(Orientation.NORTH).to(e2).with_length(17))
 
         s.add_path(e1.to(e2).with_proportion(100))
 
         random.seed(0)
-        # With seed 0 and a rate of 0.2, 38 cars are generated in 200 tick, plus 20 tick to reach the end
+        # With seed 0 and a rate of 0.2, 39 cars are generated in 200 tick, plus 20 tick to reach the end
         # Code used to compute:
         """
         res = 0
@@ -28,9 +28,10 @@ class TestSingleRoad(unittest.TestCase):
                 res += 1
                 random.random()
                 random.choice([0])
+                random.choice([0])
         """
         s.run_for(220)
-        self.assertEqual(38, s.entity_conversion[e2].outflow)
+        self.assertEqual(39, s.entity_conversion[e2].outflow)
 
     def test_double_road(self):
         s = new_simulation()

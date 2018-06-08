@@ -3,7 +3,7 @@ import random
 import simulator
 from simulator import Path
 from simulator.simulator import Simulator
-from shared import dijkstra, reconstruct_path
+from shared import *
 
 class Simulation:
 
