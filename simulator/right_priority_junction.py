@@ -24,7 +24,7 @@ class RightPriorityJunction(AbstractEntity):
         start = self.get_start(orientation.invert())
         for i in range(len(start)):
             link(end[i], start[i])
-            self.simulator.dependencies[(end[i], start[i])] = [start[i]]
+            self.simulator.dependencies[(end[i], start[i])] = self.get_nodes()
         # The car on the left (so heading right) needs to leave the priority
         if orientation.right() in self.predecessors:
             for i in range(len(start)):
@@ -49,26 +49,26 @@ class RightPriorityJunction(AbstractEntity):
                 n.apply_next()
 
     def get_start(self, orientation):
-        in_ways = self.io_roads[orientation][0] if self.io_roads[orientation][0] != 0 else self.io_roads[orientation.invert()][0]
+        in_ways = self.io_roads[orientation][0]
         if orientation == Orientation.NORTH:
-            return self.nodes[0][:in_ways]
-        if orientation == Orientation.SOUTH:
             return self.nodes[-1][:in_ways]
+        if orientation == Orientation.SOUTH:
+            return self.nodes[0][-in_ways:]
         if orientation == Orientation.EAST:
-            return [row[0] for row in self.nodes[:in_ways]]
+            return [row[-1] for row in self.nodes[-in_ways:]]
         if orientation == Orientation.WEST:
-            return [row[-1] for row in self.nodes[:in_ways]]
+            return [row[0] for row in self.nodes[:in_ways]]
 
     def get_end(self, orientation):
-        out_ways = self.io_roads[orientation][1] if self.io_roads[orientation][1] != 0 else self.io_roads[orientation.invert()][1]
+        out_ways = self.io_roads[orientation][0]
         if orientation == Orientation.NORTH:
-            return self.nodes[-1][:out_ways]
+            return self.nodes[-1][-out_ways:]
         if orientation == Orientation.SOUTH:
             return self.nodes[0][:out_ways]
         if orientation == Orientation.EAST:
             return [row[-1] for row in self.nodes[:out_ways]]
         if orientation == Orientation.WEST:
-            return [row[0] for row in self.nodes[:out_ways]]
+            return [row[0] for row in self.nodes[-out_ways:]]
 
     def __link_nodes(self):
         #North entry
