@@ -46,29 +46,31 @@ class Drawer:
                 successors = entity.successors.items()
                 predecessors = entity.predecessors.items()
                 if type(entity) is Road:
+                    direction_pred, predecessor = next(iter(entity.predecessors.items()))
+                    direction_succ, successor = next(iter(entity.successors.items()))
                     shift = 1
-                    direction, predecessor = next(iter(entity.predecessors.items()))
                     if type(predecessor) is RightPriorityJunction:
                         if entity.orientation == Orientation.NORTH or entity.orientation == Orientation.SOUTH:
-                            shift += predecessor.size_north_south + 6
+                            shift = predecessor.size_north_south - 1
+                            pos = pos - Point(0, shift * self.cell_length)
                         elif entity.orientation == Orientation.WEST or entity.orientation == Orientation.EAST:
-                            shift += predecessor.size_east_west + 6
-                            # pos=pos+Point(entity.)
+                            shift = predecessor.size_east_west
+                            # pos = pos - Point(shift * self.cell_length, 0)
                     res = pos.rotate_point(entity.orientation,
                                            Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
                     if not forward:
+                        if type(successor) is RightPriorityJunction:
+                            if entity.orientation == Orientation.NORTH or entity.orientation == Orientation.SOUTH:
+                                shift = successor.size_north_south - 1
+                                pos = pos + Point(0, shift * self.cell_length)
+                            elif entity.orientation == Orientation.WEST or entity.orientation == Orientation.EAST:
+                                shift = successor.size_east_west
                         res = pos.rotate_point(entity.orientation + 180,
-                                               Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
+                                               Point(pos.x + (entity.length + shift) * self.cell_length, pos.y))
                         pos, res = res, pos
                     roads.append(GraphicRoad(pos, res, entity, self.cell_length, self.cell_height))
                 else:
-                    if type(entity) is RightPriorityJunction:
-                        roads.append(GraphicJunction(pos, entity, self.cell_length, self.cell_height))
-                        # next_entities = []
-                        # for r in set(predecessors) - visited:
-                        #     if r
-                        #         p = pos + Point(entity.)
-                        #     next_entities.append((r, pos, False))
+                    roads.append(GraphicJunction(pos, entity, self.cell_length, self.cell_height))
 
                 visited.add(entity)
                 next_entities = [(r, pos, False) for r in set(entity.predecessors.values()) - visited]
