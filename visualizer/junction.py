@@ -1,8 +1,9 @@
 import pygame
 from pygame.sprite import RenderClear
 
-from simulator.right_priority_junction import RightPriorityJunction
+from simulator import RightPriorityJunction
 from visualizer.my_sprite import MySprite
+from visualizer.point import Point
 
 
 class GraphicJunction:
@@ -21,8 +22,16 @@ class GraphicJunction:
         if type(self.entity) is RightPriorityJunction:
             surface = pygame.Surface((self.cell_length, self.cell_height))
             surface.fill((29, 17, 17))
-            self.group.add(MySprite(self.position, self.cell_length, self.cell_height, image=surface))
-        self.node_pos.append((self.entity.nodes[0][0], self.position))
+            for i in range(self.entity.size_north_south):
+                for j in range(self.entity.size_east_west):
+                    self.group.add(
+                        MySprite(self.position + Point(j * self.cell_length, -i * self.cell_height), self.cell_length,
+                                 self.cell_height, image=surface))
+                    self.node_pos.append((self.entity.nodes[i][j], self.position))
+        else:
+            for i in self.entity.nodes:
+                for n in i:
+                    self.node_pos.append((n, self.position))
 
     def draw(self, surface):
         self.group.draw(surface)
