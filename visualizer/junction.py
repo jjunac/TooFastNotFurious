@@ -24,10 +24,11 @@ class GraphicJunction:
             surface.fill((29, 17, 17))
             for i in range(self.entity.size_north_south):
                 for j in range(self.entity.size_east_west):
+                    point = self.position + Point(j * self.cell_length, -i * self.cell_height)
                     self.group.add(
-                        MySprite(self.position + Point(j * self.cell_length, -i * self.cell_height), self.cell_length,
+                        MySprite(point, self.cell_length,
                                  self.cell_height, image=surface))
-                    self.node_pos.append((self.entity.nodes[i][j], self.position))
+                    self.node_pos.append((self.entity.nodes[i][j], point))
         else:
             for i in self.entity.nodes:
                 for n in i:

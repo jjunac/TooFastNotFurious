@@ -111,7 +111,7 @@ class Drawer:
                                 # sprite.rotate(-graphic_road.angle)
                             else:
                                 car_group.add(CarSprite(pos, node.current_car, 30, 20, -graphic_road.angle))
-                        elif node.current_car and type(graphic_road.entity) == Exit:
+                        elif node.current_car and type(graphic_road.entity) is Exit:
                             sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
                             if sprite:
                                 car_group.remove(sprite)
