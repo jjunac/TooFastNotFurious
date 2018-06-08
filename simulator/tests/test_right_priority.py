@@ -313,6 +313,19 @@ class TestRightPriority(unittest.TestCase):
         dictionary = {Orientation.NORTH: (3, 3), Orientation.EAST: (3, 3), Orientation.SOUTH: (3, 3), Orientation.WEST: (3, 3)}
 
         rp = RightPriorityJunction(simulator, dictionary)
+
+        # Start / end
+        self.assertEquals({*rp.nodes[0][3:]}, set(rp.get_start(Orientation.SOUTH)))
+        self.assertEquals({n[0] for n in rp.nodes[:3]}, set(rp.get_start(Orientation.WEST)))
+        self.assertEquals({*rp.nodes[-1][:3]}, set(rp.get_start(Orientation.NORTH)))
+        self.assertEquals({n[-1] for n in rp.nodes[3:]}, set(rp.get_start(Orientation.EAST)))
+
+        self.assertEquals({*rp.nodes[0][:3]}, set(rp.get_end(Orientation.SOUTH)))
+        self.assertEquals({n[0] for n in rp.nodes[3:]}, set(rp.get_end(Orientation.WEST)))
+        self.assertEquals({*rp.nodes[-1][3:]}, set(rp.get_end(Orientation.NORTH)))
+        self.assertEquals({n[-1] for n in rp.nodes[:3]}, set(rp.get_end(Orientation.EAST)))
+
+        # Successors test
         self.assertEquals({rp.nodes[0][1]}, set(rp.nodes[0][0].successors))
         self.assertEquals({rp.nodes[0][2]}, set(rp.nodes[0][1].successors))
         self.assertEquals({rp.nodes[0][3]}, set(rp.nodes[0][2].successors))
@@ -375,10 +388,19 @@ class TestRightPriority(unittest.TestCase):
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
+        self.assertIsNone(entryN.nodes[1][0].current_car)
         self.assertIsNone(entryW.nodes[0][0].current_car)
-        self.assertIsNotNone(rp.nodes[0][0].current_car)
+        self.assertIsNone(entryW.nodes[1][0].current_car)
+
+        self.assertIsNone(rp.nodes[0][0].current_car)
+        self.assertIsNotNone(rp.nodes[0][1].current_car)
+        self.assertIsNone(rp.nodes[1][0].current_car)
+        self.assertIsNone(rp.nodes[1][1].current_car)
+
         self.assertIsNone(exitW.nodes[0][0].current_car)
+        self.assertIsNone(exitW.nodes[1][0].current_car)
         self.assertIsNone(exitN.nodes[0][0].current_car)
+        self.assertIsNone(exitN.nodes[1][0].current_car)
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
