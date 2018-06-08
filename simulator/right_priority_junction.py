@@ -60,7 +60,7 @@ class RightPriorityJunction(AbstractEntity):
             return [row[0] for row in self.nodes[:in_ways]]
 
     def get_end(self, orientation):
-        out_ways = self.io_roads[orientation][0]
+        out_ways = self.io_roads[orientation][1]
         if orientation == Orientation.NORTH:
             return self.nodes[-1][-out_ways:]
         if orientation == Orientation.SOUTH:
@@ -74,7 +74,7 @@ class RightPriorityJunction(AbstractEntity):
         # from S to N
         in_S = self.io_roads[Orientation.SOUTH][0]
         for y in range(len(self.nodes) - 1):
-            for x in range(in_S):
+            for x in range(1, in_S + 1):
                 link(self.nodes[y][-x], self.nodes[y + 1][-x])
                 self.simulator.dependencies[(self.nodes[y][-x], self.nodes[y + 1][-x])] = [self.nodes[y + 1][-x]]
         # from W to E
@@ -89,9 +89,9 @@ class RightPriorityJunction(AbstractEntity):
             for x in range(in_N):
                 link(self.nodes[y][x], self.nodes[y - 1][x])
                 self.simulator.dependencies[(self.nodes[y][x], self.nodes[y - 1][x])] = [self.nodes[y - 1][x]]
-        # from W to E
+        # from E to W
         in_E = self.io_roads[Orientation.EAST][0]
-        for y in range(in_E):
-            for x in range(1, len(self.nodes[y])):
+        for y in range(1, in_E + 1):
+            for x in range(1, len(self.nodes[-y])):
                 link(self.nodes[-y][x], self.nodes[-y][x - 1])
                 self.simulator.dependencies[(self.nodes[-y][x], self.nodes[-y][x - 1])] = [self.nodes[-y][x - 1]]
