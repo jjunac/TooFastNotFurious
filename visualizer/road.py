@@ -27,13 +27,18 @@ class GraphicRoad:
     def create_sprites(self):
         vector = self.end - self.sprite_start
         dist = vector.length()
-        i = 0
-        while i < round(dist / self.cell_length):
-            pos = Point(self.sprite_start.x + self.pos_i.x * i, self.sprite_start.y + self.pos_i.y * i)
-            self.node_pos.append((self.entity.nodes[0][i], pos))
-            road_portion = RoadSprite(pos, self.cell_length, self.cell_height, -self.angle)
-            self.group.add(road_portion)
-            i += 1
+        for k in range(len(self.entity.nodes)):
+            p = self.sprite_start.rotate_point(self.angle,
+                                               Point(self.sprite_start.x, self.sprite_start.y + k * self.cell_height))
+            x = p.x
+            y = p.y
+            i = 0
+            while i < len(self.entity.nodes[k]):
+                pos = Point(x + self.pos_i.x * i, y + self.pos_i.y * i)
+                self.node_pos.append((self.entity.nodes[k][i], pos))
+                road_portion = RoadSprite(pos, self.cell_length, self.cell_height, -self.angle)
+                self.group.add(road_portion)
+                i += 1
 
     def update(self):
         pass
