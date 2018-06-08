@@ -71,25 +71,27 @@ class RightPriorityJunction(AbstractEntity):
             return [row[0] for row in self.nodes[-out_ways:]]
 
     def __link_nodes(self):
-        #North entry
-        out_NS = self.io_roads[Orientation.NORTH][1]
-        for i in range(out_NS, self.size_north_south):
-            for j in range(self.size_east_west - 1):
-                link(self.nodes[j][i], self.nodes[j+1][i])
-                self.simulator.dependencies[(self.nodes[j][i], self.nodes[j+1][i])] = [self.nodes[j+1][i]]
-        #South exit
-        for i in range(out_NS):
-            for j in range(self.size_east_west - 1):
-                link(self.nodes[j+1][i], self.nodes[j][i])
-                self.simulator.dependencies[(self.nodes[j+1][i], self.nodes[j][i])] = [self.nodes[j][i]]
-        # #East entry
-        out_EW = self.io_roads[Orientation.EAST][0]
-        for i in range(out_EW):
-            for j in range(self.size_north_south - 1):
-                link(self.nodes[i][j], self.nodes[i][j+1])
-                self.simulator.dependencies[(self.nodes[i][j], self.nodes[i][j+1])] = [self.nodes[i][j+1]]
-        #West exit
-        for i in range(out_EW, self.size_east_west):
-            for j in range(self.size_north_south -1):
-                link(self.nodes[i][j+1], self.nodes[i][j])
-                self.simulator.dependencies[(self.nodes[i][j+1], self.nodes[i][j])] = [self.nodes[i][j]]
+        # from S to N
+        in_S = self.io_roads[Orientation.SOUTH][0]
+        for y in range(len(self.nodes) - 1):
+            for x in range(in_S):
+                link(self.nodes[y][-x], self.nodes[y + 1][-x])
+                self.simulator.dependencies[(self.nodes[y][-x], self.nodes[y + 1][-x])] = [self.nodes[y + 1][-x]]
+        # from W to E
+        in_W = self.io_roads[Orientation.WEST][0]
+        for y in range(in_W):
+            for x in range(len(self.nodes[y]) - 1):
+                link(self.nodes[y][x], self.nodes[y][x + 1])
+                self.simulator.dependencies[(self.nodes[y][x], self.nodes[y][x + 1])] = [self.nodes[y][x + 1]]
+        # from N to S
+        in_N = self.io_roads[Orientation.NORTH][0]
+        for y in range(1, len(self.nodes)):
+            for x in range(in_N):
+                link(self.nodes[y][x], self.nodes[y - 1][x])
+                self.simulator.dependencies[(self.nodes[y][x], self.nodes[y - 1][x])] = [self.nodes[y - 1][x]]
+        # from W to E
+        in_E = self.io_roads[Orientation.EAST][0]
+        for y in range(in_E):
+            for x in range(1, len(self.nodes[y])):
+                link(self.nodes[-y][x], self.nodes[-y][x - 1])
+                self.simulator.dependencies[(self.nodes[-y][x], self.nodes[-y][x - 1])] = [self.nodes[-y][x - 1]]

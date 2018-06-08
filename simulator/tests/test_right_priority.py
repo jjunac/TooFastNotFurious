@@ -383,6 +383,18 @@ class TestRightPriority(unittest.TestCase):
         exitW.add_predecessor(Orientation.WEST, rp)
         exitN.add_predecessor(Orientation.NORTH, rp)
 
+        # Check that the graph is coherent
+        self.assertEqual({rp.nodes[0][0]}, set(entryN.nodes[0][0].successors))
+        self.assertEqual({rp.nodes[0][1]}, set(entryN.nodes[1][0].successors))
+
+        self.assertEqual({rp.nodes[0][1]}, set(entryW.nodes[0][0].successors))
+        self.assertEqual({rp.nodes[1][1]}, set(entryW.nodes[1][0].successors))
+
+        self.assertEqual({exitW.nodes[0][0], rp.nodes[1][0]}, set(rp.nodes[0][0].successors))
+        self.assertEqual({rp.nodes[0][0], rp.nodes[1][1]}, set(rp.nodes[0][1].successors))
+        self.assertEqual({exitW.nodes[1][0], exitN.nodes[0][0]}, set(rp.nodes[1][0].successors))
+        self.assertEqual({rp.nodes[1][0], exitN.nodes[1][0]}, set(rp.nodes[1][1].successors))
+
         entryW.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), entryW.nodes[0][0], exitW.nodes[0][0])), entryW.nodes[0][0])
         entryN.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), entryN.nodes[0][0], exitN.nodes[0][0])), entryW.nodes[0][0])
 
@@ -404,21 +416,80 @@ class TestRightPriority(unittest.TestCase):
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
+        self.assertIsNone(entryN.nodes[1][0].current_car)
         self.assertIsNone(entryW.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0][0].current_car)
-        self.assertIsNotNone(exitW.nodes[0][0].current_car)
-        self.assertIsNone(exitN.nodes[0][0].current_car)
+        self.assertIsNone(entryW.nodes[1][0].current_car)
 
-        simulator.tick()
-        self.assertIsNone(entryN.nodes[0][0].current_car)
-        self.assertIsNone(entryW.nodes[0][0].current_car)
         self.assertIsNotNone(rp.nodes[0][0].current_car)
+        self.assertIsNone(rp.nodes[0][1].current_car)
+        self.assertIsNone(rp.nodes[1][0].current_car)
+        self.assertIsNone(rp.nodes[1][1].current_car)
+
         self.assertIsNone(exitW.nodes[0][0].current_car)
+        self.assertIsNone(exitW.nodes[1][0].current_car)
         self.assertIsNone(exitN.nodes[0][0].current_car)
+        self.assertIsNone(exitN.nodes[1][0].current_car)
+
+        simulator.tick()
+        self.assertIsNotNone(entryN.nodes[0][0].current_car)
+        self.assertIsNone(entryN.nodes[1][0].current_car)
+        self.assertIsNone(entryW.nodes[0][0].current_car)
+        self.assertIsNone(entryW.nodes[1][0].current_car)
+
+        self.assertIsNone(rp.nodes[0][0].current_car)
+        self.assertIsNone(rp.nodes[0][1].current_car)
+        self.assertIsNone(rp.nodes[1][0].current_car)
+        self.assertIsNone(rp.nodes[1][1].current_car)
+
+        self.assertIsNotNone(exitW.nodes[0][0].current_car)
+        self.assertIsNone(exitW.nodes[1][0].current_car)
+        self.assertIsNone(exitN.nodes[0][0].current_car)
+        self.assertIsNone(exitN.nodes[1][0].current_car)
 
         simulator.tick()
         self.assertIsNone(entryN.nodes[0][0].current_car)
+        self.assertIsNone(entryN.nodes[1][0].current_car)
         self.assertIsNone(entryW.nodes[0][0].current_car)
-        self.assertIsNone(rp.nodes[0][0].current_car)
+        self.assertIsNone(entryW.nodes[1][0].current_car)
+
+        self.assertIsNotNone(rp.nodes[0][0].current_car)
+        self.assertIsNone(rp.nodes[0][1].current_car)
+        self.assertIsNone(rp.nodes[1][0].current_car)
+        self.assertIsNone(rp.nodes[1][1].current_car)
+
         self.assertIsNone(exitW.nodes[0][0].current_car)
+        self.assertIsNone(exitW.nodes[1][0].current_car)
+        self.assertIsNone(exitN.nodes[0][0].current_car)
+        self.assertIsNone(exitN.nodes[1][0].current_car)
+
+        simulator.tick()
+        self.assertIsNone(entryN.nodes[0][0].current_car)
+        self.assertIsNone(entryN.nodes[1][0].current_car)
+        self.assertIsNone(entryW.nodes[0][0].current_car)
+        self.assertIsNone(entryW.nodes[1][0].current_car)
+
+        self.assertIsNone(rp.nodes[0][0].current_car)
+        self.assertIsNone(rp.nodes[0][1].current_car)
+        self.assertIsNotNone(rp.nodes[1][0].current_car)
+        self.assertIsNone(rp.nodes[1][1].current_car)
+
+        self.assertIsNone(exitW.nodes[0][0].current_car)
+        self.assertIsNone(exitW.nodes[1][0].current_car)
+        self.assertIsNone(exitN.nodes[0][0].current_car)
+        self.assertIsNone(exitN.nodes[1][0].current_car)
+
+        simulator.tick()
+        self.assertIsNone(entryN.nodes[0][0].current_car)
+        self.assertIsNone(entryN.nodes[1][0].current_car)
+        self.assertIsNone(entryW.nodes[0][0].current_car)
+        self.assertIsNone(entryW.nodes[1][0].current_car)
+
+        self.assertIsNone(rp.nodes[0][0].current_car)
+        self.assertIsNone(rp.nodes[0][1].current_car)
+        self.assertIsNone(rp.nodes[1][0].current_car)
+        self.assertIsNone(rp.nodes[1][1].current_car)
+
+        self.assertIsNone(exitW.nodes[0][0].current_car)
+        self.assertIsNone(exitW.nodes[1][0].current_car)
         self.assertIsNotNone(exitN.nodes[0][0].current_car)
+        self.assertIsNone(exitN.nodes[1][0].current_car)
