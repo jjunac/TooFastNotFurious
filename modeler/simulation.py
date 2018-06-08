@@ -39,10 +39,10 @@ class Simulation:
 
         paths = []
 
-        for n in entry.get_nodes():
-            res = dijkstra(self.simulator.get_nodes(), n)
+        for i in range(entry.n_of_ways):
+            res = dijkstra(self.simulator.get_nodes(), entry.get_nodes()[i])
             # TODO improve path choice
-            paths.append(Path(reconstruct_path(res, n, random.choice(exit.get_nodes()))))
+            paths.append(Path(reconstruct_path(res, entry.get_nodes()[i], exit.get_nodes()[i])))
         total_proportion = max(entry.paths.keys()) if len(entry.paths) >= 1 else 0
         entry.paths[total_proportion + path.proportion] = paths
 

@@ -10,7 +10,7 @@ class Road(AbstractEntity):
         self.length = length
         self.n_of_ways = n_of_ways
         self.orientation = orientation
-        self.__link_ways()
+        # self.__link_ways()
 
     def get_start(self, orientation):
         return [row[0] for row in self.nodes]

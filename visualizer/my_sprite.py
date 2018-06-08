@@ -81,7 +81,6 @@ class CarSprite(MySprite):
                 -to_degrees(atan2(self.destination.y - self.start.y, self.destination.x - self.start.x)))
             self.delta_angle = (degrees - self.good_angle(self.angle)) / self.max_time
             self.start_angle = degrees
-            print(self.delta_angle)
 
     @staticmethod
     def good_angle(angle):
