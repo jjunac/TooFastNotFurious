@@ -26,9 +26,6 @@ class TestAnalytics(unittest.TestCase):
         entry1 = Entry(simulator, 0, 1)
         entry2 = Entry(simulator, 0, 1)
         entry3 = Entry(simulator, 0, 1)
-        entry1.to_spawn = 0
-        entry2.to_spawn = 0
-        entry3.to_spawn = 0
         rpn = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1), Orientation.WEST: (1, 0)})
         exit1 = Exit(simulator, 1)
 
