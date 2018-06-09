@@ -1,18 +1,23 @@
-def compute_average_per_exit(stats):
+def compute_function_per_exit(fct, cars):
     result = {}
 
-    for key, value in stats.items():
+    for key, value in cars.items():
         average = {}
 
         for entry, val in value.items():
             if not entry[0] in average:
                 average[entry[0]] = []
 
-            average[entry[0]] += val
+            for i in range(len(val)):
+                average[entry[0]].append(len(val[i]))
 
-        for entry, val in average.items():
-            average[entry] = sum(val) / len(val)
+        fct(average)
 
         result[key] = average
 
     return result
+
+
+def compute_average(average):
+    for entry, val in average.items():
+        average[entry] = sum(val) / len(val)
