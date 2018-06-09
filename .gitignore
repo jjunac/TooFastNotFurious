@@ -179,3 +179,6 @@ venv.bak/
 .mypy_cache/
 
 **/report_*.html
+
+cosmic-ray*.yml
+session_*.json
