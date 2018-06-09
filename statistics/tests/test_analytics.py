@@ -79,7 +79,7 @@ class TestAnalytics(unittest.TestCase):
             [road3.nodes[0][0], road3.nodes[0][1], rpn.nodes[0][0], road4.nodes[0][0], road4.nodes[0][1]]]}},
             ana.get_path_with_their_exit_nodes())
 
-    def test_average(self):
+    def test_should_compute_average_for_exit_nodes(self):
         s = Simulator()
         entry1 = Entry(s, 0)
         entry2 = Entry(s, 0)
@@ -111,13 +111,141 @@ class TestAnalytics(unittest.TestCase):
             nodes2.append(road1.nodes[0][0])
 
         stats = {
-            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes, nodes1, nodes1, nodes1]},
+            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes1, nodes, nodes1, nodes1]},
             exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
                     (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
 
         res = a.compute_function_per_exit(a.compute_average, stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 17.5}, exit2:{entry3: 23.333333333333332}}, res)
+        self.assertEqual({exit1: {entry1: 10, entry2: 17.5}, exit2: {entry3: 23.333333333333332}}, res)
+
+        print(a.compute_function_per_exit(a.compute_first_quartile, stats))
+        print(a.compute_function_per_exit(a.compute_third_quartile, stats))
+        print(a.compute_function_per_exit(a.compute_median, stats))
+
+    def test_should_compute_first_quartile_for_exit_nodes(self):
+        s = Simulator()
+        entry1 = Entry(s, 0)
+        entry2 = Entry(s, 0)
+        entry3 = Entry(s, 0)
+
+        p1 = Path([0] * 6)
+        p2 = Path([0] * 8)
+
+        exit1 = Exit(s)
+        exit2 = Exit(s)
+
+        a = Analytics({})
+
+        road1 = Road(s, 100, Orientation.SOUTH, 1)
+
+        nodes = []
+
+        for i in range(0, 10):
+            nodes.append(road1.nodes[0][0])
+
+        nodes1 = []
+
+        for i in range(0, 20):
+            nodes1.append(road1.nodes[0][0])
+
+        nodes2 = []
+
+        for i in range(0, 30):
+            nodes2.append(road1.nodes[0][0])
+
+        stats = {
+            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes],
+                    (entry2, p2): [nodes1, nodes, nodes1, nodes1]},
+            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
+                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+
+        res = a.compute_function_per_exit(a.compute_first_quartile, stats)
+
+        self.assertEqual({exit1: {entry1: 10, entry2: 10}, exit2: {entry3: 20}}, res)
+
+    def test_should_compute_third_quartile_for_exit_nodes(self):
+        s = Simulator()
+        entry1 = Entry(s, 0)
+        entry2 = Entry(s, 0)
+        entry3 = Entry(s, 0)
+
+        p1 = Path([0] * 6)
+        p2 = Path([0] * 8)
+
+        exit1 = Exit(s)
+        exit2 = Exit(s)
+
+        a = Analytics({})
+
+        road1 = Road(s, 100, Orientation.SOUTH, 1)
+
+        nodes = []
+
+        for i in range(0, 10):
+            nodes.append(road1.nodes[0][0])
+
+        nodes1 = []
+
+        for i in range(0, 20):
+            nodes1.append(road1.nodes[0][0])
+
+        nodes2 = []
+
+        for i in range(0, 30):
+            nodes2.append(road1.nodes[0][0])
+
+        stats = {
+            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes1, nodes, nodes1, nodes1]},
+            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
+                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+
+        res = a.compute_function_per_exit(a.compute_third_quartile, stats)
+
+        self.assertEqual({exit1: {entry1: 10, entry2: 20}, exit2: {entry3: 30}}, res)
+
+    def test_should_compute_median_for_exit_nodes(self):
+        s = Simulator()
+        entry1 = Entry(s, 0)
+        entry2 = Entry(s, 0)
+        entry3 = Entry(s, 0)
+
+        p1 = Path([0] * 6)
+        p2 = Path([0] * 8)
+
+        exit1 = Exit(s)
+        exit2 = Exit(s)
+
+        a = Analytics({})
+
+        road1 = Road(s, 100, Orientation.SOUTH, 1)
+
+        nodes = []
+
+        for i in range(0, 10):
+            nodes.append(road1.nodes[0][0])
+
+        nodes1 = []
+
+        for i in range(0, 20):
+            nodes1.append(road1.nodes[0][0])
+
+        nodes2 = []
+
+        for i in range(0, 30):
+            nodes2.append(road1.nodes[0][0])
+
+        stats = {
+            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes, nodes, nodes1, nodes1]},
+            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
+                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+
+        res = a.compute_function_per_exit(a.compute_median, stats)
+
+        print(res)
+
+        self.assertEqual({exit1: {entry1: 10, entry2: 15}, exit2: {entry3: 30}}, res)
+
 
 
 if __name__ == '__main__':

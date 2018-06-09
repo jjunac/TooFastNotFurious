@@ -1,3 +1,5 @@
+from math import ceil
+
 from simulator import Exit
 from statistics.report_generator import create_graphic_report_average_car_per_exit
 
@@ -26,23 +28,42 @@ class Analytics:
         result = {}
 
         for key, value in cars.items():
-            path = {}
+            path_lengths = {}
 
             for entry, val in value.items():
-                if not entry[0] in path:
-                    path[entry[0]] = []
+                if not entry[0] in path_lengths:
+                    path_lengths[entry[0]] = []
 
                 for i in range(len(val)):
-                    path[entry[0]].append(len(val[i]))
+                    path_lengths[entry[0]].append(len(val[i]))
+                    path_lengths[entry[0]].sort()
 
-            fct(path)
+            fct(path_lengths)
 
-            result[key] = path
+            result[key] = path_lengths
 
         return result
 
     @staticmethod
-    def compute_average(average):
+    def compute_average(path_lengths):
+        for entry, val in path_lengths.items():
+            path_lengths[entry] = sum(val) / len(val)
 
-        for entry, val in average.items():
-            average[entry] = sum(val) / len(val)
+    @staticmethod
+    def compute_first_quartile(path_lengths):
+        for entry, val in path_lengths.items():
+            path_lengths[entry] = val[(ceil(len(val) / 4)) - 1]
+
+    @staticmethod
+    def compute_third_quartile(path_lengths):
+        for entry, val in path_lengths.items():
+            path_lengths[entry] = val[(ceil((3 * len(val)) / 4)) - 1]
+
+    @staticmethod
+    def compute_median(path_lengths):
+        for entry, val in path_lengths.items():
+            if len(val) % 2:
+                path_lengths[entry] = val[(ceil((len(val)) / 2)) - 1]
+            else:
+                index = len(val) / 2
+                path_lengths[entry] = (val[int(index) - 1] + val[int(index)]) / 2
