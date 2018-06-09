@@ -1,7 +1,8 @@
 import unittest
 
-from statistics.average import compute_average_per_exit
-from simulator import Path, Simulator, Entry, Exit
+from shared import Orientation
+from simulator import Path, Simulator, Entry, Exit, Road
+from statistics.analytics import Analytics
 from statistics.report_generator import create_graphic_report_average_car_per_exit
 
 from pathlib import Path as P
@@ -28,10 +29,31 @@ class TestReportGenerator(unittest.TestCase):
         exit1 = Exit(s)
         exit2 = Exit(s)
 
-        stats = {exit1: {(entry1, p1): [6, 8, 5, 9], (entry2, p2): [8, 4, 6, 23, 7]},
-                 exit2: {(entry3, p1): [5, 6, 5, 7, 2], (entry3, p2): [8, 7, 4, 56, 6, 7]}}
+        a = Analytics({})
 
-        res = compute_average_per_exit(stats)
+        road1 = Road(s, 100, Orientation.SOUTH, 1)
+
+        nodes = []
+
+        for i in range(0, 10):
+            nodes.append(road1.nodes[0][0])
+
+        nodes1 = []
+
+        for i in range(0, 20):
+            nodes1.append(road1.nodes[0][0])
+
+        nodes2 = []
+
+        for i in range(0, 30):
+            nodes2.append(road1.nodes[0][0])
+
+        stats = {
+            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes, nodes1, nodes1, nodes1]},
+            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
+                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+
+        res = a.compute_function_per_exit(a.compute_average, stats)
 
         create_graphic_report_average_car_per_exit(res)
 
@@ -56,7 +78,7 @@ class TestReportGenerator(unittest.TestCase):
         j = json.loads(demjson.encode(demjson.decode(script.replace('var myChart = new Chart(ctx, data);', ''))))
 
         labels_expected = ['exit1 - entry1', 'exit1 - entry2', 'exit2 - entry3']
-        data_expected = [7.0, 9.6, 10.272727272727273]
+        data_expected = [10, 17.5, 23.333333333333332]
         pattern = 'rgba\([1-2]?[0-9]?[0-9], [1-2]?[0-9]?[0-9], [1-2]?[0-9]?[0-9], 0.7\)'
 
         for i in range(len(j['data']['labels'])):
