@@ -1,53 +1,26 @@
-from shared import Orientation
-from simulator.right_priority_junction import RightPriorityJunction
-from simulator.node import Node
-from simulator.utils import link
+from simulator.junction import Junction
 
 
-class StopJunction(RightPriorityJunction):
+class StopJunction(Junction):
 
     def __init__(self, simulator, io_roads, orientation_stop):
-        self.orientation_stop = orientation_stop
         super().__init__(simulator, io_roads)
+        self.orientation_stop = orientation_stop
 
     def do_add_predecessor(self, orientation, predecessor):
-        # print("coucou", orientation.right())
-        # print("coucou", self.predecessors)
-        # print("coucou", self.io_roads[orientation.right()])
-
+        super().do_add_predecessor(orientation, predecessor)
         end = predecessor.get_end(orientation.invert())
         start = self.get_start(orientation.invert())
-        for i in range(len(start)):
-            link(end[i], start[i])
-            self.simulator.dependencies[(end[i], start[i])] = [start[i]]
-        # This car needs to leave the priority to the car on the left (so heading right)
-
-        # print(self.predecessors[Orientation.SOUTH])
 
         if orientation == self.orientation_stop:
-            print("STOP")
-            if orientation.right() in self.predecessors:
+            for o in self.predecessors.keys():
+                if o == orientation.invert():
+                    continue
                 for i in range(len(start)):
-                    self.simulator.dependencies[(end[i], start[i])].extend(
-                        self.get_end_of_predecessor(orientation.right()))
-
-            if orientation.left() in self.predecessors:
-                for i in range(len(start)):
-                    self.simulator.dependencies[(end[i], start[i])].extend(
-                        self.get_end_of_predecessor(orientation.left()))
-
+                    self.simulator.dependencies[(end[i], start[i])].extend(self.get_end_of_predecessor(o))
         else:
-            print("ORION", orientation.right(), self.orientation_stop)
-            if orientation.right() != self.orientation_stop:
-                print("J'AI LA PRIO")
-                # The car on the left (so heading right) needs to leave the priority
-                if orientation.right() in self.predecessors:
-                    for i in range(len(start)):
-                        self.simulator.dependencies[(end[i], start[i])].extend(
-                            self.get_end_of_predecessor(orientation.right()))
-                # This car needs to leave the priority to the car on the right (so heading left)
-                if orientation.left() in self.predecessors:
-                    end_of_predecessor = self.get_end_of_predecessor(orientation.left())
-                    for i in range(len(end_of_predecessor)):
-                        self.simulator.dependencies[
-                            (end_of_predecessor[i], self.get_start(orientation.left())[i])].extend(end)
+            if self.orientation_stop.invert() in self.predecessors:
+                end_of_predecessor = self.get_end_of_predecessor(self.orientation_stop.invert())
+                stop_start = self.get_start(self.orientation_stop.invert())
+                for i in range(len(end_of_predecessor)):
+                    self.simulator.dependencies[(end_of_predecessor[i], stop_start[i])].extend(end)
