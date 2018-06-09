@@ -4,3 +4,4 @@ wheel
 pygame
 jinja2
 demjson
+cosmic-ray

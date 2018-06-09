@@ -8,13 +8,9 @@ class TestStatistics(unittest.TestCase):
 
     def test_sould_add_travel_path(self):
         simulator = Simulator()
-        entry1 = Entry(simulator, 0)
-        entry2 = Entry(simulator, 0)
-        entry3 = Entry(simulator, 0)
-
-        entry1.to_spawn = 0
-        entry2.to_spawn = 0
-        entry3.to_spawn = 0
+        entry1 = Entry(simulator, 0, 1)
+        entry2 = Entry(simulator, 0, 1)
+        entry3 = Entry(simulator, 0, 1)
 
         p = Path([])
         p2 = Path([])

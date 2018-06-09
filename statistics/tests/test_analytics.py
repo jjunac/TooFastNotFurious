@@ -11,12 +11,12 @@ class TestAnalytics(unittest.TestCase):
 
     def test_should_only_get_exit_nodes(self):
         s = Simulator()
-        Entry(s, 0)
-        Entry(s, 0)
-        Entry(s, 0)
+        Entry(s, 0, 1)
+        Entry(s, 0, 1)
+        Entry(s, 0, 1)
 
-        exit1 = Exit(s)
-        exit2 = Exit(s)
+        exit1 = Exit(s, 1)
+        exit2 = Exit(s, 1)
 
         ana = Analytics(s.entities)
 
@@ -24,11 +24,11 @@ class TestAnalytics(unittest.TestCase):
 
     def test_should_get_the_exit_nodes_with_the_travelled_path_by_the_car_which_go_through_it(self):
         simulator = Simulator()
-        entry1 = Entry(simulator, 0)
-        entry2 = Entry(simulator, 0)
-        entry3 = Entry(simulator, 0)
-        rpn = RightPriorityJunction(simulator, 1, 1)
-        exit1 = Exit(simulator)
+        entry1 = Entry(simulator, 0, 1)
+        entry2 = Entry(simulator, 0, 1)
+        entry3 = Entry(simulator, 0, 1)
+        rpn = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1), Orientation.WEST: (1, 0)})
+        exit1 = Exit(simulator, 1)
 
         # road to south
         road1 = Road(simulator, 2, Orientation.SOUTH, 1)

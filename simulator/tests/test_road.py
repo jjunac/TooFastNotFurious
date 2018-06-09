@@ -85,48 +85,5 @@ class TestRoad(unittest.TestCase):
         self.assertIsNone(road.nodes[0][1].current_car)
         self.assertIsNone(road.nodes[0][2].current_car)
 
-    def test_a_road_with_3_ways(self):
-        simulator = Simulator()
-        e = Road(simulator, 5, Orientation.NORTH, 3)
-        #first nodes of ways
-        self.assertIs(e.nodes[0][0].successors[0], e.nodes[0][1])
-        self.assertIs(e.nodes[0][0].successors[1], e.nodes[1][1])
-        self.assertIs(e.nodes[1][0].successors[0], e.nodes[1][1])
-        self.assertIs(e.nodes[1][0].successors[1], e.nodes[2][1])
-        self.assertIs(e.nodes[1][0].successors[2], e.nodes[0][1])
-        self.assertIs(e.nodes[2][0].successors[0], e.nodes[2][1])
-        self.assertIs(e.nodes[2][0].successors[1], e.nodes[1][1])
-
-        #last nodes of ways
-        self.assertIs(e.nodes[0][3].successors[0], e.nodes[0][4])
-        self.assertIs(e.nodes[0][3].successors[1], e.nodes[1][4])
-        self.assertIs(e.nodes[1][3].successors[0], e.nodes[1][4])
-        self.assertIs(e.nodes[1][3].successors[1], e.nodes[2][4])
-        self.assertIs(e.nodes[1][3].successors[2], e.nodes[0][4])
-        self.assertIs(e.nodes[2][3].successors[0], e.nodes[2][4])
-        self.assertIs(e.nodes[2][3].successors[1], e.nodes[1][4])
-
-    def test__a_road_with_1_ways(self):
-        simulator = Simulator()
-        e = Road(simulator, 5, Orientation.NORTH, 3)
-        #first nodes of ways
-        self.assertIs(e.nodes[0][0].successors[0], e.nodes[0][1])
-        self.assertIs(e.nodes[0][0].successors[1], e.nodes[1][1])
-        self.assertIs(e.nodes[1][0].successors[0], e.nodes[1][1])
-        self.assertIs(e.nodes[1][0].successors[1], e.nodes[2][1])
-        self.assertIs(e.nodes[1][0].successors[2], e.nodes[0][1])
-        self.assertIs(e.nodes[2][0].successors[0], e.nodes[2][1])
-        self.assertIs(e.nodes[2][0].successors[1], e.nodes[1][1])
-
-        #last nodes of ways
-        self.assertIs(e.nodes[0][3].successors[0], e.nodes[0][4])
-        self.assertIs(e.nodes[0][3].successors[1], e.nodes[1][4])
-        self.assertIs(e.nodes[1][3].successors[0], e.nodes[1][4])
-        self.assertIs(e.nodes[1][3].successors[1], e.nodes[2][4])
-        self.assertIs(e.nodes[1][3].successors[2], e.nodes[0][4])
-        self.assertIs(e.nodes[2][3].successors[0], e.nodes[2][4])
-        self.assertIs(e.nodes[2][3].successors[1], e.nodes[1][4])
-
-
 if __name__ == '__main__':
     unittest.main()

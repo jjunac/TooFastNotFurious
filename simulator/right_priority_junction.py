@@ -1,41 +1,24 @@
-from simulator.abstract_entity import AbstractEntity
+from shared import Orientation
+from simulator.junction import Junction
 from simulator.node import Node
 from simulator.utils import link
 
 
-class RightPriorityJunction(AbstractEntity):
+class RightPriorityJunction(Junction):
 
-    def __init__(self, simulator, n_of_entry, n_of_exit):
-        super().__init__(simulator, [[Node()]])
-        self.n_of_entry = n_of_entry
-        self.n_of_exit = n_of_exit
+    def __init__(self, simulator, io_roads):
+        super().__init__(simulator, io_roads)
 
     def do_add_predecessor(self, orientation, predecessor):
-        end = predecessor.get_end(orientation)
-        start = self.get_start(orientation)
-        link(end, start)
-        self.simulator.dependencies[(end, start)] = [start]
-        if orientation.left() in self.predecessors:
-            self.simulator.dependencies[(end, start)].append(self.get_end_of_predecessor(orientation.left()))
+        super().do_add_predecessor(orientation, predecessor)
+        end = predecessor.get_end(orientation.invert())
+        start = self.get_start(orientation.invert())
+        # The car on the left (so heading right) needs to leave the priority
         if orientation.right() in self.predecessors:
-            self.simulator.dependencies[(self.get_end_of_predecessor(orientation.right()), start)].append(end)
-
-
-    def get_end_of_predecessor(self, orientation):
-        return self.predecessors[orientation].get_end(orientation)
-
-    def compute_next(self):
-        for row in self.nodes:
-            for n in row:
-                n.compute_next(self.simulator)
-
-    def apply_next(self):
-        for row in self.nodes:
-            for n in row:
-                n.apply_next()
-
-    def get_start(self, orientation):
-        return self.nodes[0][0]
-
-    def get_end(self, orientation):
-        return self.nodes[0][0]
+            for i in range(len(start)):
+                self.simulator.dependencies[(end[i], start[i])].extend(self.get_end_of_predecessor(orientation.right()))
+        # This car needs to leave the priority to the car on the right (so heading left)
+        if orientation.left() in self.predecessors:
+            end_of_predecessor = self.get_end_of_predecessor(orientation.left())
+            for i in range(len(end_of_predecessor)):
+                self.simulator.dependencies[(end_of_predecessor[i], self.get_start(orientation.left())[i])].extend(end)

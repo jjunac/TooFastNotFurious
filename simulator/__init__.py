@@ -8,4 +8,5 @@ from simulator.right_priority_junction import RightPriorityJunction
 from simulator.road import Road
 from simulator.simulator import *
 from simulator.statistics import Statistics
+from simulator.stop_junction import StopJunction
 from simulator.utils import *

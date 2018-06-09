@@ -9,11 +9,11 @@ class TestRoad(unittest.TestCase):
 
     def test_integration_3_input_1_output_with_right_priority(self):
         simulator = Simulator()
-        entry1 = Entry(simulator, 0)
-        entry2 = Entry(simulator, 0)
-        entry3 = Entry(simulator, 0)
-        rpn = RightPriorityJunction(simulator, 1, 1)
-        exit1 = Exit(simulator)
+        entry1 = Entry(simulator, 0, 1)
+        entry2 = Entry(simulator, 0, 1)
+        entry3 = Entry(simulator, 0, 1)
+        rpn = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (1, 0), Orientation.WEST: (1, 0)})
+        exit1 = Exit(simulator, 1)
 
         # road to south
         road1 = Road(simulator, 2, Orientation.SOUTH, 1)
@@ -34,10 +34,6 @@ class TestRoad(unittest.TestCase):
         road4 = Road(simulator, 2, Orientation.EAST, 1)
         exit1.add_predecessor(Orientation.EAST, road4)
         road4.add_predecessor(Orientation.EAST, rpn)
-
-        entry1.to_spawn = 0
-        entry2.to_spawn = 0
-        entry3.to_spawn = 0
 
         p1 = Path(dijkstra_with_path(simulator.get_nodes(), entry1.nodes[0][0], exit1.nodes[0][0]))
         p2 = Path(dijkstra_with_path(simulator.get_nodes(), entry2.nodes[0][0], exit1.nodes[0][0]))
@@ -189,14 +185,12 @@ class TestRoad(unittest.TestCase):
 
     def test_integration_2_input_2_output_with_right_priority(self):
         simulator = Simulator()
-        entry1 = Entry(simulator, 0)
-        entry2 = Entry(simulator, 0)
-        entry1.to_spawn = 0
-        entry2.to_spawn = 0
+        entry1 = Entry(simulator, 0, 1)
+        entry2 = Entry(simulator, 0, 1)
 
-        rpn = RightPriorityJunction(simulator, 1, 1)
-        exit1 = Exit(simulator)
-        exit2 = Exit(simulator)
+        rpn = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1), Orientation.WEST: (1, 0)})
+        exit1 = Exit(simulator, 1)
+        exit2 = Exit(simulator, 1)
 
         # road to south
         road1 = Road(simulator, 2, Orientation.SOUTH, 1)
