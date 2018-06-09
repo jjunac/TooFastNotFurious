@@ -16,8 +16,8 @@ def main():
     junction = right_priority_junction()
     s.add_node(junction)
 
-    s.add_road(entry1.connect(Orientation.NORTH).to(junction).with_length(3).with_n_ways(2))
-    s.add_road(entry2.connect(Orientation.WEST).to(junction).with_length(3).with_n_ways(2))
+    s.add_road(entry1.connect(Orientation.NORTH).to(junction).with_length(5).with_n_ways(2))
+    s.add_road(entry2.connect(Orientation.WEST).to(junction).with_length(5).with_n_ways(2))
     s.add_road(junction.connect(Orientation.NORTH).to(exit1).with_length(3).with_n_ways(2))
     s.add_road(junction.connect(Orientation.WEST).to(exit2).with_length(3).with_n_ways(2))
 
