@@ -53,9 +53,12 @@ class TestReportGenerator(unittest.TestCase):
             exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
                     (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
 
-        res = a.compute_function_per_exit(a.compute_average, stats)
+        res_a = a.compute_function_per_exit(a.compute_average, stats)
+        res_m = a.compute_function_per_exit(a.compute_median, stats)
+        res_first_q = a.compute_function_per_exit(a.compute_median, stats)
+        res_third_q = a.compute_function_per_exit(a.compute_median, stats)
 
-        create_graphic_report_average_car_per_exit(res)
+        create_graphic_report_average_car_per_exit(res_a, res_m, res_first_q, res_third_q)
 
         now = datetime.datetime.now()
 
@@ -71,11 +74,12 @@ class TestReportGenerator(unittest.TestCase):
 
         script = parser.scripts[3]
 
-        script = re.search(r'var data = .*$', script, re.DOTALL).group()
+        script = re.search(r'var data_average = .*$', script, re.DOTALL).group()
 
-        script = script.replace('var data =', '')
+        script = script.replace('var data_average =', '')
 
-        j = json.loads(demjson.encode(demjson.decode(script.replace('var myChart = new Chart(ctx, data);', ''))))
+        j = json.loads(
+            demjson.encode(demjson.decode(script.replace('var AverageChart = new Chart(average_chart, data_average);', ''))))
 
         labels_expected = ['exit1 - entry1', 'exit1 - entry2', 'exit2 - entry3']
         data_expected = [10, 17.5, 23.333333333333332]

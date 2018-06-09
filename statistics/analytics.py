@@ -20,8 +20,9 @@ class Analytics:
     def generate_report(self):
         cars = self.get_path_with_their_exit_nodes()
 
-        res = self.compute_function_per_exit(self.compute_average, cars)
-        create_graphic_report_average_car_per_exit(res)
+        res_average = self.compute_function_per_exit(self.compute_average, cars)
+        res_median = self.compute_function_per_exit(self.compute_median, cars)
+        create_graphic_report_average_car_per_exit(res_average, res_median)
 
     @staticmethod
     def compute_function_per_exit(fct, cars):

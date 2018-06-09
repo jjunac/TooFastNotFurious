@@ -31,7 +31,25 @@
     </div>
     <div class="row">
         <div class="col-12 pt-4">
-            <canvas id="myChart" width="500" height="200"></canvas>
+            <canvas id="AverageChart" width="500" height="200"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 pt-4">
+            <canvas id="MedianChart" width="500" height="200"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 pt-4">
+            <canvas id="FirstQChart" width="500" height="200"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 pt-4">
+            <canvas id="ThirdQChart" width="500" height="200"></canvas>
         </div>
     </div>
 
@@ -41,16 +59,16 @@
 </body>
 
 <script type="text/javascript">
-    var ctx = document.getElementById("myChart");
+    var average_chart = document.getElementById("AverageChart");
 
-    var data = {
+    var data_average = {
         type: 'bar',
         data: {
 
             labels: {{ labels | safe }},
     datasets: [{
         label: 'Nb cars',
-        data: {{ data }},
+        data: {{ data_average }},
         backgroundColor: {{ backgroundColor | safe }}
                 }]
             },
@@ -66,7 +84,94 @@
     }
         }
 
-    var myChart = new Chart(ctx, data);
+    var AverageChart = new Chart(average_chart, data_average);
+</script>
+
+<script type="text/javascript">
+    var median_chart = document.getElementById("MedianChart");
+
+    var data_median = {
+        type: 'bar',
+        data: {
+
+            labels: {{ labels | safe }},
+    datasets: [{
+        label: 'Nb cars',
+        data: {{ data_median }},
+        backgroundColor: {{ backgroundColor | safe }}
+                }]
+            },
+    options: {
+        responsive: true,
+            scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+        }
+
+    var MedianChart = new Chart(median_chart, data_median);
+</script>
+
+<script type="text/javascript">
+    var first_quartile_chart = document.getElementById("FirstQChart");
+
+    var data_first_q = {
+        type: 'bar',
+        data: {
+
+            labels: {{ labels | safe }},
+    datasets: [{
+        label: 'Nb cars',
+        data: {{ data_first_q }},
+        backgroundColor: {{ backgroundColor | safe }}
+                }]
+            },
+    options: {
+        responsive: true,
+            scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+        }
+
+    var FirstQChart = new Chart(first_quartile_chart, data_first_q);
+</script>
+
+<script type="text/javascript">
+    var third_quartile_chart = document.getElementById("ThirdQChart");
+
+    var data_third_q = {
+        type: 'bar',
+        data: {
+
+            labels: {{ labels | safe }},
+    datasets: [{
+        label: 'Nb cars',
+        data: {{ data_first_q }},
+        backgroundColor: {{ backgroundColor | safe }}
+                }]
+            },
+    options: {
+        responsive: true,
+            scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+        }
+
+    var ThirdQChart = new Chart(third_quartile_chart, data_third_q);
 </script>
 
 </html>
