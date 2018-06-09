@@ -15,6 +15,5 @@ script:
   - sonar-scanner
   - bash <(curl -s https://codecov.io/bash)
   - python tools/mutation_testing.py
-  - bash test.sh
 notifications:
   email: false
