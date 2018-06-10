@@ -13,7 +13,7 @@ def main():
     s.add_node(exit1)
     exit2 = exit_node()
     s.add_node(exit2)
-    junction = right_priority_junction()
+    junction = right_priority()
     s.add_node(junction)
 
     s.add_road(entry1.connect(Orientation.NORTH).to(junction).with_length(3))

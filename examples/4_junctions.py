@@ -23,13 +23,13 @@ def main():
     exit4 = exit_node()
     s.add_node(exit4)
 
-    junction1 = right_priority_junction()
+    junction1 = right_priority()
     s.add_node(junction1)
-    junction2 = right_priority_junction()
+    junction2 = right_priority()
     s.add_node(junction2)
-    junction3 = right_priority_junction()
+    junction3 = right_priority()
     s.add_node(junction3)
-    junction4 = right_priority_junction()
+    junction4 = right_priority()
     s.add_node(junction4)
 
     s.add_road(entry1.connect(Orientation.SOUTH).to(junction1).with_length(3))
