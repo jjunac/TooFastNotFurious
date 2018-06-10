@@ -7,7 +7,7 @@ from simulator.node import Node
 class Exit(AbstractEntity):
 
     def __init__(self, simulator, n_of_ways):
-        super().__init__(simulator, [[Node()] for _ in range(n_of_ways)])
+        super().__init__(simulator, [[Node(self)] for _ in range(n_of_ways)])
         self.n_of_ways = n_of_ways
         self.outflow = 0
         self.departure_counter = {}
@@ -22,7 +22,6 @@ class Exit(AbstractEntity):
                         self.departure_counter[departure] = 0
                     self.departure_counter[departure] += 1
                     self.outflow += 1
-                    # We don't want the exit node in the list of visited nodes
                     # We don't want the exit node in the list of visited nodes
                     del (n.current_car.visited_nodes[-1])
                     self.statistics.add_car_travel(n.current_car.departure,
@@ -49,3 +48,6 @@ class Exit(AbstractEntity):
 
     def get_cars_arrived(self):
         return self.statistics.list_cars_arrived
+
+    def is_dependency_satisfied(self, source):
+        return True

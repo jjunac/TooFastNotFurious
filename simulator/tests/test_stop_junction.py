@@ -5,8 +5,6 @@ from simulator import Road, Simulator
 from simulator.car import Car
 from simulator.path import Path
 from simulator.stop_junction import StopJunction
-from simulator.utils import *
-from copy import deepcopy
 
 
 class TestStopJunction(unittest.TestCase):

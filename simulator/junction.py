@@ -1,10 +1,11 @@
+from abc import ABC, abstractmethod
 from shared import Orientation
 from simulator.abstract_entity import AbstractEntity
 from simulator.node import Node
 from simulator.utils import link
 
 
-class Junction(AbstractEntity):
+class Junction(AbstractEntity, ABC):
 
     def __init__(self, simulator, io_roads):
         self.io_roads = io_roads
@@ -16,7 +17,7 @@ class Junction(AbstractEntity):
                 raise RuntimeError("in/out of North/South and East/West must be coherent")
         self.size_north_south = max(n_ways_N, n_ways_S)
         self.size_east_west = max(n_ways_E, n_ways_W)
-        super().__init__(simulator, [[Node() for i in range(self.size_north_south)] for j in range(self.size_east_west)])
+        super().__init__(simulator, [[Node(self) for i in range(self.size_north_south)] for j in range(self.size_east_west)])
         self.__link_nodes()
 
     def do_add_predecessor(self, orientation, predecessor):
@@ -86,3 +87,7 @@ class Junction(AbstractEntity):
             for x in range(1, len(self.nodes[-y])):
                 link(self.nodes[-y][x], self.nodes[-y][x - 1])
                 self.simulator.dependencies[(self.nodes[-y][x], self.nodes[-y][x - 1])] = [self.nodes[-y][x - 1]]
+
+    @abstractmethod
+    def is_dependency_satisfied(self, source):
+        pass

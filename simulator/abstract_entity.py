@@ -41,5 +41,9 @@ class AbstractEntity(ABC):
     def apply_next(self):
         pass
 
+    @abstractmethod
+    def is_dependency_satisfied(self, source):
+        pass
+
     def __str__(self):
         return [n.__repr__() for n in self.get_nodes()]

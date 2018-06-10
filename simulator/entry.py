@@ -8,7 +8,7 @@ from simulator.car import Car
 class Entry(AbstractEntity):
 
     def __init__(self, simulator, rate, n_of_ways):
-        super().__init__(simulator, [[Node()] for _ in range(n_of_ways)])
+        super().__init__(simulator, [[Node(self)] for _ in range(n_of_ways)])
         self.n_of_ways = n_of_ways
         self.rate = rate
         self.paths = {}
@@ -44,3 +44,7 @@ class Entry(AbstractEntity):
                         self.nodes[i][0].next_car = Car(path, self)
                         self.to_spawn[i] -= 1
                         break
+
+    def is_dependency_satisfied(self, source):
+        return True
+

@@ -1,8 +1,9 @@
 from modeler.entry_node import EntryNode
 from modeler.exit_node import ExitNode
-from modeler.path import Path
 from modeler.simulation import Simulation
 from modeler.right_priority_junction import RightPriorityJunction
+from modeler.stop_junction import StopJunction
+from modeler.traffic_light import TrafficLight
 
 nodes = []
 
@@ -19,8 +20,11 @@ def exit_node():
 def new_simulation():
     return Simulation()
 
-def go_to(destination):
-    return Path(destination)
-
-def right_priority_junction():
+def right_priority():
     return RightPriorityJunction()
+
+def traffic_light():
+    return TrafficLight()
+
+def stop():
+    return StopJunction()
