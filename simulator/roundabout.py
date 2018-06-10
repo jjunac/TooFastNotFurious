@@ -5,22 +5,51 @@ from simulator.node import Node
 from simulator.utils import link
 
 
-class Junction(AbstractEntity, ABC):
+class Roundabout(AbstractEntity, ABC):
 
-    def __init__(self, simulator, io_roads):
+    def __init__(self, simulator, io_roads, n_of_ways):
         self.io_roads = io_roads
-
-        n_ways_N = io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1]
-        n_ways_S = io_roads[Orientation.SOUTH][0] + io_roads[Orientation.SOUTH][1]
-        n_ways_E = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
-        n_ways_W = io_roads[Orientation.WEST][0] + io_roads[Orientation.WEST][1]
-        if (n_ways_N != n_ways_S and n_ways_N != 0 and n_ways_S != 0) or (n_ways_E != n_ways_W and n_ways_E != 0 and n_ways_W != 0):
-                raise RuntimeError("in/out of North/South and East/West must be coherent")
-
-        self.size_north_south = max(n_ways_N, n_ways_S)
-        self.size_east_west = max(n_ways_E, n_ways_W)
-        super().__init__(simulator, [[Node(self) for i in range(self.size_north_south)] for j in range(self.size_east_west)])
+        self.n_of_ways = n_of_ways
+        self.n_ways_N = io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1]
+        self.n_ways_S = io_roads[Orientation.SOUTH][0] + io_roads[Orientation.SOUTH][1]
+        self.n_ways_E = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
+        self.n_ways_W = io_roads[Orientation.WEST][0] + io_roads[Orientation.WEST][1]
+        super().__init__(simulator, self.__build_roundabout())
         self.__link_nodes()
+
+    def __build_roundabout(self):
+        interval = 2
+        length = sum([i for t in self.io_roads.values() for i in t])
+        return [[Node(self) for i in range(length + 4 * interval)] for _ in range(self.n_of_ways)]
+
+    def __link_nodes(self):
+        # Link a way
+        for row in self.nodes:
+            for i in range(len(row)):
+                link(row[i-1], row[i])
+                self.simulator.dependencies[(row[i-1], row[i])] = [row[i]]
+        # Link ways
+        if self.n_of_ways < 2:
+            return
+        for i in range(self.n_of_ways):
+            if i == 0:
+                for j in range(len(self.nodes[i]) - 1):
+                    link(self.nodes[i][j], self.nodes[i + 1][j + 1])
+                    self.simulator.dependencies[(self.nodes[i][j], self.nodes[i + 1][j + 1])] = \
+                        [self.nodes[i + 1][j + 1], self.nodes[i + 1][j]]
+            elif i == self.n_of_ways - 1:
+                for j in range(len(self.nodes[i]) - 1):
+                    link(self.nodes[i][j], self.nodes[i - 1][j + 1])
+                    self.simulator.dependencies[(self.nodes[i][j], self.nodes[i - 1][j + 1])] = \
+                        [self.nodes[i - 1][j + 1], self.nodes[i - 1][j]]
+            else:
+                for j in range(len(self.nodes[i]) - 1):
+                    link(self.nodes[i][j], self.nodes[i + 1][j + 1])
+                    self.simulator.dependencies[(self.nodes[i][j], self.nodes[i + 1][j + 1])] = \
+                        [self.nodes[i + 1][j + 1], self.nodes[i + 1][j]]
+                    link(self.nodes[i][j], self.nodes[i - 1][j + 1])
+                    self.simulator.dependencies[(self.nodes[i][j], self.nodes[i - 1][j + 1])] = \
+                        [self.nodes[i + 1][j + 1], self.nodes[i - 1][j]]
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation.invert())
