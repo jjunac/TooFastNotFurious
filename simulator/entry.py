@@ -45,6 +45,6 @@ class Entry(AbstractEntity):
                         self.to_spawn[i] -= 1
                         break
 
-    def is_dependency_satisfied(self):
+    def is_dependency_satisfied(self, source):
         return True
 

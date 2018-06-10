@@ -66,5 +66,5 @@ class Road(AbstractEntity):
             simulator.dependencies[(res[-2], res[-1])] = [res[-1]]
         return res
 
-    def is_dependency_satisfied(self):
+    def is_dependency_satisfied(self, source):
         return True

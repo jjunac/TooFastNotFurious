@@ -23,5 +23,5 @@ class RightPriorityJunction(Junction):
             for i in range(len(end_of_predecessor)):
                 self.simulator.dependencies[(end_of_predecessor[i], self.get_start(orientation.left())[i])].extend(end)
 
-    def is_dependency_satisfied(self):
+    def is_dependency_satisfied(self, source):
         return True

@@ -42,7 +42,7 @@ class AbstractEntity(ABC):
         pass
 
     @abstractmethod
-    def is_dependency_satisfied(self):
+    def is_dependency_satisfied(self, source):
         pass
 
     def __str__(self):

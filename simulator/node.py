@@ -25,12 +25,12 @@ class Node:
             return False
         dependencies = simulator.dependencies[(self, destination)]
         for d in dependencies:
-            if d.current_car:
+            if not d.is_dependency_satisfied(self):
                 return False
         return True
 
-    def is_dependency_satisfied(self):
-        if not self.entity.is_dependency_satisfied:
+    def is_dependency_satisfied(self, source):
+        if not self.entity.is_dependency_satisfied(source):
             return False
         if self.current_car:
             return False

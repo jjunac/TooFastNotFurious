@@ -89,5 +89,5 @@ class Junction(AbstractEntity, ABC):
                 self.simulator.dependencies[(self.nodes[-y][x], self.nodes[-y][x - 1])] = [self.nodes[-y][x - 1]]
 
     @abstractmethod
-    def is_dependency_satisfied(self):
+    def is_dependency_satisfied(self, source):
         pass

@@ -46,5 +46,5 @@ class Exit(AbstractEntity):
     def get_stats(self):
         return self.statistics.list_time_travel
 
-    def is_dependency_satisfied(self):
+    def is_dependency_satisfied(self, source):
         return True
