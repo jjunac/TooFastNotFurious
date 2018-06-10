@@ -72,7 +72,7 @@ class TestReportGenerator(unittest.TestCase):
 
         parser.feed(list(p.glob('./*.html'))[0].read_text())
 
-        script = parser.scripts[3]
+        script = parser.scripts[5]
 
         script = re.search(r'var data = .*$', script, re.DOTALL).group()
 

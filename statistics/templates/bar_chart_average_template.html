@@ -10,6 +10,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
             crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.rawgit.com/chartjs/chartjs-plugin-zoom/d5caf691/chartjs-plugin-zoom.js"></script>
     <title>Too Fast and not Furious</title>
 </head>
 
@@ -78,6 +81,18 @@
                         beginAtZero: true
                     }
                 }]
+            },
+            pan: {
+                enabled: true,
+                mode: 'xy'
+            },
+            zoom: {
+                enabled: true,
+                mode: 'xy',
+                limits: {
+                    max: 10,
+                    min: 0.5
+                }
             }
         }
     }
