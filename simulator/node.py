@@ -1,5 +1,6 @@
 class Node:
-    def __init__(self):
+    def __init__(self, entity):
+        self.entity = entity
         self.successors = []
         self.predecessors = []
         self.current_car = None
@@ -26,6 +27,13 @@ class Node:
         for d in dependencies:
             if d.current_car:
                 return False
+        return True
+
+    def is_dependency_satisfied(self):
+        if not self.entity.is_dependency_satisfied:
+            return False
+        if self.current_car:
+            return False
         return True
 
     def apply_next(self):

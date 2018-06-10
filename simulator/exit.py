@@ -7,7 +7,7 @@ from simulator.node import Node
 class Exit(AbstractEntity):
 
     def __init__(self, simulator, n_of_ways):
-        super().__init__(simulator, [[Node()] for _ in range(n_of_ways)])
+        super().__init__(simulator, [[Node(self)] for _ in range(n_of_ways)])
         self.n_of_ways = n_of_ways
         self.outflow = 0
         self.departure_counter = {}
@@ -45,3 +45,6 @@ class Exit(AbstractEntity):
 
     def get_stats(self):
         return self.statistics.list_time_travel
+
+    def is_dependency_satisfied(self):
+        return True

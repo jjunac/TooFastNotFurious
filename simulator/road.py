@@ -59,9 +59,12 @@ class Road(AbstractEntity):
             self.simulator.dependencies[(end[i], start[i])] = [start[i]]
 
     def __build_road(self, simulator, length):
-        res = [Node()]
+        res = [Node(self)]
         for _ in range(length - 1):
-            res.append(Node())
+            res.append(Node(self))
             link(res[-2], res[-1])
             simulator.dependencies[(res[-2], res[-1])] = [res[-1]]
         return res
+
+    def is_dependency_satisfied(self):
+        return True

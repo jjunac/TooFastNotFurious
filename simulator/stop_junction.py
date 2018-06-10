@@ -24,3 +24,6 @@ class StopJunction(Junction):
                 stop_start = self.get_start(self.stop_orientation.invert())
                 for i in range(len(end_of_predecessor)):
                     self.simulator.dependencies[(end_of_predecessor[i], stop_start[i])].extend(end)
+
+    def is_dependency_satisfied(self):
+        return True
