@@ -22,7 +22,9 @@ class Analytics:
 
         res_average = self.compute_function_per_exit(self.compute_average, cars)
         res_median = self.compute_function_per_exit(self.compute_median, cars)
-        create_graphic_report_average_car_per_exit(res_average, res_median)
+        res_first_quartile = self.compute_function_per_exit(self.compute_first_quartile, cars)
+        res_third_quartile = self.compute_function_per_exit(self.compute_third_quartile, cars)
+        create_graphic_report_average_car_per_exit(res_average, res_median, res_first_quartile, res_third_quartile)
 
     @staticmethod
     def compute_function_per_exit(fct, cars):

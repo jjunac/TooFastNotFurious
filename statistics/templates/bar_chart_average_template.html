@@ -29,149 +29,61 @@
             </h1>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 pt-4">
-            <canvas id="AverageChart" width="500" height="200"></canvas>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 pt-4">
-            <canvas id="MedianChart" width="500" height="200"></canvas>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 pt-4">
-            <canvas id="FirstQChart" width="500" height="200"></canvas>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 pt-4">
-            <canvas id="ThirdQChart" width="500" height="200"></canvas>
+    <div class="row pt-4">
+        <h3>Overview</h3>
+        <div class="w-100"></div>
+        <div class="col-12 pt-4" style="background-color: #f0f0f0; border-radius: 10px">
+            <canvas id="ReportChart" width="100" height="60"></canvas>
         </div>
     </div>
 
 </div>
 
-
 </body>
 
 <script type="text/javascript">
-    var average_chart = document.getElementById("AverageChart");
+    var reportChart = document.getElementById("ReportChart");
 
-    var data_average = {
+     var data = {
         type: 'bar',
         data: {
 
-            labels: {{ labels | safe }},
-    datasets: [{
-        label: 'Nb cars',
-        data: {{ data_average }},
-        backgroundColor: {{ backgroundColor | safe }}
-                }]
+            labels: {{labels | safe}},
+            datasets: [{
+                label: 'Average',
+                data: {{data_average | safe}},
+                backgroundColor: 'rgba(175, 104, 211, 0.7)'
             },
-    options: {
-        responsive: true,
+                {
+                    label: 'Median',
+                    data: {{data_median | safe}},
+                    backgroundColor: 'rgba(98, 101, 238, 0.7)'
+                },
+                {
+                    label: 'First Quartile',
+                    data: {{data_first_q | safe}},
+                    backgroundColor: 'rgba(85, 63, 126, 0.7)'
+                },
+                {
+                    label: 'Third Quartile',
+                    data: {{data_third_q | safe}},
+                    backgroundColor: 'rgba(29, 18, 168, 0.7)'
+                }]
+        },
+        options: {
+            responsive: true,
             scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
         }
     }
-        }
 
-    var AverageChart = new Chart(average_chart, data_average);
+    var ReportChart = new Chart(reportChart, data);
 </script>
 
-<script type="text/javascript">
-    var median_chart = document.getElementById("MedianChart");
-
-    var data_median = {
-        type: 'bar',
-        data: {
-
-            labels: {{ labels | safe }},
-    datasets: [{
-        label: 'Nb cars',
-        data: {{ data_median }},
-        backgroundColor: {{ backgroundColor | safe }}
-                }]
-            },
-    options: {
-        responsive: true,
-            scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-        }
-
-    var MedianChart = new Chart(median_chart, data_median);
-</script>
-
-<script type="text/javascript">
-    var first_quartile_chart = document.getElementById("FirstQChart");
-
-    var data_first_q = {
-        type: 'bar',
-        data: {
-
-            labels: {{ labels | safe }},
-    datasets: [{
-        label: 'Nb cars',
-        data: {{ data_first_q }},
-        backgroundColor: {{ backgroundColor | safe }}
-                }]
-            },
-    options: {
-        responsive: true,
-            scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-        }
-
-    var FirstQChart = new Chart(first_quartile_chart, data_first_q);
-</script>
-
-<script type="text/javascript">
-    var third_quartile_chart = document.getElementById("ThirdQChart");
-
-    var data_third_q = {
-        type: 'bar',
-        data: {
-
-            labels: {{ labels | safe }},
-    datasets: [{
-        label: 'Nb cars',
-        data: {{ data_first_q }},
-        backgroundColor: {{ backgroundColor | safe }}
-                }]
-            },
-    options: {
-        responsive: true,
-            scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-        }
-
-    var ThirdQChart = new Chart(third_quartile_chart, data_third_q);
-</script>
 
 </html>

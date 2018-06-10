@@ -37,14 +37,11 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
     dataset_median = []
     dataset_first_q = []
     dataset_third_q = []
-    background_color = []
     labels = []
 
     for key, value in stats_string_average.items():
 
         for entry, val in value.items():
-            background_color.append("rgba(" + str(randrange(255)) + ", " + str(
-                randrange(255)) + ", " + str(randrange(255)) + ", 0.7)")
             dataset_average.append(val)
             labels.append(key + " - " + entry)
 
@@ -60,8 +57,7 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
 
     with open(name, 'w+') as file:
         file.write(template.render(labels=labels, data_average=dataset_average, data_median=dataset_median,
-                                   data_first_q=dataset_first_q, data_third_q=dataset_third_q,
-                                   backgroundColor=background_color))
+                                   data_first_q=dataset_first_q, data_third_q=dataset_third_q))
 
 
 def fill_dataset(dataset, stats_string):

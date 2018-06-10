@@ -74,21 +74,26 @@ class TestReportGenerator(unittest.TestCase):
 
         script = parser.scripts[3]
 
-        script = re.search(r'var data_average = .*$', script, re.DOTALL).group()
+        script = re.search(r'var data = .*$', script, re.DOTALL).group()
 
-        script = script.replace('var data_average =', '')
+        script = script.replace('var data =', '')
 
         j = json.loads(
-            demjson.encode(demjson.decode(script.replace('var AverageChart = new Chart(average_chart, data_average);', ''))))
+            demjson.encode(
+                demjson.decode(script.replace('var ReportChart = new Chart(reportChart, data);', ''))))
 
         labels_expected = ['exit1 - entry1', 'exit1 - entry2', 'exit2 - entry3']
-        data_expected = [10, 17.5, 23.333333333333332]
-        pattern = 'rgba\([1-2]?[0-9]?[0-9], [1-2]?[0-9]?[0-9], [1-2]?[0-9]?[0-9], 0.7\)'
+        data_average = [10, 17.5, 23.333333333333332]
+        data_median = [10, 20.0, 30]
+        data_f_q = [10, 20.0, 30]
+        data_t_q = [10, 20.0, 30]
 
         for i in range(len(j['data']['labels'])):
             self.assertTrue(labels_expected[i] in j['data']['labels'])
-            self.assertTrue(data_expected[i] in j['data']['datasets'][0]['data'])
-            self.assertRegex(j['data']['datasets'][0]['backgroundColor'][i], pattern)
+            self.assertTrue(data_average[i] in j['data']['datasets'][0]['data'])
+            self.assertTrue(data_median[i] in j['data']['datasets'][1]['data'])
+            self.assertTrue(data_f_q[i] in j['data']['datasets'][2]['data'])
+            self.assertTrue(data_t_q[i] in j['data']['datasets'][3]['data'])
 
         list(p.glob('./' + name))[0].unlink()
 
