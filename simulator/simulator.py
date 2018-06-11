@@ -18,8 +18,7 @@ class Simulator:
             e.compute_next()
         for e in self.entities:
             e.apply_next()
-        # print([n for n in self.get_nodes() if n.current_car is not None and type(n) is not Exit])
-        # print([n for n in self.get_nodes() if n.current_car is not None and type(n.entity) != Exit])
+
         self.traffic_load.append(
             len([n for n in self.get_nodes() if n.current_car is not None and type(n.entity) is not Exit]))
 
@@ -33,8 +32,9 @@ class Simulator:
         drawing.draw()
 
     def generate_report(self):
-        analytics = Analytics(self.entities)
+        analytics = Analytics(self.entities, self.traffic_load)
         analytics.generate_report()
+        analytics.compute_stop_time()
 
     def get_nodes(self):
         return [n for e in self.entities for n in e.get_nodes()]

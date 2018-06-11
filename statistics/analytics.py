@@ -1,13 +1,15 @@
 from math import ceil
+from collections import Counter
 
-from simulator import Exit
+from simulator import Exit, Road, Entry
 from statistics.report_generator import create_graphic_report_average_car_per_exit
 
 
 class Analytics:
 
-    def __init__(self, nodes):
+    def __init__(self, nodes, traffic_load):
         self.nodes = nodes
+        self.traffic_load = traffic_load
 
     def get_path_with_their_exit_nodes(self):
         stats = {}
@@ -38,7 +40,7 @@ class Analytics:
                     path_lengths[entry[0]] = []
                 # print(val)
                 for i in range(len(val)):
-                    path_lengths[entry[0]].append(len(val[i]))
+                    path_lengths[entry[0]].append(len(val[i].visited_nodes))
                     path_lengths[entry[0]].sort()
 
             fct(path_lengths)
@@ -71,6 +73,27 @@ class Analytics:
                 index = len(val) / 2
                 path_lengths[entry] = (val[int(index) - 1] + val[int(index)]) / 2
 
-    @staticmethod
-    def compute_stop_time(val):
-        pass
+    def compute_stop_time(self):
+        nodes = self.get_path_with_their_exit_nodes()
+        roads = {}
+
+        for key, value in nodes.items():
+            for entry, val in value.items():
+                for i in range(len(val)):
+                    c = Counter(val[i].visited_nodes)
+                    for k, v in dict(Counter(n for n in c.elements() if c[n] > 1)).items():
+                        if not (k.entity, val[i]) in roads:
+                            roads[(k.entity, val[i])] = []
+
+                        roads[(k.entity, val[i])].append(v)
+
+        print(roads)
+
+        return roads
+
+        #
+        # for i in range(len(self.traffic_load)):
+        #     for key, value in roads.items():
+        #         if key[1].departure_tick >= i:
+        #             print(value)
+

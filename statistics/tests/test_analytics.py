@@ -18,7 +18,7 @@ class TestAnalytics(unittest.TestCase):
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
 
-        ana = Analytics(s.entities)
+        ana = Analytics(s.entities, [])
 
         self.assertEqual({exit1: {}, exit2: {}}, ana.get_path_with_their_exit_nodes())
 
@@ -59,9 +59,13 @@ class TestAnalytics(unittest.TestCase):
         entry2.paths[100] = p2
         entry3.paths[100] = p3
 
-        entry1.nodes[0][0].current_car = Car(entry1.paths[100], entry1, 0)
-        entry2.nodes[0][0].current_car = Car(entry2.paths[100], entry2, 0)
-        entry3.nodes[0][0].current_car = Car(entry3.paths[100], entry3, 0)
+        car1 = Car(entry1.paths[100], entry1, 0)
+        car2 = Car(entry2.paths[100], entry2, 0)
+        car3 = Car(entry3.paths[100], entry3, 0)
+
+        entry1.nodes[0][0].current_car = car1
+        entry2.nodes[0][0].current_car = car2
+        entry3.nodes[0][0].current_car = car3
 
         simulator.tick()
         simulator.tick()
@@ -71,11 +75,13 @@ class TestAnalytics(unittest.TestCase):
         simulator.tick()
         simulator.tick()
 
-        ana = Analytics(simulator.entities)
+        ana = Analytics(simulator.entities, [])
 
-        self.assertEqual({exit1: {(entry3, entry3.paths[100]): [
-            [road3.nodes[0][0], road3.nodes[0][1], rpn.nodes[0][0], road4.nodes[0][0], road4.nodes[0][1]]]}},
-            ana.get_path_with_their_exit_nodes())
+        self.assertEqual({exit1: {(entry3, entry3.paths[100]): [car3]}},
+                         ana.get_path_with_their_exit_nodes())
+
+        self.assertEqual([road3.nodes[0][0], road3.nodes[0][1], rpn.nodes[0][0], road4.nodes[0][0], road4.nodes[0][1]],
+                         ana.get_path_with_their_exit_nodes()[exit1][(entry3, entry3.paths[100])][0].visited_nodes)
 
     def test_should_compute_average_for_exit_nodes(self):
         s = Simulator()
@@ -89,7 +95,7 @@ class TestAnalytics(unittest.TestCase):
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
 
-        a = Analytics({})
+        a = Analytics({}, [])
 
         road1 = Road(s, 100, Orientation.SOUTH, 1)
 
@@ -129,7 +135,7 @@ class TestAnalytics(unittest.TestCase):
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
 
-        a = Analytics({})
+        a = Analytics({}, [])
 
         road1 = Road(s, 100, Orientation.SOUTH, 1)
 
@@ -170,7 +176,7 @@ class TestAnalytics(unittest.TestCase):
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
 
-        a = Analytics({})
+        a = Analytics({}, [])
 
         road1 = Road(s, 100, Orientation.SOUTH, 1)
 
@@ -210,7 +216,7 @@ class TestAnalytics(unittest.TestCase):
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
 
-        a = Analytics({})
+        a = Analytics({}, [])
 
         road1 = Road(s, 100, Orientation.SOUTH, 1)
 
@@ -236,10 +242,10 @@ class TestAnalytics(unittest.TestCase):
 
         res = a.compute_function_per_exit(a.compute_median, stats)
 
-        print(res)
-
         self.assertEqual({exit1: {entry1: 10, entry2: 15}, exit2: {entry3: 30}}, res)
 
+    def test_should_compute_the_stop_time_for_each_arrived_cars(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

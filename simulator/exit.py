@@ -24,9 +24,7 @@ class Exit(AbstractEntity):
                     self.outflow += 1
                     # We don't want the exit node in the list of visited nodes
                     del (n.current_car.visited_nodes[-1])
-                    self.statistics.add_car_travel(n.current_car.departure,
-                                                   n.current_car.original_path,
-                                                   n.current_car.visited_nodes)
+                    self.statistics.add_car_travel(n.current_car)
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation.invert())
