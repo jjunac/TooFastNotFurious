@@ -87,8 +87,41 @@ class Analytics:
                             delay[val[i]] = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
 
         print(delay)
-
+        self.compute_delay_time_with_traffic_load(delay)
         return delay
+
+    def compute_delay_time_with_traffic_load(self, delay):
+
+        graph = {}
+
+        for i in range(len(self.traffic_load)):
+            for key, value in delay.items():
+                if key.departure_tick <= i <= key.departure_tick + len(key.visited_nodes):
+                    if not i in graph:
+                        graph[i] = []
+                    graph[i].append(value)
+
+        print(graph)
+        self.compute_esperance(graph)
+
+
+    def compute_esperance(self, tab):
+
+        esperance = {}
+
+        for entry, val in tab.items():
+
+            # print(dict(Counter(i)))
+            proba = 0
+            # print("coucou", i)
+            for key, value in dict(Counter(val)).items():
+                proba += (key * key) * (value/len(val))
+
+            if not entry in esperance:
+                esperance[entry] = proba
+
+
+        print(esperance)
 
         #
         # for i in range(len(self.traffic_load)):
