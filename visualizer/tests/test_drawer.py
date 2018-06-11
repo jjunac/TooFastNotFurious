@@ -3,7 +3,7 @@ import unittest
 from shared import Orientation
 from simulator import Road, RightPriorityJunction
 from simulator.simulator import Simulator
-from visualizer.drawer import Drawer
+from visualizer.drawer import Drawer, closest_orientation
 from visualizer.point import Point
 
 
@@ -48,6 +48,18 @@ class MyTestCase(unittest.TestCase):
         # self.assertEqual(road0_end + Point(2 * cell_size, 0), roads[2].sprite_end)
 
         # TODO continue test
+
+    def test_clamp(self):
+        self.assertEqual(Orientation.EAST, closest_orientation(0))
+        self.assertEqual(Orientation.SOUTH, closest_orientation(90))
+        self.assertEqual(Orientation.NORTH, closest_orientation(-90))
+        self.assertEqual(Orientation.NORTH, closest_orientation(-80))
+        self.assertEqual(Orientation.EAST, closest_orientation(-30))
+        self.assertEqual(Orientation.WEST, closest_orientation(200))
+        self.assertEqual(Orientation.NORTH, closest_orientation(250))
+        self.assertEqual(Orientation.EAST, closest_orientation(330))
+        self.assertEqual(Orientation.EAST, closest_orientation(45))
+        self.assertEqual(Orientation.WEST, closest_orientation(-135))
 
 
 if __name__ == '__main__':

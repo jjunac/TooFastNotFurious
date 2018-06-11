@@ -17,22 +17,24 @@ class GraphicJunction:
         self.cell_height = cell_height
         self.angle = 0
         self.node_pos = []
-
-    def create_sprites(self):
         if type(self.entity) is RightPriorityJunction:
             surface = pygame.Surface((self.cell_length, self.cell_height))
             surface.fill((29, 17, 17))
-            for i in range(self.entity.size_north_south):
-                for j in range(self.entity.size_east_west):
+            for i in range(len(self.entity.nodes)):
+                for j in range(len(self.entity.nodes[i])):
                     point = self.position + Point(j * self.cell_length, -i * self.cell_height)
-                    self.group.add(
-                        MySprite(point, self.cell_length,
-                                 self.cell_height, image=surface))
                     self.node_pos.append((self.entity.nodes[i][j], point))
         else:
             for i in self.entity.nodes:
                 for n in i:
                     self.node_pos.append((n, self.position))
+
+    def create_sprites(self):
+        if type(self.entity) is RightPriorityJunction:
+            for cell, pos in self.node_pos:
+                surface = pygame.Surface((self.cell_length, self.cell_height))
+                surface.fill((29, 17, 17))
+                self.group.add(MySprite(pos, self.cell_length, self.cell_height, image=surface))
 
     def draw(self, surface):
         self.group.draw(surface)
