@@ -89,11 +89,12 @@ class TestReportGenerator(unittest.TestCase):
         data_t_q = [10, 20.0, 30]
 
         for i in range(len(j['data']['labels'])):
-            self.assertTrue(labels_expected[i] in j['data']['labels'])
-            self.assertTrue(data_average[i] in j['data']['datasets'][0]['data'])
-            self.assertTrue(data_median[i] in j['data']['datasets'][1]['data'])
-            self.assertTrue(data_f_q[i] in j['data']['datasets'][2]['data'])
-            self.assertTrue(data_t_q[i] in j['data']['datasets'][3]['data'])
+            with self.subTest(i=i):
+                self.assertTrue(labels_expected[i] in j['data']['labels'])
+                self.assertTrue(data_average[i] in j['data']['datasets'][0]['data'])
+                self.assertTrue(data_median[i] in j['data']['datasets'][1]['data'])
+                self.assertTrue(data_f_q[i] in j['data']['datasets'][2]['data'])
+                self.assertTrue(data_t_q[i] in j['data']['datasets'][3]['data'])
 
         list(p.glob('./' + name))[0].unlink()
 

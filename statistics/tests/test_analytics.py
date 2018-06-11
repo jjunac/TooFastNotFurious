@@ -59,9 +59,9 @@ class TestAnalytics(unittest.TestCase):
         entry2.paths[100] = p2
         entry3.paths[100] = p3
 
-        entry1.nodes[0][0].current_car = Car(entry1.paths[100], entry1)
-        entry2.nodes[0][0].current_car = Car(entry2.paths[100], entry2)
-        entry3.nodes[0][0].current_car = Car(entry3.paths[100], entry3)
+        entry1.nodes[0][0].current_car = Car(entry1.paths[100], entry1, 0)
+        entry2.nodes[0][0].current_car = Car(entry2.paths[100], entry2, 0)
+        entry3.nodes[0][0].current_car = Car(entry3.paths[100], entry3, 0)
 
         simulator.tick()
         simulator.tick()
@@ -96,17 +96,17 @@ class TestAnalytics(unittest.TestCase):
         nodes = []
 
         for i in range(0, 10):
-            nodes.append(road1.nodes[0][0])
+            nodes.append(road1.nodes[0][i])
 
         nodes1 = []
 
         for i in range(0, 20):
-            nodes1.append(road1.nodes[0][0])
+            nodes1.append(road1.nodes[0][i])
 
         nodes2 = []
 
         for i in range(0, 30):
-            nodes2.append(road1.nodes[0][0])
+            nodes2.append(road1.nodes[0][i])
 
         stats = {
             exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes1, nodes, nodes1, nodes1]},
@@ -136,17 +136,17 @@ class TestAnalytics(unittest.TestCase):
         nodes = []
 
         for i in range(0, 10):
-            nodes.append(road1.nodes[0][0])
+            nodes.append(road1.nodes[0][i])
 
         nodes1 = []
 
         for i in range(0, 20):
-            nodes1.append(road1.nodes[0][0])
+            nodes1.append(road1.nodes[0][i])
 
         nodes2 = []
 
         for i in range(0, 30):
-            nodes2.append(road1.nodes[0][0])
+            nodes2.append(road1.nodes[0][i])
 
         stats = {
             exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes],
@@ -177,17 +177,17 @@ class TestAnalytics(unittest.TestCase):
         nodes = []
 
         for i in range(0, 10):
-            nodes.append(road1.nodes[0][0])
+            nodes.append(road1.nodes[0][i])
 
         nodes1 = []
 
         for i in range(0, 20):
-            nodes1.append(road1.nodes[0][0])
+            nodes1.append(road1.nodes[0][i])
 
         nodes2 = []
 
         for i in range(0, 30):
-            nodes2.append(road1.nodes[0][0])
+            nodes2.append(road1.nodes[0][i])
 
         stats = {
             exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes1, nodes, nodes1, nodes1]},
@@ -217,17 +217,17 @@ class TestAnalytics(unittest.TestCase):
         nodes = []
 
         for i in range(0, 10):
-            nodes.append(road1.nodes[0][0])
+            nodes.append(road1.nodes[0][i])
 
         nodes1 = []
 
         for i in range(0, 20):
-            nodes1.append(road1.nodes[0][0])
+            nodes1.append(road1.nodes[0][i])
 
         nodes2 = []
 
         for i in range(0, 30):
-            nodes2.append(road1.nodes[0][0])
+            nodes2.append(road1.nodes[0][i])
 
         stats = {
             exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes, nodes, nodes1, nodes1]},

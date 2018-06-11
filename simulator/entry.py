@@ -41,7 +41,7 @@ class Entry(AbstractEntity):
                 for p in probas:
                     if draw <= p / 100:
                         path = [tmp for tmp in self.paths[p] if tmp.nodes[0] in self.nodes[i][0].successors][0]
-                        self.nodes[i][0].next_car = Car(path, self)
+                        self.nodes[i][0].next_car = Car(path, self, len(self.simulator.traffic_load))
                         self.to_spawn[i] -= 1
                         break
 

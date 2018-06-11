@@ -12,7 +12,9 @@ class TestRoad(unittest.TestCase):
         entry1 = Entry(simulator, 0, 1)
         entry2 = Entry(simulator, 0, 1)
         entry3 = Entry(simulator, 0, 1)
-        rpn = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (1, 0), Orientation.WEST: (1, 0)})
+        rpn = RightPriorityJunction(simulator,
+                                    {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (1, 0),
+                                     Orientation.WEST: (1, 0)})
         exit1 = Exit(simulator, 1)
 
         # road to south
@@ -42,9 +44,9 @@ class TestRoad(unittest.TestCase):
         entry2.paths[100] = p2
         entry3.paths[100] = p3
 
-        entry1.nodes[0][0].current_car = Car(entry1.paths[100], entry1)
-        entry2.nodes[0][0].current_car = Car(entry2.paths[100], entry2)
-        entry3.nodes[0][0].current_car = Car(entry3.paths[100], entry3)
+        entry1.nodes[0][0].current_car = Car(entry1.paths[100], entry1, 0)
+        entry2.nodes[0][0].current_car = Car(entry2.paths[100], entry2, 0)
+        entry3.nodes[0][0].current_car = Car(entry3.paths[100], entry3, 0)
 
         # Cars move from Entry to junction
         self.assertIsNotNone(entry1.nodes[0][0].current_car)
@@ -188,7 +190,9 @@ class TestRoad(unittest.TestCase):
         entry1 = Entry(simulator, 0, 1)
         entry2 = Entry(simulator, 0, 1)
 
-        rpn = RightPriorityJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1), Orientation.WEST: (1, 0)})
+        rpn = RightPriorityJunction(simulator,
+                                    {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1), Orientation.SOUTH: (0, 1),
+                                     Orientation.WEST: (1, 0)})
         exit1 = Exit(simulator, 1)
         exit2 = Exit(simulator, 1)
 
@@ -218,19 +222,21 @@ class TestRoad(unittest.TestCase):
         entry1.paths[100] = p1
         entry2.paths[100] = p2
 
-        entry1.nodes[0][0].current_car = Car(p1, entry1)
-        entry2.nodes[0][0].current_car = Car(p2, entry2)
+        entry1.nodes[0][0].current_car = Car(p1, entry1, 0)
+        entry2.nodes[0][0].current_car = Car(p2, entry2, 0)
 
         self.assertIsNotNone(entry1.nodes[0][0].current_car)
         self.assertIsNone(road1.nodes[0][0].current_car)
         self.assertIsNotNone(entry2.nodes[0][0].current_car)
         self.assertIsNone(road2.nodes[0][0].current_car)
         simulator.tick()
+        print(simulator.traffic_load)
         self.assertIsNone(entry1.nodes[0][0].current_car)
         self.assertIsNotNone(road1.nodes[0][0].current_car)
         self.assertIsNone(entry2.nodes[0][0].current_car)
         self.assertIsNotNone(road2.nodes[0][0].current_car)
         simulator.tick()
+        print(simulator.traffic_load)
         self.assertIsNone(road1.nodes[0][0].current_car)
         self.assertIsNotNone(road1.nodes[0][1].current_car)
         self.assertIsNone(road1.nodes[0][0].current_car)
@@ -238,11 +244,13 @@ class TestRoad(unittest.TestCase):
         self.assertIsNone(rpn.nodes[0][0].current_car)
 
         simulator.tick()
+        print(simulator.traffic_load)
         self.assertIsNotNone(road1.nodes[0][1].current_car)
         self.assertIsNone(road2.nodes[0][1].current_car)
         self.assertIsNotNone(rpn.nodes[0][0].current_car)
 
         simulator.tick()
+        print(simulator.traffic_load)
         self.assertIsNotNone(road1.nodes[0][1].current_car)
         self.assertIsNone(road2.nodes[0][1].current_car)
         self.assertIsNone(rpn.nodes[0][0].current_car)
@@ -250,18 +258,24 @@ class TestRoad(unittest.TestCase):
         self.assertIsNotNone(road4.nodes[0][0].current_car)
 
         simulator.tick()
+        print(simulator.traffic_load)
         self.assertIsNone(road1.nodes[0][1].current_car)
         self.assertIsNone(road2.nodes[0][1].current_car)
         self.assertIsNotNone(rpn.nodes[0][0].current_car)
         self.assertIsNone(road3.nodes[0][0].current_car)
         self.assertIsNone(road4.nodes[0][0].current_car)
+        self.assertIsNotNone(road4.nodes[0][1].current_car)
 
         simulator.tick()
+        print(simulator.traffic_load)
         self.assertIsNone(road1.nodes[0][1].current_car)
         self.assertIsNone(road2.nodes[0][1].current_car)
         self.assertIsNone(rpn.nodes[0][0].current_car)
-        self.assertIsNotNone(road3.nodes[0][0].current_car)
+        self.assertIsNotNone(road3.nodes[0][0].current_car), 0
         self.assertIsNone(road4.nodes[0][0].current_car)
+        self.assertIsNotNone(exit2.nodes[0][0].current_car)
+
+        print(simulator.traffic_load)
 
 
 if __name__ == '__main__':

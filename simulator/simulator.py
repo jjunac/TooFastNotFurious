@@ -8,6 +8,7 @@ class Simulator:
     def __init__(self):
         self.entities = []
         self.dependencies = {}
+        self.traffic_load = []
 
     def add_entities(self, entity):
         self.entities.append(entity)
@@ -17,6 +18,10 @@ class Simulator:
             e.compute_next()
         for e in self.entities:
             e.apply_next()
+        # print([n for n in self.get_nodes() if n.current_car is not None and type(n) is not Exit])
+        # print([n for n in self.get_nodes() if n.current_car is not None and type(n.entity) != Exit])
+        self.traffic_load.append(
+            len([n for n in self.get_nodes() if n.current_car is not None and type(n.entity) is not Exit]))
 
     def run(self, ticks):
         for _ in range(ticks):
