@@ -21,15 +21,19 @@ class Roundabout(AbstractEntity, ABC):
             ios[o.invert()] = io_roads[o]
             ios[o.left()] = (n_of_ways, 0)
             ios[o.right()] = (0, n_of_ways)
-            self.yields[o] = StopJunction(simulator, ios, o)
+            stop = StopJunction(simulator, ios, o)
+            self.yields[o] = stop
+            self.entities.append(stop)
         for o in self.yields.keys():
-            road = Road(simulator, self.INTERVAL, o, n_of_ways)
-            road.add_predecessor(o, self.yields[o])
-            self.yields[o].add_predecessor(o.left(), road)
+            road = Road(simulator, self.INTERVAL, o.invert(), n_of_ways)
+            road.add_predecessor(o.invert(), self.yields[o])
+            self.yields[o.left()].add_predecessor(o, road)
+            self.roads[o] = road
+            self.entities.append(road)
         super().__init__(simulator, self.get_nodes())
 
     def do_add_predecessor(self, orientation, predecessor):
-        self.yields[orientation].add_predecessor(orientation, predecessor)
+        self.yields[orientation.invert()].add_predecessor(orientation, predecessor)
 
     def get_end_of_predecessor(self, orientation):
         return self.predecessors[orientation].get_end(orientation)
@@ -45,19 +49,19 @@ class Roundabout(AbstractEntity, ABC):
                 n.apply_next()
 
     def get_start(self, orientation):
-        self.yields[orientation].get_start(orientation)
+        return self.yields[orientation].get_start(orientation)
 
     def get_end(self, orientation):
-        self.yields[orientation].get_end(orientation)
+        return self.yields[orientation].get_end(orientation)
 
     def is_dependency_satisfied(self, source):
         return True
 
     def get_nodes(self):
         nodes = [[] for _ in range(self.n_of_ways)]
-        for o in Orientation.values():
+        for o in self.yields.keys():
             for i in range(self.n_of_ways):
-                nodes[i].extend(self.yields[i])
-                nodes[i].extend(self.roads[i])
+                nodes[i].extend(self.yields[o].nodes[i])
+                nodes[i].extend(self.roads[o].nodes[i])
         return nodes
 

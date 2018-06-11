@@ -10,7 +10,7 @@ class TestRoundabout(unittest.TestCase):
     def test_a_roundabout_should_be_well_connected(self):
         simulator = Simulator()
         round = Roundabout(simulator, {Orientation.NORTH: (1, 1), Orientation.EAST: (1, 1),
-                                      Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, 2)
+                                      Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, 1)
         in_N = Road(simulator, 1, Orientation.NORTH, 1)
         in_E = Road(simulator, 1, Orientation.EAST, 1)
         in_S = Road(simulator, 1, Orientation.SOUTH, 1)
@@ -28,5 +28,7 @@ class TestRoundabout(unittest.TestCase):
         out_W.add_predecessor(Orientation.WEST, round)
         out_N.add_predecessor(Orientation.NORTH, round)
         out_E.add_predecessor(Orientation.EAST, round)
+
+        self.assertEqual({out_S.nodes[0][0], round.yields[Orientation.NORTH].nodes[0][1]}, set(round.yields[Orientation.NORTH].nodes[0][0].successors))
 
         
