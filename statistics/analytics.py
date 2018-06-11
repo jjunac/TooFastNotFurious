@@ -73,27 +73,25 @@ class Analytics:
                 index = len(val) / 2
                 path_lengths[entry] = (val[int(index) - 1] + val[int(index)]) / 2
 
-    def compute_stop_time(self):
+    def compute_delay_time_by_car(self):
         nodes = self.get_path_with_their_exit_nodes()
-        roads = {}
+        delay = {}
 
-        for key, value in nodes.items():
-            for entry, val in value.items():
+        for value in nodes.values():
+
+            for val in value.values():
+
                 for i in range(len(val)):
-                    c = Counter(val[i].visited_nodes)
-                    for k, v in dict(Counter(n for n in c.elements() if c[n] > 1)).items():
-                        if not (k.entity, val[i]) in roads:
-                            roads[(k.entity, val[i])] = []
+                    if len(val[i].visited_nodes) - len(val[i].original_path.nodes) != 0:
+                        if not val[i] in delay:
+                            delay[val[i]] = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
 
-                        roads[(k.entity, val[i])].append(v)
+        print(delay)
 
-        print(roads)
-
-        return roads
+        return delay
 
         #
         # for i in range(len(self.traffic_load)):
         #     for key, value in roads.items():
         #         if key[1].departure_tick >= i:
         #             print(value)
-
