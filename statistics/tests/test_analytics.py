@@ -299,6 +299,9 @@ class TestAnalytics(unittest.TestCase):
         car1 = Car(p2, entry1, 0)
         car2 = Car(p2, entry2, 0)
         car3 = Car(p2, entry3, 0)
+        car4 = Car(p2, entry1, 0)
+        car5 = Car(p2, entry2, 0)
+        car6 = Car(p2, entry3, 0)
 
         nodes = []
 
@@ -306,26 +309,31 @@ class TestAnalytics(unittest.TestCase):
             nodes.append(road1.nodes[0][i])
 
         car1.visited_nodes = nodes
-
+        car6.visited_nodes = nodes
         nodes1 = []
 
         for i in range(0, 20):
             nodes1.append(road1.nodes[0][i])
 
         car2.visited_nodes = nodes1
-
+        car4.visited_nodes = nodes1
         nodes2 = []
 
         for i in range(0, 30):
             nodes2.append(road1.nodes[0][i])
 
         car3.visited_nodes = nodes2
+        car5.visited_nodes = nodes2
 
         car1.original_path.nodes = nodes
         car2.original_path.nodes = nodes
         car3.original_path.nodes = nodes
+        car4.original_path.nodes = nodes
+        car5.original_path.nodes = nodes
+        car6.original_path.nodes = nodes
 
-        stats = {exit1: {(entry1, p1): [car1, car2, car3]}}
+        stats = {exit1: {(entry1, p1): [car1, car2, car3, car6]},
+                 exit2: {(entry2, p1): [car4, car5]}}
 
         a = Analytics([], [])
 
@@ -334,9 +342,14 @@ class TestAnalytics(unittest.TestCase):
         self.assertFalse(car1 in res)
         self.assertTrue(car2 in res)
         self.assertTrue(car3 in res)
+        self.assertTrue(car4 in res)
+        self.assertTrue(car5 in res)
+        self.assertFalse(car6 in res)
 
         self.assertEqual(10, res[car2])
         self.assertEqual(20, res[car3])
+        self.assertEqual(10, res[car4])
+        self.assertEqual(20, res[car5])
 
 
 if __name__ == '__main__':

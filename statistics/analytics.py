@@ -52,6 +52,8 @@ class Analytics:
 
     def compute_average(self, path_lengths):
         for entry, val in path_lengths.items():
+            print(val)
+            print(sum(val) / len(val))
             path_lengths[entry] = sum(val) / len(val)
 
     def compute_first_quartile(self, path_lengths):
