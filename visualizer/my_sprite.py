@@ -44,20 +44,17 @@ class CarSprite(MySprite):
     def __init__(self, pos, car, length=50, height=50, angle=0.0):
         super().__init__(pos, length, height, angle, random.choice(CAR_IMAGES))
         self.start_angle = self.angle
-        self.delta_angle = self.angle
         self.car = car
         self.destination = None
-        self.max_time = 10
+        self.max_time = 15
         self.current_time = 0
         self.delta = Point(0, 0)
         self.start = None
 
     def update(self, *args):
         if self.destination:
-            tick = args[0]
             self.current_time += 1
             if self.current_time >= self.max_time:
-                # print(self.rect, self.destination, self.xupdate)
                 self.current_time = 0
                 self.move_to(self.destination)
                 if self.destination != self.start:
@@ -65,7 +62,6 @@ class CarSprite(MySprite):
                     self.rotate(degrees)
                 self.destination = None
             else:
-                degrees = self.start_angle + self.delta_angle
                 self.rotate(self.start_angle)
                 point = self.delta * self.current_time + self.start
                 self.move_to(point)
@@ -79,7 +75,6 @@ class CarSprite(MySprite):
                                (self.destination.y - self.start.y) / self.max_time)
             degrees = self.good_angle(
                 -to_degrees(atan2(self.destination.y - self.start.y, self.destination.x - self.start.x)))
-            self.delta_angle = (degrees - self.good_angle(self.angle)) / self.max_time
             self.start_angle = degrees
 
     @staticmethod

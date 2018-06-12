@@ -3,7 +3,6 @@ from copy import copy
 import pygame
 from pygame.locals import *
 
-from shared import Orientation
 from simulator import Exit, Entry, RightPriorityJunction
 from simulator.road import Road
 from visualizer.junction import GraphicJunction
@@ -46,7 +45,6 @@ class Drawer:
                 predecessors = entity.predecessors.values()
                 successors = entity.successors.values()
                 if type(entity) is Road:
-                    entity: Road
                     res = pos.rotate_point(entity.orientation,
                                            Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
                     if not forward:
@@ -55,20 +53,9 @@ class Drawer:
                         pos, res = res, pos
                     roads.append(GraphicRoad(pos, res, entity, self.cell_length, self.cell_height))
                 elif type(entity) is RightPriorityJunction:
-                    entity: RightPriorityJunction
                     junction = GraphicJunction(pos, entity, self.cell_length, self.cell_height)
                     roads.append(junction)
-                    next_entities = []
-                    for value in entity.predecessors.values():
-                        end = [i for n in value.get_end(None) for i in n.successors]
-                        cell, pos = next(((cell, pos) for cell, pos in junction.node_pos if cell in end), None)
-                        if value not in visited:
-                            next_entities.append((value, pos, False))
-                    for value in entity.successors.values():
-                        start = [i for n in value.get_start(None) for i in n.predecessors]
-                        cell, pos = next(((cell, pos) for cell, pos in junction.node_pos if cell in start), None)
-                        if value not in visited:
-                            next_entities.append((value, pos, True))
+                    next_entities = self.get_correct_road_positions(entity, junction, visited)
                     stack.extend(next_entities)
                     visited.add(entity)
                     continue
@@ -79,6 +66,21 @@ class Drawer:
                 next_entities.extend([(r, res, True) for r in set(successors) - visited])
                 stack.extend(next_entities)
         return roads
+
+    @staticmethod
+    def get_correct_road_positions(entity, junction, visited):
+        next_entities = []
+        for value in entity.predecessors.values():
+            end = [i for n in value.get_end(None) for i in n.successors]
+            cell, pos = next(((cell, pos) for cell, pos in junction.node_pos if cell in end), None)
+            if value not in visited:
+                next_entities.append((value, pos, False))
+        for value in entity.successors.values():
+            start = [i for n in value.get_start(None) for i in n.predecessors]
+            cell, pos = next(((cell, pos) for cell, pos in junction.node_pos if cell in start), None)
+            if value not in visited:
+                next_entities.append((value, pos, True))
+        return next_entities
 
     def start_point(self, point, angle, iterations):
         res = []
@@ -102,7 +104,7 @@ class Drawer:
             car_updates += tick
             for graphic_road in graphic_roads:
                 graphic_road.draw(self.screen)
-            if car_updates >= 30:
+            if car_updates >= 20:
                 car_group.update(tick)
                 car_updates = 0
             car_group.draw(self.screen)
@@ -128,10 +130,3 @@ class Drawer:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.continue_drawing = 0
-
-
-def closest_orientation(angle_degrees):
-    angle_degrees = angle_degrees % 360
-    orientations = [(abs(o - angle_degrees), o) for o in Orientation]
-    orientations.append((360 - angle_degrees, Orientation.EAST))
-    return min(orientations)[1]
