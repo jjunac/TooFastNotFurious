@@ -9,12 +9,14 @@ class Junction(AbstractEntity, ABC):
 
     def __init__(self, simulator, io_roads):
         self.io_roads = io_roads
+
         n_ways_N = io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1]
         n_ways_S = io_roads[Orientation.SOUTH][0] + io_roads[Orientation.SOUTH][1]
         n_ways_E = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
         n_ways_W = io_roads[Orientation.WEST][0] + io_roads[Orientation.WEST][1]
         if (n_ways_N != n_ways_S and n_ways_N != 0 and n_ways_S != 0) or (n_ways_E != n_ways_W and n_ways_E != 0 and n_ways_W != 0):
                 raise RuntimeError("in/out of North/South and East/West must be coherent")
+
         self.size_north_south = max(n_ways_N, n_ways_S)
         self.size_east_west = max(n_ways_E, n_ways_W)
         super().__init__(simulator, [[Node(self) for i in range(self.size_north_south)] for j in range(self.size_east_west)])
