@@ -299,7 +299,7 @@ class TestTrafficLight (unittest.TestCase):
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.WEST, 1)
 
-        r2.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0])
+        r2.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0], 0)
 
         tl.add_predecessor(Orientation.NORTH, r1)
         tl.add_predecessor(Orientation.WEST, r2)

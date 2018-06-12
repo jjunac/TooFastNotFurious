@@ -88,7 +88,7 @@ class TestRoundabout(unittest.TestCase):
         out_N.add_predecessor(Orientation.NORTH, round)
         out_E.add_predecessor(Orientation.EAST, round)
 
-        in_N.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_N.nodes[0][0], out_S.nodes[0][0])), in_N.nodes[0][0])
+        in_N.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_N.nodes[0][0], out_S.nodes[0][0])), in_N.nodes[0][0], 0)
 
         simulator.tick()
         self.assertIsNotNone(round.yields[Orientation.SOUTH].nodes[0][1].current_car)
@@ -99,7 +99,7 @@ class TestRoundabout(unittest.TestCase):
 
         simulator.tick()
         self.assertIsNotNone(round.yields[Orientation.EAST].nodes[0][0].current_car)
-        in_W.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_W.nodes[0][0], out_S.nodes[0][0])), in_W.nodes[0][0])
+        in_W.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_W.nodes[0][0], out_S.nodes[0][0])), in_W.nodes[0][0], 0)
         simulator.tick()
         self.assertIsNotNone(round.yields[Orientation.EAST].nodes[1][0].current_car)
         self.assertIsNotNone(in_W.nodes[0][0].current_car)
@@ -112,7 +112,7 @@ class TestRoundabout(unittest.TestCase):
 
         simulator.tick()
         self.assertIsNotNone(round.yields[Orientation.NORTH].nodes[0][1].current_car)
-        in_S.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_S.nodes[0][0], out_E.nodes[0][0])), in_S.nodes[0][0])
+        in_S.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_S.nodes[0][0], out_E.nodes[0][0])), in_S.nodes[0][0], 0)
         simulator.tick()
         self.assertIsNotNone(round.yields[Orientation.NORTH].nodes[0][0].current_car)
         self.assertIsNotNone(in_S.nodes[0][0].current_car)
@@ -125,7 +125,7 @@ class TestRoundabout(unittest.TestCase):
 
         simulator.tick()
         self.assertIsNotNone(round.yields[Orientation.WEST].nodes[1][0].current_car)
-        in_E.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_E.nodes[0][0], out_S.nodes[0][0])), in_E.nodes[0][0])
+        in_E.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_E.nodes[0][0], out_S.nodes[0][0])), in_E.nodes[0][0], 0)
         simulator.tick()
         self.assertIsNotNone(round.yields[Orientation.WEST].nodes[0][0].current_car)
         self.assertIsNotNone(in_E.nodes[0][0].current_car)
@@ -138,7 +138,7 @@ class TestRoundabout(unittest.TestCase):
         
         simulator.tick()
         self.assertIsNotNone(round.yields[Orientation.SOUTH].nodes[0][0].current_car)
-        in_N.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0])
+        in_N.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0], 0)
         simulator.tick()
         self.assertIsNotNone(out_S.nodes[0][0].current_car)
         self.assertIsNotNone(in_N.nodes[0][0].current_car)

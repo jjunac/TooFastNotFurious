@@ -35,7 +35,6 @@ class Simulator:
     def generate_report(self):
         analytics = Analytics(self.entities, self.traffic_load)
         analytics.generate_report()
-        analytics.compute_delay_time_by_car()
 
     def get_nodes(self):
         return [n for e in self.entities for n in e.get_nodes()]
