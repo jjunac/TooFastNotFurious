@@ -1,7 +1,7 @@
 from math import ceil
 from collections import Counter
 
-from simulator import Exit, Road, Entry
+from simulator import Exit
 from statistics.report_generator import create_graphic_report_average_car_per_exit
 
 
@@ -30,8 +30,7 @@ class Analytics:
         create_graphic_report_average_car_per_exit(res_average, res_median, res_first_quartile, res_third_quartile,
                                                    self.traffic_load, expectancy_load)
 
-    @staticmethod
-    def compute_function_per_exit(fct, cars):
+    def compute_function_per_exit(self, fct, cars):
         result = {}
 
         for key, value in cars.items():
@@ -51,23 +50,19 @@ class Analytics:
 
         return result
 
-    @staticmethod
-    def compute_average(path_lengths):
+    def compute_average(self, path_lengths):
         for entry, val in path_lengths.items():
             path_lengths[entry] = sum(val) / len(val)
 
-    @staticmethod
-    def compute_first_quartile(path_lengths):
+    def compute_first_quartile(self, path_lengths):
         for entry, val in path_lengths.items():
             path_lengths[entry] = val[(ceil(len(val) / 4)) - 1]
 
-    @staticmethod
-    def compute_third_quartile(path_lengths):
+    def compute_third_quartile(self, path_lengths):
         for entry, val in path_lengths.items():
             path_lengths[entry] = val[(ceil((3 * len(val)) / 4)) - 1]
 
-    @staticmethod
-    def compute_median(path_lengths):
+    def compute_median(self, path_lengths):
         for entry, val in path_lengths.items():
             if len(val) % 2:
                 path_lengths[entry] = val[(ceil((len(val)) / 2)) - 1]
@@ -88,8 +83,6 @@ class Analytics:
                         if not val[i] in delay:
                             delay[val[i]] = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
 
-        # print(delay)
-
         return delay
 
     def compute_delay_time_expectancy_with_traffic_load(self, delay):
@@ -102,8 +95,6 @@ class Analytics:
                     if not i in graph:
                         graph[i] = []
                     graph[i].append(value)
-
-        # print(graph)
 
         esperance = {}
 

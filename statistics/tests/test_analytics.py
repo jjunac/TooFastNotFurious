@@ -89,8 +89,8 @@ class TestAnalytics(unittest.TestCase):
         entry2 = Entry(s, 0, 1)
         entry3 = Entry(s, 0, 1)
 
-        p1 = Path([0] * 6)
-        p2 = Path([0] * 8)
+        p1 = Path([])
+        p2 = Path([])
 
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
@@ -99,25 +99,35 @@ class TestAnalytics(unittest.TestCase):
 
         road1 = Road(s, 100, Orientation.SOUTH, 1)
 
+        car1 = Car(p2, entry1, 0)
+        car2 = Car(p2, entry2, 0)
+        car3 = Car(p2, entry3, 0)
+
         nodes = []
 
         for i in range(0, 10):
             nodes.append(road1.nodes[0][i])
+
+        car1.visited_nodes = nodes
 
         nodes1 = []
 
         for i in range(0, 20):
             nodes1.append(road1.nodes[0][i])
 
+        car2.visited_nodes = nodes1
+
         nodes2 = []
 
         for i in range(0, 30):
             nodes2.append(road1.nodes[0][i])
 
+        car3.visited_nodes = nodes2
+
         stats = {
-            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes1, nodes, nodes1, nodes1]},
-            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
-                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+            exit1: {(entry1, p1): [car1, car1, car1, car1, car1], (entry2, p2): [car2, car1, car2, car2]},
+            exit2: {(entry3, p1): [car2, car1, car3, car3],
+                    (entry3, p2): [car3, car3, car3, car1, car2]}}
 
         res = a.compute_function_per_exit(a.compute_average, stats)
 
@@ -129,8 +139,8 @@ class TestAnalytics(unittest.TestCase):
         entry2 = Entry(s, 0, 1)
         entry3 = Entry(s, 0, 1)
 
-        p1 = Path([0] * 6)
-        p2 = Path([0] * 8)
+        p1 = Path([])
+        p2 = Path([])
 
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
@@ -139,26 +149,35 @@ class TestAnalytics(unittest.TestCase):
 
         road1 = Road(s, 100, Orientation.SOUTH, 1)
 
+        car1 = Car(p2, entry1, 0)
+        car2 = Car(p2, entry2, 0)
+        car3 = Car(p2, entry3, 0)
+
         nodes = []
 
         for i in range(0, 10):
             nodes.append(road1.nodes[0][i])
+
+        car1.visited_nodes = nodes
 
         nodes1 = []
 
         for i in range(0, 20):
             nodes1.append(road1.nodes[0][i])
 
+        car2.visited_nodes = nodes1
+
         nodes2 = []
 
         for i in range(0, 30):
             nodes2.append(road1.nodes[0][i])
 
+        car3.visited_nodes = nodes2
+
         stats = {
-            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes],
-                    (entry2, p2): [nodes1, nodes, nodes1, nodes1]},
-            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
-                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+            exit1: {(entry1, p1): [car1, car1, car1, car1, car1], (entry2, p2): [car2, car1, car2, car2]},
+            exit2: {(entry3, p1): [car2, car1, car3, car3],
+                    (entry3, p2): [car3, car3, car3, car1, car2]}}
 
         res = a.compute_function_per_exit(a.compute_first_quartile, stats)
 
@@ -170,8 +189,8 @@ class TestAnalytics(unittest.TestCase):
         entry2 = Entry(s, 0, 1)
         entry3 = Entry(s, 0, 1)
 
-        p1 = Path([0] * 6)
-        p2 = Path([0] * 8)
+        p1 = Path([])
+        p2 = Path([])
 
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
@@ -180,25 +199,34 @@ class TestAnalytics(unittest.TestCase):
 
         road1 = Road(s, 100, Orientation.SOUTH, 1)
 
+        car1 = Car(p2, entry1, 0)
+        car2 = Car(p2, entry2, 0)
+        car3 = Car(p2, entry3, 0)
+
         nodes = []
 
         for i in range(0, 10):
             nodes.append(road1.nodes[0][i])
+
+        car1.visited_nodes = nodes
 
         nodes1 = []
 
         for i in range(0, 20):
             nodes1.append(road1.nodes[0][i])
 
+        car2.visited_nodes = nodes1
+
         nodes2 = []
 
         for i in range(0, 30):
             nodes2.append(road1.nodes[0][i])
 
+        car3.visited_nodes = nodes2
         stats = {
-            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes1, nodes, nodes1, nodes1]},
-            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
-                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+            exit1: {(entry1, p1): [car1, car1, car1, car1, car1], (entry2, p2): [car2, car1, car2, car2]},
+            exit2: {(entry3, p1): [car2, car1, car3, car3],
+                    (entry3, p2): [car3, car3, car3, car1, car2]}}
 
         res = a.compute_function_per_exit(a.compute_third_quartile, stats)
 
@@ -210,8 +238,8 @@ class TestAnalytics(unittest.TestCase):
         entry2 = Entry(s, 0, 1)
         entry3 = Entry(s, 0, 1)
 
-        p1 = Path([0] * 6)
-        p2 = Path([0] * 8)
+        p1 = Path([])
+        p2 = Path([])
 
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
@@ -220,25 +248,35 @@ class TestAnalytics(unittest.TestCase):
 
         road1 = Road(s, 100, Orientation.SOUTH, 1)
 
+        car1 = Car(p2, entry1, 0)
+        car2 = Car(p2, entry2, 0)
+        car3 = Car(p2, entry3, 0)
+
         nodes = []
 
         for i in range(0, 10):
             nodes.append(road1.nodes[0][i])
+
+        car1.visited_nodes = nodes
 
         nodes1 = []
 
         for i in range(0, 20):
             nodes1.append(road1.nodes[0][i])
 
+        car2.visited_nodes = nodes1
+
         nodes2 = []
 
         for i in range(0, 30):
             nodes2.append(road1.nodes[0][i])
 
+        car3.visited_nodes = nodes2
+
         stats = {
-            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes, nodes, nodes1, nodes1]},
-            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
-                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+            exit1: {(entry1, p1): [car1, car1, car1, car1, car1], (entry2, p2): [car1, car1, car2, car2]},
+            exit2: {(entry3, p1): [car2, car1, car3, car3],
+                    (entry3, p2): [car3, car3, car3, car1, car2]}}
 
         res = a.compute_function_per_exit(a.compute_median, stats)
 
