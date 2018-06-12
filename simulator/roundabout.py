@@ -43,12 +43,12 @@ class Roundabout(AbstractEntity, ABC):
         return self.predecessors[orientation].get_end(orientation)
 
     def compute_next(self):
-        for e in self.entities:
-            e.compute_next()
+        # Everything is handle by simulator since entities are also reference there
+        pass
 
     def apply_next(self):
-        for e in self.entities:
-            e.apply_next()
+        # Everything is handle by simulator since entities are also reference there
+        pass
 
     def get_start(self, orientation):
         return self.yields[orientation].get_start(orientation)
@@ -60,5 +60,6 @@ class Roundabout(AbstractEntity, ABC):
         return True
 
     def get_nodes(self):
-        return [n for e in self.entities for n in e.get_nodes()]
+        # Everything is handle by simulator since entities are also reference there
+        return []
 

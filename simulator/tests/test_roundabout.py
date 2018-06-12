@@ -66,7 +66,7 @@ class TestRoundabout(unittest.TestCase):
         self.assertEqual({round.yields[Orientation.EAST].nodes[1][0]}, set(in_W.nodes[0][0].successors))
         self.assertEqual({round.yields[Orientation.EAST].nodes[0][0]}, set(out_E.nodes[0][0].predecessors))
 
-    def test_a_car_in_the_roundabout_should_have_priority_when_(self):
+    def test_a_car_in_the_roundabout_should_have_priority_when_it_is_in_a_roundabout(self):
         simulator = Simulator()
         round = Roundabout(simulator, {Orientation.NORTH: (1, 1), Orientation.EAST: (1, 1),
                                       Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, 1)
@@ -95,7 +95,57 @@ class TestRoundabout(unittest.TestCase):
         simulator.tick()
         self.assertIsNotNone(round.roads[Orientation.SOUTH].nodes[0][0].current_car)
         simulator.tick()
-        self.assertIsNotNone(round.roads[Orientation.SOUTH].nodes[1][0].current_car)
+        self.assertIsNotNone(round.roads[Orientation.SOUTH].nodes[0][1].current_car)
+
+        simulator.tick()
+        self.assertIsNotNone(round.yields[Orientation.EAST].nodes[0][0].current_car)
+        in_W.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), in_W.nodes[0][0], out_S.nodes[0][0])), in_W.nodes[0][0])
+        simulator.tick()
+        self.assertIsNotNone(round.yields[Orientation.EAST].nodes[1][0].current_car)
+        self.assertIsNotNone(in_W.nodes[0][0].current_car)
+        simulator.tick()
+        self.assertIsNotNone(round.roads[Orientation.EAST].nodes[0][0].current_car)
+        self.assertIsNotNone(in_W.nodes[0][0].current_car)
+        in_W.nodes[0][0].current_car = None
+        simulator.tick()
+        self.assertIsNotNone(round.roads[Orientation.EAST].nodes[0][1].current_car)
+
+        simulator.tick()
+        self.assertIsNotNone(round.yields[Orientation.NORTH].nodes[0][1].current_car)
+        in_S.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), in_S.nodes[0][0], out_E.nodes[0][0])), in_S.nodes[0][0])
+        simulator.tick()
+        self.assertIsNotNone(round.yields[Orientation.NORTH].nodes[0][0].current_car)
+        self.assertIsNotNone(in_S.nodes[0][0].current_car)
+        simulator.tick()
+        self.assertIsNotNone(round.roads[Orientation.NORTH].nodes[0][0].current_car)
+        self.assertIsNotNone(in_S.nodes[0][0].current_car)
+        in_S.nodes[0][0].current_car = None
+        simulator.tick()
+        self.assertIsNotNone(round.roads[Orientation.NORTH].nodes[0][1].current_car)
+
+        simulator.tick()
+        self.assertIsNotNone(round.yields[Orientation.WEST].nodes[1][0].current_car)
+        in_E.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), in_E.nodes[0][0], out_S.nodes[0][0])), in_E.nodes[0][0])
+        simulator.tick()
+        self.assertIsNotNone(round.yields[Orientation.WEST].nodes[0][0].current_car)
+        self.assertIsNotNone(in_E.nodes[0][0].current_car)
+        simulator.tick()
+        self.assertIsNotNone(round.roads[Orientation.WEST].nodes[0][0].current_car)
+        self.assertIsNotNone(in_E.nodes[0][0].current_car)
+        in_E.nodes[0][0].current_car = None
+        simulator.tick()
+        self.assertIsNotNone(round.roads[Orientation.WEST].nodes[0][1].current_car)
+        
+        simulator.tick()
+        self.assertIsNotNone(round.yields[Orientation.SOUTH].nodes[0][0].current_car)
+        in_N.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0])
+        simulator.tick()
+        self.assertIsNotNone(out_S.nodes[0][0].current_car)
+        self.assertIsNotNone(in_N.nodes[0][0].current_car)
+        simulator.tick()
+        self.assertIsNone(out_S.nodes[0][0].current_car)
+        self.assertIsNone(in_N.nodes[0][0].current_car)
+
 
 
 
