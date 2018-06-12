@@ -26,7 +26,7 @@ class Analytics:
         res_median = self.compute_function_per_exit(self.compute_median, cars)
         res_first_quartile = self.compute_function_per_exit(self.compute_first_quartile, cars)
         res_third_quartile = self.compute_function_per_exit(self.compute_third_quartile, cars)
-        expectancy_load = self.compute_delay_time_expectancy_with_traffic_load(self.compute_delay_time_by_car())
+        expectancy_load = self.compute_delay_time_expectancy_with_traffic_load(self.compute_delay_time_by_car(cars))
         create_graphic_report_average_car_per_exit(res_average, res_median, res_first_quartile, res_third_quartile,
                                                    self.traffic_load, expectancy_load)
 
@@ -70,8 +70,8 @@ class Analytics:
                 index = len(val) / 2
                 path_lengths[entry] = (val[int(index) - 1] + val[int(index)]) / 2
 
-    def compute_delay_time_by_car(self):
-        nodes = self.get_path_with_their_exit_nodes()
+    def compute_delay_time_by_car(self, nodes):
+
         delay = {}
 
         for value in nodes.values():
@@ -96,7 +96,7 @@ class Analytics:
                         graph[i] = []
                     graph[i].append(value)
 
-        esperance = {}
+        expectancy = {}
 
         for entry, val in graph.items():
 
@@ -105,7 +105,7 @@ class Analytics:
             for key, value in dict(Counter(val)).items():
                 proba += (key * key) * (value / len(val))
 
-            if not entry in esperance:
-                esperance[entry] = proba
+            if not entry in expectancy:
+                expectancy[entry] = proba
 
-        return esperance
+        return expectancy
