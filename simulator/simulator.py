@@ -8,6 +8,7 @@ class Simulator:
     def __init__(self):
         self.entities = []
         self.dependencies = {}
+        self.weights = {}
 
     def add_entities(self, entity):
         self.entities.append(entity)

@@ -162,9 +162,9 @@ class TestStopJunction(unittest.TestCase):
         out_W.add_predecessor(Orientation.WEST, stop)
         out_N.add_predecessor(Orientation.NORTH, stop)
 
-        in_N.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), in_N.nodes[0][0], out_S.nodes[0][0])), in_N.nodes[0][0])
-        in_E.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), in_E.nodes[0][0], out_W.nodes[0][0])), in_E.nodes[0][0])
-        in_S.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), in_S.nodes[0][0], out_N.nodes[0][0])), in_S.nodes[0][0])
+        in_N.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_N.nodes[0][0], out_S.nodes[0][0])), in_N.nodes[0][0])
+        in_E.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_E.nodes[0][0], out_W.nodes[0][0])), in_E.nodes[0][0])
+        in_S.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_S.nodes[0][0], out_N.nodes[0][0])), in_S.nodes[0][0])
 
         self.assertIsNotNone(in_N.nodes[0][0].current_car)
         self.assertIsNotNone(in_E.nodes[0][0].current_car)
@@ -317,11 +317,11 @@ class TestStopJunction(unittest.TestCase):
         out_N.add_predecessor(Orientation.NORTH, stop)
 
         in_N.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0])
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0])
         in_E.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_E.nodes[0][0], out_N.nodes[0][0])), in_E.nodes[0][0])
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_E.nodes[0][0], out_N.nodes[0][0])), in_E.nodes[0][0])
         in_S.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_S.nodes[0][0], out_S.nodes[0][0])), in_S.nodes[0][0])
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_S.nodes[0][0], out_S.nodes[0][0])), in_S.nodes[0][0])
 
         self.assertIsNotNone(in_N.nodes[0][0].current_car)
         self.assertIsNotNone(in_E.nodes[0][0].current_car)

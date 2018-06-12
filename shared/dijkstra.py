@@ -1,6 +1,6 @@
 from shared import DijkstraHeap
 
-def dijkstra(nodes, source):
+def dijkstra(nodes, weights, source):
     '''
     Computes all shortest paths frm source to all other vertices.
     Returns a dictionary 'path' such that if path[n] = u, u is the
@@ -26,8 +26,8 @@ def dijkstra(nodes, source):
         for a in n.successors:
             if a not in known:
                 # TODO change weight of edges to improve the path
-                if values[n] + 1 < values[a]:
-                    values[a] = values[n] + 1
+                if values[n] + weights[(n, a)] < values[a]:
+                    values[a] = values[n] + weights[(n, a)]
                     # heap.decreaseKey(a)
                     path[a] = n
     return path
@@ -40,5 +40,5 @@ def reconstruct_path(paths, source, destination):
         d = paths[d]
     return reversed(nodes)
 
-def dijkstra_with_path(nodes, source, destination):
-    return reconstruct_path(dijkstra(nodes, source), source, destination)
+def dijkstra_with_path(nodes, weights, source, destination):
+    return reconstruct_path(dijkstra(nodes, weights, source), source, destination)

@@ -34,6 +34,7 @@ class Exit(AbstractEntity):
         for i in range(self.n_of_ways):
             link(end[i], start[i])
             self.simulator.dependencies[(end[i], start[i])] = [start[i]]
+            self.simulator.weights[(end[i], start[i])] = 1
 
     def get_start(self, orientation):
         return [row[0] for row in self.nodes]

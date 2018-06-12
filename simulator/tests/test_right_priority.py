@@ -130,9 +130,9 @@ class TestRightPriority(unittest.TestCase):
         rp.add_predecessor(Orientation.SOUTH, r3)
         r4.add_predecessor(Orientation.EAST, rp)
 
-        r1.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), r1.nodes[0][0], r4.nodes[0][0])), r1)
-        r2.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), r2.nodes[0][0], r4.nodes[0][0])), r2)
-        r3.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), r3.nodes[0][0], r4.nodes[0][0])), r3)
+        r1.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, r1.nodes[0][0], r4.nodes[0][0])), r1)
+        r2.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, r2.nodes[0][0], r4.nodes[0][0])), r2)
+        r3.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, r3.nodes[0][0], r4.nodes[0][0])), r3)
 
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
@@ -452,8 +452,8 @@ class TestRightPriority(unittest.TestCase):
         self.assertEqual({exitW.nodes[1][0], exitN.nodes[0][0]}, set(rp.nodes[1][0].successors))
         self.assertEqual({rp.nodes[1][0], exitN.nodes[1][0]}, set(rp.nodes[1][1].successors))
 
-        entryW.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), entryW.nodes[0][0], exitW.nodes[0][0])), entryW.nodes[0][0])
-        entryN.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), entryN.nodes[0][0], exitN.nodes[0][0])), entryW.nodes[0][0])
+        entryW.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entryW.nodes[0][0], exitW.nodes[0][0])), entryW.nodes[0][0])
+        entryN.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entryN.nodes[0][0], exitN.nodes[0][0])), entryW.nodes[0][0])
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)
