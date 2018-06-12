@@ -10,6 +10,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
             crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.rawgit.com/chartjs/chartjs-plugin-zoom/d5caf691/chartjs-plugin-zoom.js"></script>
     <title>Too Fast and not Furious</title>
 </head>
 
@@ -29,44 +32,73 @@
             </h1>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 pt-4">
-            <canvas id="myChart" width="500" height="200"></canvas>
+    <div class="row pt-4">
+        <h3>Overview</h3>
+        <div class="w-100"></div>
+        <div class="col-12 pt-4" style="background-color: #f0f0f0; border-radius: 10px">
+            <canvas id="ReportChart" width="100" height="60"></canvas>
         </div>
     </div>
 
 </div>
 
-
 </body>
 
 <script type="text/javascript">
-    var ctx = document.getElementById("myChart");
+    var reportChart = document.getElementById("ReportChart");
 
-    var data = {
+     var data = {
         type: 'bar',
         data: {
 
-            labels: {{ labels | safe }},
-    datasets: [{
-        label: 'Nb cars',
-        data: {{ data }},
-        backgroundColor: {{ backgroundColor | safe }}
+            labels: {{labels | safe}},
+            datasets: [{
+                label: 'Average',
+                data: {{data_average | safe}},
+                backgroundColor: 'rgba(175, 104, 211, 0.7)'
+            },
+                {
+                    label: 'Median',
+                    data: {{data_median | safe}},
+                    backgroundColor: 'rgba(98, 101, 238, 0.7)'
+                },
+                {
+                    label: 'First Quartile',
+                    data: {{data_first_q | safe}},
+                    backgroundColor: 'rgba(85, 63, 126, 0.7)'
+                },
+                {
+                    label: 'Third Quartile',
+                    data: {{data_third_q | safe}},
+                    backgroundColor: 'rgba(29, 18, 168, 0.7)'
+                }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
                 }]
             },
-    options: {
-        responsive: true,
-            scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
+            pan: {
+                enabled: true,
+                mode: 'xy'
+            },
+            zoom: {
+                enabled: true,
+                mode: 'xy',
+                limits: {
+                    max: 10,
+                    min: 0.5
                 }
-            }]
+            }
         }
     }
-        }
 
-    var myChart = new Chart(ctx, data);
+    var ReportChart = new Chart(reportChart, data);
 </script>
+
 
 </html>

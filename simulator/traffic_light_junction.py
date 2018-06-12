@@ -15,7 +15,7 @@ class TrafficLightJunction(Junction):
 
     def apply_next(self):
         super().apply_next()
-        self.counter += 1
+        self.counter = (self.counter + 1) % self.total_time
 
     def is_dependency_satisfied(self, source):
         if source in self.get_nodes():

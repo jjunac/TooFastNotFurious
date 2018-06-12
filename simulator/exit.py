@@ -22,8 +22,11 @@ class Exit(AbstractEntity):
                         self.departure_counter[departure] = 0
                     self.departure_counter[departure] += 1
                     self.outflow += 1
-                    self.statistics.add_travel_time(n.current_car.departure, n.current_car.original_path,
-                                                    n.current_car.time)
+                    # We don't want the exit node in the list of visited nodes
+                    del (n.current_car.visited_nodes[-1])
+                    self.statistics.add_car_travel(n.current_car.departure,
+                                                   n.current_car.original_path,
+                                                   n.current_car.visited_nodes)
 
     def do_add_predecessor(self, orientation, predecessor):
         end = predecessor.get_end(orientation.invert())
@@ -43,8 +46,8 @@ class Exit(AbstractEntity):
             for n in row:
                 n.apply_next()
 
-    def get_stats(self):
-        return self.statistics.list_time_travel
+    def get_cars_arrived(self):
+        return self.statistics.list_cars_arrived
 
     def is_dependency_satisfied(self, source):
         return True

@@ -1,7 +1,8 @@
 import unittest
 
-from statistics.average import compute_average_per_exit
-from simulator import Path, Simulator, Entry, Exit
+from shared import Orientation
+from simulator import Path, Simulator, Entry, Exit, Road
+from statistics.analytics import Analytics
 from statistics.report_generator import create_graphic_report_average_car_per_exit
 
 from pathlib import Path as P
@@ -28,12 +29,36 @@ class TestReportGenerator(unittest.TestCase):
         exit1 = Exit(s, 1)
         exit2 = Exit(s, 1)
 
-        stats = {exit1: {(entry1, p1): [6, 8, 5, 9], (entry2, p2): [8, 4, 6, 23, 7]},
-                 exit2: {(entry3, p1): [5, 6, 5, 7, 2], (entry3, p2): [8, 7, 4, 56, 6, 7]}}
+        a = Analytics({})
 
-        res = compute_average_per_exit(stats)
+        road1 = Road(s, 100, Orientation.SOUTH, 1)
 
-        create_graphic_report_average_car_per_exit(res)
+        nodes = []
+
+        for i in range(0, 10):
+            nodes.append(road1.nodes[0][0])
+
+        nodes1 = []
+
+        for i in range(0, 20):
+            nodes1.append(road1.nodes[0][0])
+
+        nodes2 = []
+
+        for i in range(0, 30):
+            nodes2.append(road1.nodes[0][0])
+
+        stats = {
+            exit1: {(entry1, p1): [nodes, nodes, nodes, nodes, nodes], (entry2, p2): [nodes, nodes1, nodes1, nodes1]},
+            exit2: {(entry3, p1): [nodes1, nodes, nodes2, nodes2],
+                    (entry3, p2): [nodes2, nodes2, nodes2, nodes, nodes1]}}
+
+        res_a = a.compute_function_per_exit(a.compute_average, stats)
+        res_m = a.compute_function_per_exit(a.compute_median, stats)
+        res_first_q = a.compute_function_per_exit(a.compute_median, stats)
+        res_third_q = a.compute_function_per_exit(a.compute_median, stats)
+
+        create_graphic_report_average_car_per_exit(res_a, res_m, res_first_q, res_third_q)
 
         now = datetime.datetime.now()
 
@@ -47,22 +72,28 @@ class TestReportGenerator(unittest.TestCase):
 
         parser.feed(list(p.glob('./*.html'))[0].read_text())
 
-        script = parser.scripts[3]
+        script = parser.scripts[5]
 
         script = re.search(r'var data = .*$', script, re.DOTALL).group()
 
         script = script.replace('var data =', '')
 
-        j = json.loads(demjson.encode(demjson.decode(script.replace('var myChart = new Chart(ctx, data);', ''))))
+        j = json.loads(
+            demjson.encode(
+                demjson.decode(script.replace('var ReportChart = new Chart(reportChart, data);', ''))))
 
         labels_expected = ['exit1 - entry1', 'exit1 - entry2', 'exit2 - entry3']
-        data_expected = [7.0, 9.6, 10.272727272727273]
-        pattern = 'rgba\([1-2]?[0-9]?[0-9], [1-2]?[0-9]?[0-9], [1-2]?[0-9]?[0-9], 0.7\)'
+        data_average = [10, 17.5, 23.333333333333332]
+        data_median = [10, 20.0, 30]
+        data_f_q = [10, 20.0, 30]
+        data_t_q = [10, 20.0, 30]
 
         for i in range(len(j['data']['labels'])):
             self.assertTrue(labels_expected[i] in j['data']['labels'])
-            self.assertTrue(data_expected[i] in j['data']['datasets'][0]['data'])
-            self.assertRegex(j['data']['datasets'][0]['backgroundColor'][i], pattern)
+            self.assertTrue(data_average[i] in j['data']['datasets'][0]['data'])
+            self.assertTrue(data_median[i] in j['data']['datasets'][1]['data'])
+            self.assertTrue(data_f_q[i] in j['data']['datasets'][2]['data'])
+            self.assertTrue(data_t_q[i] in j['data']['datasets'][3]['data'])
 
         list(p.glob('./' + name))[0].unlink()
 

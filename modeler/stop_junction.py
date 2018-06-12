@@ -10,6 +10,7 @@ class StopJunction(JunctionNode):
 
     def with_stop_on_road(self, orientation):
         self.stop_orientation = orientation
+        return self
 
     def build(self, sim):
         return simulator.StopJunction(sim, self.get_io_roads(), self.stop_orientation)
