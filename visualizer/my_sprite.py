@@ -3,7 +3,7 @@ from math import atan2
 
 import pygame
 
-from resources import ROAD_IMAGE, CAR_IMAGES
+from resources import ROAD_IMAGE, CAR_IMAGES, STOP_IMAGE
 from visualizer.point import Point, to_degrees
 
 
@@ -37,6 +37,11 @@ class MySprite(pygame.sprite.Sprite):
 class RoadSprite(MySprite):
     def __init__(self, pos, length=50, height=50, angle=0.0):
         super().__init__(pos, length, height, angle, ROAD_IMAGE)
+
+
+class StopSprite(MySprite):
+    def __init__(self, pos, length=50, height=50, angle=0.0):
+        super().__init__(pos, length, height, angle, STOP_IMAGE)
 
 
 class CarSprite(MySprite):
