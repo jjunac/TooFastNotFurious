@@ -4,7 +4,8 @@ from random import randrange
 import datetime
 
 
-def create_graphic_report_average_car_per_exit(stats_average, stats_median, stats_first_Q, stats_third_Q):
+def create_graphic_report_average_car_per_exit(stats_average, stats_median, stats_first_Q, stats_third_Q, traffic_load,
+                                               expectancy_load):
     env = Environment(
         loader=PackageLoader('statistics', 'templates'),
         autoescape=select_autoescape(['html'])
@@ -24,6 +25,12 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
     stats_string_first_q = {}
     stats_string_third_q = {}
 
+    dataset_average = []
+    dataset_median = []
+    dataset_first_q = []
+    dataset_third_q = []
+    labels = []
+
     create_state_string(stats_average, stats_string_average, entry_name, exit_name, explored_entry, explored_exit,
                         index_entry, index_exit)
     create_state_string(stats_median, stats_string_median, entry_name, exit_name, explored_entry, explored_exit,
@@ -32,12 +39,6 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
                         index_entry, index_exit)
     create_state_string(stats_third_Q, stats_string_third_q, entry_name, exit_name, explored_entry, explored_exit,
                         index_entry, index_exit)
-
-    dataset_average = []
-    dataset_median = []
-    dataset_first_q = []
-    dataset_third_q = []
-    labels = []
 
     for key, value in stats_string_average.items():
 
@@ -49,6 +50,14 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
     fill_dataset(dataset_first_q, stats_string_first_q)
     fill_dataset(dataset_third_q, stats_string_third_q)
 
+    data_traffic_load = []
+    data_delay_time = []
+
+    for i in range(len(traffic_load)):
+        data_traffic_load.append({'x': i, 'y': traffic_load[i]})
+        if i in expectancy_load:
+            data_delay_time.append({'x': i, 'y': expectancy_load[i]})
+
     template = env.get_template('bar_chart_average_template.html')
 
     now = datetime.datetime.now()
@@ -57,7 +66,8 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
 
     with open(name, 'w+') as file:
         file.write(template.render(labels=labels, data_average=dataset_average, data_median=dataset_median,
-                                   data_first_q=dataset_first_q, data_third_q=dataset_third_q))
+                                   data_first_q=dataset_first_q, data_third_q=dataset_third_q,
+                                   data_traffic_load=data_traffic_load, data_delay_time=data_delay_time))
 
 
 def fill_dataset(dataset, stats_string):

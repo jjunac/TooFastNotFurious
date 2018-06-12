@@ -26,7 +26,9 @@ class Analytics:
         res_median = self.compute_function_per_exit(self.compute_median, cars)
         res_first_quartile = self.compute_function_per_exit(self.compute_first_quartile, cars)
         res_third_quartile = self.compute_function_per_exit(self.compute_third_quartile, cars)
-        create_graphic_report_average_car_per_exit(res_average, res_median, res_first_quartile, res_third_quartile)
+        expectancy_load = self.compute_delay_time_expectancy_with_traffic_load(self.compute_delay_time_by_car())
+        create_graphic_report_average_car_per_exit(res_average, res_median, res_first_quartile, res_third_quartile,
+                                                   self.traffic_load, expectancy_load)
 
     @staticmethod
     def compute_function_per_exit(fct, cars):
@@ -86,11 +88,11 @@ class Analytics:
                         if not val[i] in delay:
                             delay[val[i]] = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
 
-        print(delay)
-        self.compute_delay_time_with_traffic_load(delay)
+        # print(delay)
+
         return delay
 
-    def compute_delay_time_with_traffic_load(self, delay):
+    def compute_delay_time_expectancy_with_traffic_load(self, delay):
 
         graph = {}
 
@@ -101,30 +103,18 @@ class Analytics:
                         graph[i] = []
                     graph[i].append(value)
 
-        print(graph)
-        self.compute_esperance(graph)
-
-
-    def compute_esperance(self, tab):
+        # print(graph)
 
         esperance = {}
 
-        for entry, val in tab.items():
+        for entry, val in graph.items():
 
-            # print(dict(Counter(i)))
             proba = 0
-            # print("coucou", i)
+
             for key, value in dict(Counter(val)).items():
-                proba += (key * key) * (value/len(val))
+                proba += (key * key) * (value / len(val))
 
             if not entry in esperance:
                 esperance[entry] = proba
 
-
-        print(esperance)
-
-        #
-        # for i in range(len(self.traffic_load)):
-        #     for key, value in roads.items():
-        #         if key[1].departure_tick >= i:
-        #             print(value)
+        return esperance

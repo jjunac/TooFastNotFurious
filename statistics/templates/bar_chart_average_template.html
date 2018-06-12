@@ -40,6 +40,14 @@
         </div>
     </div>
 
+    <div class="row pt-4">
+        <h3>Overview</h3>
+        <div class="w-100"></div>
+        <div class="col-12 pt-4" style="background-color: #f0f0f0; border-radius: 10px">
+            <canvas id="TrafficLoad" width="100" height="60"></canvas>
+        </div>
+    </div>
+
 </div>
 
 </body>
@@ -100,5 +108,96 @@
     var ReportChart = new Chart(reportChart, data);
 </script>
 
+<script type="text/javascript">
+    var reportChart = document.getElementById("TrafficLoad");
+
+    var data = {
+        type: 'scatter',
+        data: {
+
+            datasets: [{
+                label: 'Delay Time',
+                data: {{data_delay_time |safe}},
+                yAxisID: 'y-axis-1',
+                showLine: true,
+                fill: false,
+                borderColor: 'rgba(175, 104, 211, 0.7)'
+            },
+                {
+                    label: 'Traffic Load',
+                    data: {{data_traffic_load |safe}},
+                    yAxisID: 'y-axis-2',
+                    showLine: true,
+                    fill: true,
+                    borderColor: 'rgba(0, 104, 211, 0.7)'
+                }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        suggestedMin: 0
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time',
+                        fontSize: 16
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        suggestedMin: 0,
+                        beginAtZero: true
+                    },
+                    type: 'linear',
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Expectancy E(T²)',
+                        fontSize: 16
+                    },
+                    position: 'left',
+                    id: 'y-axis-1'
+                },
+                    {
+                        type: 'linear',
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Number of cars',
+                            fontSize: 16
+                        },
+                        position: 'right',
+                        id: 'y-axis-2',
+                        gridLines: {drawOnChartArea: false}
+                    }]
+            },
+            pan: {
+                enabled: true,
+                mode: 'xy',
+                rangeMin: {
+                    // Format of min pan range depends on scale type
+                    x: 0,
+                    y: 0
+                }
+            },
+            zoom: {
+                enabled: true,
+                mode: 'xy',
+                rangeMin: {
+                    // Format of min zoom range depends on scale type
+                    x: 0,
+                    y: 0
+                },
+                limits: {
+                    max: 10,
+                    min: 0.5
+                }
+            }
+        }
+    }
+    var TrafficLoad = new Chart(reportChart, data);
+</script>
 
 </html>
