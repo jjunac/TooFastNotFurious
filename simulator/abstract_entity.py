@@ -12,8 +12,11 @@ class AbstractEntity(ABC):
 
     def add_predecessor(self, orientation, predecessor):
         self.predecessors[orientation.invert()] = predecessor
-        predecessor.successors[orientation] = self
+        predecessor._add_successor(orientation, self)
         self.do_add_predecessor(orientation, predecessor)
+
+    def _add_successor(self, orientation, successor):
+        self.successors[orientation] = successor
 
     def get_cars(self):
         return [n.current_car for n in self.get_nodes() if n.current_car]
