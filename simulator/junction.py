@@ -9,12 +9,14 @@ class Junction(AbstractEntity, ABC):
 
     def __init__(self, simulator, io_roads):
         self.io_roads = io_roads
+
         n_ways_N = io_roads[Orientation.NORTH][0] + io_roads[Orientation.NORTH][1]
         n_ways_S = io_roads[Orientation.SOUTH][0] + io_roads[Orientation.SOUTH][1]
         n_ways_E = io_roads[Orientation.EAST][0] + io_roads[Orientation.EAST][1]
         n_ways_W = io_roads[Orientation.WEST][0] + io_roads[Orientation.WEST][1]
         if (n_ways_N != n_ways_S and n_ways_N != 0 and n_ways_S != 0) or (n_ways_E != n_ways_W and n_ways_E != 0 and n_ways_W != 0):
                 raise RuntimeError("in/out of North/South and East/West must be coherent")
+
         self.size_north_south = max(n_ways_N, n_ways_S)
         self.size_east_west = max(n_ways_E, n_ways_W)
         super().__init__(simulator, [[Node(self) for i in range(self.size_north_south)] for j in range(self.size_east_west)])
@@ -26,6 +28,7 @@ class Junction(AbstractEntity, ABC):
         for i in range(len(start)):
             link(end[i], start[i])
             self.simulator.dependencies[(end[i], start[i])] = self.get_nodes()
+            self.simulator.weights[(end[i], start[i])] = 2
 
     def get_end_of_predecessor(self, orientation):
         return self.predecessors[orientation].get_end(orientation)
@@ -69,24 +72,28 @@ class Junction(AbstractEntity, ABC):
             for x in range(1, in_S + 1):
                 link(self.nodes[y][-x], self.nodes[y + 1][-x])
                 self.simulator.dependencies[(self.nodes[y][-x], self.nodes[y + 1][-x])] = [self.nodes[y + 1][-x]]
+                self.simulator.weights[(self.nodes[y][-x], self.nodes[y + 1][-x])] = 2
         # from W to E
         in_W = self.io_roads[Orientation.WEST][0]
         for y in range(in_W):
             for x in range(len(self.nodes[y]) - 1):
                 link(self.nodes[y][x], self.nodes[y][x + 1])
                 self.simulator.dependencies[(self.nodes[y][x], self.nodes[y][x + 1])] = [self.nodes[y][x + 1]]
+                self.simulator.weights[(self.nodes[y][x], self.nodes[y][x + 1])] = 2
         # from N to S
         in_N = self.io_roads[Orientation.NORTH][0]
         for y in range(1, len(self.nodes)):
             for x in range(in_N):
                 link(self.nodes[y][x], self.nodes[y - 1][x])
                 self.simulator.dependencies[(self.nodes[y][x], self.nodes[y - 1][x])] = [self.nodes[y - 1][x]]
+                self.simulator.weights[(self.nodes[y][x], self.nodes[y - 1][x])] = 2
         # from E to W
         in_E = self.io_roads[Orientation.EAST][0]
         for y in range(1, in_E + 1):
             for x in range(1, len(self.nodes[-y])):
                 link(self.nodes[-y][x], self.nodes[-y][x - 1])
                 self.simulator.dependencies[(self.nodes[-y][x], self.nodes[-y][x - 1])] = [self.nodes[-y][x - 1]]
+                self.simulator.weights[(self.nodes[-y][x], self.nodes[-y][x - 1])] = 2
 
     @abstractmethod
     def is_dependency_satisfied(self, source):

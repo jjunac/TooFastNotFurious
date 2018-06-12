@@ -49,6 +49,5 @@ class MyTestCase(unittest.TestCase):
 
         # TODO continue test
 
-
 if __name__ == '__main__':
     unittest.main()

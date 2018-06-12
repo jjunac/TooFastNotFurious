@@ -9,6 +9,7 @@ class Simulator:
         self.entities = []
         self.dependencies = {}
         self.traffic_load = []
+        self.weights = {}
 
     def add_entities(self, entity):
         self.entities.append(entity)

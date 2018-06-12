@@ -130,9 +130,9 @@ class TestRightPriority(unittest.TestCase):
         rp.add_predecessor(Orientation.SOUTH, r3)
         r4.add_predecessor(Orientation.EAST, rp)
 
-        r1.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), r1.nodes[0][0], r4.nodes[0][0])), r1, 0)
-        r2.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), r2.nodes[0][0], r4.nodes[0][0])), r2, 0)
-        r3.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), r3.nodes[0][0], r4.nodes[0][0])), r3, 0)
+        r1.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, r1.nodes[0][0], r4.nodes[0][0])), r1, 0)
+        r2.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, r2.nodes[0][0], r4.nodes[0][0])), r2, 0)
+        r3.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, r3.nodes[0][0], r4.nodes[0][0])), r3, 0)
 
         simulator.tick()
         self.assertIsNotNone(r1.nodes[0][0].current_car)
@@ -327,29 +327,43 @@ class TestRightPriority(unittest.TestCase):
         self.assertEqual(len(rp.get_start(Orientation.EAST)), 3)
         self.assertEqual(len(rp.get_start(Orientation.WEST)), 2)
 
-    @unittest.skip("Idk what is going on")
-    def test_should_create_intern_mesh_when_junction_is_created(self):
+    def test_should_create_intern_mesh_when_a_2_3_junction_is_created(self):
         simulator = Simulator()
         dictionnary = {Orientation.NORTH: (3, 2), Orientation.EAST: (3, 2), Orientation.SOUTH: (2, 3), Orientation.WEST: (2, 3)}
 
-        # FIXME
-
         rp = RightPriorityJunction(simulator, dictionnary)
 
-        for i in range( rp.size_north_south ):
-            for j in range( rp.size_east_west ):
-                if i < dictionnary[Orientation.NORTH][1] :
-                    if j!=0:
-                        self.assertIn(rp.nodes[j-1][i], rp.nodes[j][i].successors)
-                else:
-                    if j != rp.size_north_south-1:
-                        self.assertIn(rp.nodes[j+1][i], rp.nodes[j][i].successors)
-                if j < dictionnary[Orientation.EAST][0]:
-                    if i != rp.size_north_south-1:
-                        self.assertIn(rp.nodes[j][i+1], rp.nodes[j][i].successors)
-                else:
-                    if i != 0:
-                        self.assertIn(rp.nodes[j][i-1], rp.nodes[j][i].successors)
+        self.assertEquals({rp.nodes[0][1]}, set(rp.nodes[0][0].successors))
+        self.assertEquals({rp.nodes[0][2]}, set(rp.nodes[0][1].successors))
+        self.assertEquals({rp.nodes[0][3]}, set(rp.nodes[0][2].successors))
+        self.assertEquals({rp.nodes[0][4], rp.nodes[1][3]}, set(rp.nodes[0][3].successors))
+        self.assertEquals({rp.nodes[1][4]}, set(rp.nodes[0][4].successors))
+
+        self.assertEquals({rp.nodes[0][0], rp.nodes[1][1]}, set(rp.nodes[1][0].successors))
+        self.assertEquals({rp.nodes[0][1], rp.nodes[1][2]}, set(rp.nodes[1][1].successors))
+        self.assertEquals({rp.nodes[0][2], rp.nodes[1][3]}, set(rp.nodes[1][2].successors))
+        self.assertEquals({rp.nodes[2][3], rp.nodes[1][4]}, set(rp.nodes[1][3].successors))
+        self.assertEquals({rp.nodes[2][4]}, set(rp.nodes[1][4].successors))
+
+        self.assertEquals({rp.nodes[1][0]}, set(rp.nodes[2][0].successors))
+        self.assertEquals({rp.nodes[1][1], rp.nodes[2][0]}, set(rp.nodes[2][1].successors))
+        self.assertEquals({rp.nodes[1][2], rp.nodes[2][1]}, set(rp.nodes[2][2].successors))
+        self.assertEquals({rp.nodes[3][3], rp.nodes[2][2]}, set(rp.nodes[2][3].successors))
+        self.assertEquals({rp.nodes[3][4], rp.nodes[2][3]}, set(rp.nodes[2][4].successors))
+
+        self.assertEquals({rp.nodes[2][0]}, set(rp.nodes[3][0].successors))
+        self.assertEquals({rp.nodes[2][1], rp.nodes[3][0]}, set(rp.nodes[3][1].successors))
+        self.assertEquals({rp.nodes[2][2], rp.nodes[3][1]}, set(rp.nodes[3][2].successors))
+        self.assertEquals({rp.nodes[4][3], rp.nodes[3][2]}, set(rp.nodes[3][3].successors))
+        self.assertEquals({rp.nodes[4][4], rp.nodes[3][3]}, set(rp.nodes[3][4].successors))
+
+        self.assertEquals({rp.nodes[3][0]}, set(rp.nodes[4][0].successors))
+        self.assertEquals({rp.nodes[3][1], rp.nodes[4][0]}, set(rp.nodes[4][1].successors))
+        self.assertEquals({rp.nodes[3][2], rp.nodes[4][1]}, set(rp.nodes[4][2].successors))
+        self.assertEquals({rp.nodes[4][2]}, set(rp.nodes[4][3].successors))
+        self.assertEquals({rp.nodes[4][3]}, set(rp.nodes[4][4].successors))
+
+
 
     def test_should_create_intern_mesh_when_a_3_3_junction_is_created(self):
         simulator = Simulator()
@@ -438,8 +452,8 @@ class TestRightPriority(unittest.TestCase):
         self.assertEqual({exitW.nodes[1][0], exitN.nodes[0][0]}, set(rp.nodes[1][0].successors))
         self.assertEqual({rp.nodes[1][0], exitN.nodes[1][0]}, set(rp.nodes[1][1].successors))
 
-        entryW.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), entryW.nodes[0][0], exitW.nodes[0][0])), entryW.nodes[0][0], 0)
-        entryN.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), entryN.nodes[0][0], exitN.nodes[0][0])), entryW.nodes[0][0], 0)
+        entryW.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entryW.nodes[0][0], exitW.nodes[0][0])), entryW.nodes[0][0], 0)
+        entryN.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entryN.nodes[0][0], exitN.nodes[0][0])), entryW.nodes[0][0], 0)
 
         simulator.tick()
         self.assertIsNotNone(entryN.nodes[0][0].current_car)

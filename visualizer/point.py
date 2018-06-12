@@ -8,11 +8,19 @@ class Point:
         self.x = round(x)
         self.y = round(y)
 
+    def __getitem__(self, item):
+        if item == 0:
+            return self.x
+        elif item == 1:
+            return self.y
+        else:
+            raise Exception
+
     def __add__(self, other):
-        return Point(self.x + other.x, self.y + other.y)
+        return Point(self.x + other[0], self.y + other[1])
 
     def __sub__(self, other):
-        point = Point(self.x - other.x, self.y - other.y)
+        point = Point(self.x - other[0], self.y - other[1])
         return point
 
     def __mul__(self, other):
@@ -26,8 +34,8 @@ class Point:
 
     def rotate_point(self, degree_angle, point):
         radian_angle = to_radians(degree_angle)
-        return Point(cos(radian_angle) * (point.x - self.x) - sin(radian_angle) * (point.y - self.y) + self.x,
-                     sin(radian_angle) * (point.x - self.x) + cos(radian_angle) * (point.y - self.y) + self.y)
+        return Point(cos(radian_angle) * (point[0] - self.x) - sin(radian_angle) * (point[1] - self.y) + self.x,
+                     sin(radian_angle) * (point[0] - self.x) + cos(radian_angle) * (point[1] - self.y) + self.y)
 
     def __eq__(self, o):
         return isclose(o.x, self.x, abs_tol=1e-09) and isclose(o.y, self.y, abs_tol=1e-09)

@@ -13,7 +13,10 @@ def main():
     s.add_node(entry1)
     exit1 = exit_node()
     s.add_node(exit1)
-    junction = right_priority()
+    junction = traffic_light()
+    junction.set_state1_orientations(Orientation.EAST, Orientation.WEST).with_timer(5)
+    junction.set_state2_orientations(Orientation.SOUTH).with_timer(5)
+    junction.with_interval(2)
     s.add_node(junction)
 
     s.add_road(entry1.connect(Orientation.WEST).to(junction).with_length(10))
@@ -25,7 +28,7 @@ def main():
     s.add_path(entry2.to(exit1).with_proportion(100))
     s.add_path(entry3.to(exit1).with_proportion(100))
 
-    s.run_graphical_for(400)
+    s.run_for(400)
 
 
 if __name__ == '__main__':

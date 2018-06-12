@@ -76,13 +76,13 @@ class TestTrafficLight (unittest.TestCase):
         out_E.add_predecessor(Orientation.EAST, tl)
 
         in_N.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0], 0)
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0], 0)
         in_E.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_E.nodes[0][0], out_N.nodes[0][0])), in_E.nodes[0][0], 0)
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_E.nodes[0][0], out_N.nodes[0][0])), in_E.nodes[0][0], 0)
         in_S.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_S.nodes[0][0], out_E.nodes[0][0])), in_S.nodes[0][0], 0)
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_S.nodes[0][0], out_E.nodes[0][0])), in_S.nodes[0][0], 0)
         in_W.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_W.nodes[0][0], out_S.nodes[0][0])), in_W.nodes[0][0], 0)
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_W.nodes[0][0], out_S.nodes[0][0])), in_W.nodes[0][0], 0)
 
         self.assertIsNotNone(in_N.nodes[0][0].current_car)
         self.assertIsNotNone(in_E.nodes[0][0].current_car)
@@ -288,4 +288,75 @@ class TestTrafficLight (unittest.TestCase):
         self.assertIsNone(tl.nodes[0][0].current_car)
         self.assertIsNotNone(r3.nodes[0][0].current_car)
 
+    def test_a_car_should_move_forward_when_light_goes_from_red_to_green(self):
+        simulator = Simulator()
+
+        tl = TrafficLightJunction(simulator,
+                                  {Orientation.NORTH: (0, 1), Orientation.EAST: (1, 0), Orientation.SOUTH: (1, 0),
+                                   Orientation.WEST: (0, 1)},
+                                  [Orientation.SOUTH], 1, [Orientation.EAST], 1, 2)
+        r1 = Road(simulator, 1, Orientation.NORTH, 1)
+        r2 = Road(simulator, 1, Orientation.WEST, 1)
+        r3 = Road(simulator, 1, Orientation.WEST, 1)
+
+        r2.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0])
+
+        tl.add_predecessor(Orientation.NORTH, r1)
+        tl.add_predecessor(Orientation.WEST, r2)
+        r3.add_predecessor(Orientation.WEST, tl)
+
+        # Red for 2t
+        simulator.tick()
+        self.assertEqual(1, tl.counter)
+        self.assertIsNone(r1.nodes[0][0].current_car)
+        self.assertIsNotNone(r2.nodes[0][0].current_car)
+        self.assertIsNone(tl.nodes[0][0].current_car)
+        self.assertIsNone(r3.nodes[0][0].current_car)
+
+        # Red for 1t
+        simulator.tick()
+        self.assertEqual(2, tl.counter)
+        self.assertIsNone(r1.nodes[0][0].current_car)
+        self.assertIsNotNone(r2.nodes[0][0].current_car)
+        self.assertIsNone(tl.nodes[0][0].current_car)
+        self.assertIsNone(r3.nodes[0][0].current_car)
+
+        # Green
+        simulator.tick()
+        self.assertEqual(3, tl.counter)
+        self.assertIsNone(r1.nodes[0][0].current_car)
+        self.assertIsNotNone(r2.nodes[0][0].current_car)
+        self.assertIsNone(tl.nodes[0][0].current_car)
+        self.assertIsNone(r3.nodes[0][0].current_car)
+
+        # Green
+        simulator.tick()
+        self.assertEqual(4, tl.counter)
+        self.assertIsNone(r1.nodes[0][0].current_car)
+        self.assertIsNone(r2.nodes[0][0].current_car)
+        self.assertIsNotNone(tl.nodes[0][0].current_car)
+        self.assertIsNone(r3.nodes[0][0].current_car)
+
+    def test_a_traffic_light_should_restart_after_a_full_rotation(self):
+        simulator = Simulator()
+
+        tl = TrafficLightJunction(simulator,
+                                  {Orientation.NORTH: (0, 1), Orientation.EAST: (1, 0), Orientation.SOUTH: (1, 0),
+                                   Orientation.WEST: (0, 1)},
+                                  [Orientation.SOUTH], 1, [Orientation.EAST], 1, 1)
+        self.assertEqual(0, tl.counter)
+        simulator.tick()
+        self.assertEqual(1, tl.counter)
+        simulator.tick()
+        self.assertEqual(2, tl.counter)
+        simulator.tick()
+        self.assertEqual(3, tl.counter)
+        simulator.tick()
+        self.assertEqual(0, tl.counter)
+        simulator.tick()
+        self.assertEqual(1, tl.counter)
+        simulator.tick()
+        self.assertEqual(2, tl.counter)
+        simulator.tick()
+        self.assertEqual(3, tl.counter)
 

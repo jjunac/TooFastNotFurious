@@ -37,9 +37,9 @@ class TestRoad(unittest.TestCase):
         exit1.add_predecessor(Orientation.EAST, road4)
         road4.add_predecessor(Orientation.EAST, rpn)
 
-        p1 = Path(dijkstra_with_path(simulator.get_nodes(), entry1.nodes[0][0], exit1.nodes[0][0]))
-        p2 = Path(dijkstra_with_path(simulator.get_nodes(), entry2.nodes[0][0], exit1.nodes[0][0]))
-        p3 = Path(dijkstra_with_path(simulator.get_nodes(), entry3.nodes[0][0], exit1.nodes[0][0]))
+        p1 = Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entry1.nodes[0][0], exit1.nodes[0][0]))
+        p2 = Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entry2.nodes[0][0], exit1.nodes[0][0]))
+        p3 = Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entry3.nodes[0][0], exit1.nodes[0][0]))
         entry1.paths[100] = p1
         entry2.paths[100] = p2
         entry3.paths[100] = p3
@@ -220,8 +220,8 @@ class TestRoad(unittest.TestCase):
         exit2.add_predecessor(Orientation.SOUTH, road4)
         road4.add_predecessor(Orientation.SOUTH, rpn)
 
-        p1 = Path(dijkstra_with_path(simulator.get_nodes(), entry1.nodes[0][0], exit1.nodes[0][0]))
-        p2 = Path(dijkstra_with_path(simulator.get_nodes(), entry2.nodes[0][0], exit2.nodes[0][0]))
+        p1 = Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entry1.nodes[0][0], exit1.nodes[0][0]))
+        p2 = Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, entry2.nodes[0][0], exit2.nodes[0][0]))
 
         entry1.paths[100] = p1
         entry2.paths[100] = p2
