@@ -8,6 +8,8 @@ class Simulator:
     def __init__(self):
         self.entities = []
         self.dependencies = {}
+        self.traffic_load = []
+        self.weights = {}
 
     def add_entities(self, entity):
         self.entities.append(entity)
@@ -17,6 +19,9 @@ class Simulator:
             e.compute_next()
         for e in self.entities:
             e.apply_next()
+
+        self.traffic_load.append(
+            len([n for n in self.get_nodes() if n.current_car is not None and type(n.entity) is not Exit]))
 
     def run(self, ticks):
         for _ in range(ticks):
@@ -28,7 +33,7 @@ class Simulator:
         drawing.draw()
 
     def generate_report(self):
-        analytics = Analytics(self.entities)
+        analytics = Analytics(self.entities, self.traffic_load)
         analytics.generate_report()
 
     def get_nodes(self):

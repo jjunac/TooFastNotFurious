@@ -15,7 +15,7 @@ class TestTrafficLight (unittest.TestCase):
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.WEST, 1)
 
-        r1.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0])
+        r1.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0], 0)
 
         tl.add_predecessor(Orientation.NORTH, r1)
         tl.add_predecessor(Orientation.WEST, r2)
@@ -76,13 +76,13 @@ class TestTrafficLight (unittest.TestCase):
         out_E.add_predecessor(Orientation.EAST, tl)
 
         in_N.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0])
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_N.nodes[0][0], out_W.nodes[0][0])), in_N.nodes[0][0], 0)
         in_E.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_E.nodes[0][0], out_N.nodes[0][0])), in_E.nodes[0][0])
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_E.nodes[0][0], out_N.nodes[0][0])), in_E.nodes[0][0], 0)
         in_S.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_S.nodes[0][0], out_E.nodes[0][0])), in_S.nodes[0][0])
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_S.nodes[0][0], out_E.nodes[0][0])), in_S.nodes[0][0], 0)
         in_W.nodes[0][0].current_car = Car(
-            Path(dijkstra_with_path(simulator.get_nodes(), in_W.nodes[0][0], out_S.nodes[0][0])), in_W.nodes[0][0])
+            Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, in_W.nodes[0][0], out_S.nodes[0][0])), in_W.nodes[0][0], 0)
 
         self.assertIsNotNone(in_N.nodes[0][0].current_car)
         self.assertIsNotNone(in_E.nodes[0][0].current_car)
@@ -268,7 +268,7 @@ class TestTrafficLight (unittest.TestCase):
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.WEST, 1)
 
-        r1.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0])
+        r1.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0], 0)
 
         tl.add_predecessor(Orientation.NORTH, r1)
         tl.add_predecessor(Orientation.WEST, r2)
@@ -299,7 +299,7 @@ class TestTrafficLight (unittest.TestCase):
         r2 = Road(simulator, 1, Orientation.WEST, 1)
         r3 = Road(simulator, 1, Orientation.WEST, 1)
 
-        r2.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0])
+        r2.nodes[0][0].current_car = Car(Path([tl.nodes[0][0], r3.nodes[0][0]]), r1.nodes[0][0], 0)
 
         tl.add_predecessor(Orientation.NORTH, r1)
         tl.add_predecessor(Orientation.WEST, r2)

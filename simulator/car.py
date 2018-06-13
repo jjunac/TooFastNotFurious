@@ -5,11 +5,12 @@ from simulator.path import Path
 
 class Car:
 
-    def __init__(self, path, departure):
+    def __init__(self, path, departure, departure_tick):
         self.path = Path(copy(path.nodes))
         self.original_path = path
         self.departure = departure
         self.visited_nodes = []
+        self.departure_tick = departure_tick
 
     def get_next_node(self):
         return self.path.next_node()
