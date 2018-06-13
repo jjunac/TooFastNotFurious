@@ -39,7 +39,7 @@ class Analytics:
             for entry, val in value.items():
                 if not entry[0] in path_lengths:
                     path_lengths[entry[0]] = []
-                # print(val)
+
                 for i in range(len(val)):
                     path_lengths[entry[0]].append(len(val[i].visited_nodes))
                     path_lengths[entry[0]].sort()
