@@ -87,7 +87,7 @@ class TestStopJunction(unittest.TestCase):
     def test_a_car_should_leave_priority_when_it_is_at_a_stop_and_there_are_another_cars_on_the_left_and_on_the_right(self):
         simulator = Simulator()
         stop = StopJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1),
-                                      Orientation.SOUTH: (1, 0), Orientation.WEST: (1, 0)}, Orientation.EAST)
+                                      Orientation.SOUTH: (1, 0), Orientation.WEST: (1, 0)}, Orientation.WEST)
         r1 = Road(simulator, 1, Orientation.NORTH, 1)
         r2 = Road(simulator, 1, Orientation.EAST, 1)
         r3 = Road(simulator, 1, Orientation.SOUTH, 1)
@@ -147,7 +147,7 @@ class TestStopJunction(unittest.TestCase):
             self):
         simulator = Simulator()
         stop = StopJunction(simulator, {Orientation.NORTH: (1, 1), Orientation.EAST: (1, 1),
-                                        Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, Orientation.EAST)
+                                        Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, Orientation.WEST)
         in_N = Road(simulator, 1, Orientation.NORTH, 1)
         in_E = Road(simulator, 1, Orientation.EAST, 1)
         in_S = Road(simulator, 1, Orientation.SOUTH, 1)
@@ -301,7 +301,7 @@ class TestStopJunction(unittest.TestCase):
             self):
         simulator = Simulator()
         stop = StopJunction(simulator, {Orientation.NORTH: (1, 1), Orientation.EAST: (1, 1),
-                                        Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, Orientation.EAST)
+                                        Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, Orientation.WEST)
         in_N = Road(simulator, 1, Orientation.NORTH, 1)
         in_E = Road(simulator, 1, Orientation.EAST, 1)
         in_S = Road(simulator, 1, Orientation.SOUTH, 1)
@@ -433,7 +433,7 @@ class TestStopJunction(unittest.TestCase):
     def test_stop_should_be_respected_when_there_are_2_entries_and_2_exits_and_cars_go_in_the_same_direction(self):
         simulator = Simulator()
         stop = StopJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1),
-                                        Orientation.SOUTH: (1, 0), Orientation.WEST: (0, 1)}, Orientation.SOUTH)
+                                        Orientation.SOUTH: (1, 0), Orientation.WEST: (0, 1)}, Orientation.NORTH)
         in_N = Road(simulator, 1, Orientation.NORTH, 1)
         in_S = Road(simulator, 1, Orientation.SOUTH, 1)
         out_E = Road(simulator, 1, Orientation.EAST, 1)
@@ -471,7 +471,7 @@ class TestStopJunction(unittest.TestCase):
     def test_stop_should_be_respected_when_there_are_2_entries_and_2_exits_and_cars_go_in_different_directions(self):
         simulator = Simulator()
         stop = StopJunction(simulator, {Orientation.NORTH: (1, 0), Orientation.EAST: (0, 1),
-                                        Orientation.SOUTH: (1, 0), Orientation.WEST: (0, 1)}, Orientation.SOUTH)
+                                        Orientation.SOUTH: (1, 0), Orientation.WEST: (0, 1)}, Orientation.NORTH)
         in_N = Road(simulator, 1, Orientation.NORTH, 1)
         in_S = Road(simulator, 1, Orientation.SOUTH, 1)
         out_E = Road(simulator, 1, Orientation.EAST, 1)
