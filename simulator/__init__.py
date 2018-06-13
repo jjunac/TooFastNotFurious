@@ -6,6 +6,7 @@ from simulator.node import Node
 from simulator.path import Path
 from simulator.right_priority_junction import RightPriorityJunction
 from simulator.road import Road
+from simulator.roundabout import Roundabout
 from simulator.simulator import *
 from simulator.statistics import Statistics
 from simulator.stop_junction import StopJunction

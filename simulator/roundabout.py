@@ -1,7 +1,7 @@
 from abc import ABC
 
-from shared import Orientation
-from simulator import StopJunction, Road
+from simulator.stop_junction import StopJunction
+from simulator.road import Road
 from simulator.abstract_entity import AbstractEntity
 
 
