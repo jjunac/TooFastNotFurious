@@ -38,7 +38,6 @@ class Drawer:
         stack = [(start, first_point, True)]
         visited = set()
         roads = []
-        nodes = []
         while stack:
             entity, pos, forward = stack.pop()
             res = copy(pos)
@@ -54,7 +53,7 @@ class Drawer:
                         pos, res = res, pos
                     roads.append(GraphicRoad(pos, res, entity, self.cell_length, self.cell_height))
                 elif type(entity) is RightPriorityJunction:
-                    junction = GraphicJunction(pos, entity, self.cell_length, self.cell_height)
+                    junction = GraphicJunction(pos, entity, self.cell_length, self.cell_height, roads[-1].entity)
                     roads.append(junction)
                     next_entities = self.get_correct_road_positions(entity, junction, visited)
                     stack.extend(next_entities)

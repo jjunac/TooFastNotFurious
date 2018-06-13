@@ -1,6 +1,7 @@
 import pygame
 from pygame.sprite import RenderClear
 
+from shared import Orientation
 from simulator.junction import Junction
 from simulator.right_priority_junction import RightPriorityJunction
 from simulator.stop_junction import StopJunction
@@ -11,7 +12,7 @@ from visualizer.point import Point
 
 class GraphicJunction:
 
-    def __init__(self, position, junction, cell_length=30, cell_height=30):
+    def __init__(self, position: Point, junction, cell_length=30, cell_height=30, previous_road=None):
         super().__init__()
         self.position = position
         self.group = RenderClear()
@@ -24,6 +25,10 @@ class GraphicJunction:
         if isinstance(self.entity, Junction):
             surface = pygame.Surface((self.cell_length, self.cell_height))
             surface.fill((29, 17, 17))
+            if previous_road.orientation == Orientation.NORTH and self.entity.size_north_south - previous_road.n_of_ways > 0:
+                self.position = self.position - ((self.entity.size_north_south - 1) * cell_height, 0)
+            elif previous_road.orientation == Orientation.WEST and self.entity.size_east_west - previous_road.n_of_ways > 0:
+                self.position = self.position - (0, (self.entity.size_east_west - 1) * cell_height)
             for i in range(len(self.entity.nodes)):
                 for j in range(len(self.entity.nodes[i])):
                     point = self.position + Point(j * self.cell_length, -i * self.cell_height)
