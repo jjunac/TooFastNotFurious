@@ -20,6 +20,7 @@ class Analytics:
 
         return stats
 
+
     def generate_report(self):
         cars = self.get_path_with_their_exit_nodes()
 
@@ -111,3 +112,16 @@ class Analytics:
                 expectancy[entry] = proba
 
         return expectancy
+
+    def __consommation_function(self, v0, v1):
+        return 2 * v1 + v0
+
+    def compute_consommation_by_car(self, nodes):
+        conso = {}
+        for value in nodes.values():
+            for val in value.values():
+                for i in range(len(val)):
+                    v0 = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
+                    v1 = len(val[i].original_path.nodes)
+                    conso[val[i]] = self.__consommation_function(v0, v1)
+        return conso
