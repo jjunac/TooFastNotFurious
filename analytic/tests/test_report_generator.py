@@ -115,7 +115,8 @@ class TestReportGenerator(unittest.TestCase):
 
         res = a.compute_delay_time_expectancy_with_traffic_load(delay)
 
-        create_graphic_report_average_car_per_exit(res_overview[0], res_overview[1], res_overview[2], res_overview[3], t_load, res)
+        create_graphic_report_average_car_per_exit(res_overview[0], res_overview[1], res_overview[2], res_overview[3],
+                                                   t_load, res)
 
         now = datetime.datetime.now()
 
@@ -140,15 +141,17 @@ class TestReportGenerator(unittest.TestCase):
                 demjson.decode(script.replace('var ReportChart = new Chart(reportChart, data);', ''))))
 
         labels_expected = ['exit1 - entry1', 'exit1 - entry2', 'exit2 - entry3']
-        data_average = [10, 17.5, 23.333333333333332]
+        data_average = [10, 18, 23]
         data_median = [10, 20.0, 30]
         data_f_q = [10, 10, 20]
         data_t_q = [10, 20.0, 30]
 
+        self.assertEqual(3, len(j['data']['datasets'][0]['data']))
+
         for i in range(len(j['data']['labels'])):
             with self.subTest(i=i):
                 self.assertTrue(labels_expected[i] in j['data']['labels'])
-                self.assertTrue(data_average[i] in j['data']['datasets'][0]['data'])
+                self.assertTrue(round(j['data']['datasets'][0]['data'][i]) in data_average)
                 self.assertTrue(data_median[i] in j['data']['datasets'][1]['data'])
                 self.assertTrue(data_f_q[i] in j['data']['datasets'][2]['data'])
                 self.assertTrue(data_t_q[i] in j['data']['datasets'][3]['data'])
@@ -170,7 +173,7 @@ class TestReportGenerator(unittest.TestCase):
 
         for i in range(len(t_load)):
             with self.subTest(i=i):
-                self.assertTrue({'x':i, 'y':t_load[i]} in j["data"]["datasets"][1]["data"])
+                self.assertTrue({'x': i, 'y': t_load[i]} in j["data"]["datasets"][1]["data"])
 
         list(p.glob('./' + name))[0].unlink()
 

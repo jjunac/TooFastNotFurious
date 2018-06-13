@@ -131,7 +131,14 @@ class TestAnalytics(unittest.TestCase):
 
         res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 17.5}, exit2: {entry3: 23.333333333333332}}, res[0])
+        self.assertTrue(exit1 in res[0])
+        self.assertTrue(exit2 in res[0])
+        self.assertTrue(entry1 in res[0][exit1])
+        self.assertTrue(entry2 in res[0][exit1])
+        self.assertTrue(entry3 in res[0][exit2])
+        self.assertEqual(10, res[0][exit1][entry1])
+        self.assertEqual(17.5, res[0][exit1][entry2])
+        self.assertAlmostEqual(23.33, res[0][exit2][entry3], delta=0.1)
 
     def test_should_compute_first_quartile_for_exit_nodes(self):
         s = Simulator()
@@ -450,9 +457,6 @@ class TestAnalytics(unittest.TestCase):
         self.assertEqual(250, res[8])
         self.assertAlmostEqual(300, res[22], delta=0.1)
         self.assertEqual(400, res[28])
-
-
-
 
 
 if __name__ == '__main__':
