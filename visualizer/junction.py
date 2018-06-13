@@ -1,8 +1,9 @@
+from abc import ABC
+
 import pygame
 from pygame.sprite import RenderClear
 
 from shared import Orientation
-from simulator.junction import Junction
 from simulator.right_priority_junction import RightPriorityJunction
 from simulator.stop_junction import StopJunction
 from simulator.traffic_light_junction import TrafficLightJunction
@@ -10,7 +11,7 @@ from visualizer.my_sprite import MySprite, StopSprite
 from visualizer.point import Point
 
 
-class GraphicJunction:
+class GraphicJunction(ABC):
 
     def __init__(self, position: Point, junction, cell_length=30, cell_height=30, previous_road=None):
         super().__init__()
@@ -22,7 +23,6 @@ class GraphicJunction:
         self.angle = 0
         self.lights = [[], []]
         self.node_pos = []
-        if isinstance(self.entity, Junction):
             surface = pygame.Surface((self.cell_length, self.cell_height))
             surface.fill((29, 17, 17))
             if self.entity.size_east_west > 1 or self.entity.size_north_south > 1:
@@ -87,3 +87,6 @@ class GraphicJunction:
 
     def draw(self, surface):
         self.group.draw(surface)
+
+
+class GraphicRightPriority(GraphicJunction):
