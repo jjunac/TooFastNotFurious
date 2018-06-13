@@ -41,7 +41,7 @@ class TestRoadRightPriorities(unittest.TestCase):
         tl.set_state2_orientations(Orientation.SOUTH).with_timer(7)
         tl.with_interval(4)
         s.add_node(tl)
-        st = stop().with_stop_on_road(Orientation.SOUTH)
+        st = stop().with_stop_on_road(Orientation.WEST)
         s.add_node(st)
 
         s.add_road(entry1.connect(Orientation.EAST).to(rp).with_length(2))
