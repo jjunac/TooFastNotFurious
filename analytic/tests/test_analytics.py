@@ -522,7 +522,6 @@ class TestAnalytics(unittest.TestCase):
         self.assertEqual(40, res[car5])
         self.assertEqual(40, res[car6])
 
-        print("coucou")
 
 if __name__ == '__main__':
     unittest.main()
