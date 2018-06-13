@@ -2,8 +2,8 @@ import unittest
 
 from shared import Orientation
 from simulator import Path, Simulator, Entry, Exit, Road, Car
-from statistics.analytics import Analytics
-from statistics.report_generator import create_graphic_report_average_car_per_exit
+from analytic.analytics import Analytics
+from analytic.report_generator import create_graphic_report_average_car_per_exit
 
 from pathlib import Path as P
 
@@ -109,16 +109,13 @@ class TestReportGenerator(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res_a = a.compute_function_per_exit(a.compute_average, stats)
-        res_m = a.compute_function_per_exit(a.compute_median, stats)
-        res_first_q = a.compute_function_per_exit(a.compute_median, stats)
-        res_third_q = a.compute_function_per_exit(a.compute_median, stats)
+        res_overview = a.compute_function_per_exit(stats)
 
         delay = a.compute_delay_time_by_car(stats)
 
         res = a.compute_delay_time_expectancy_with_traffic_load(delay)
 
-        create_graphic_report_average_car_per_exit(res_a, res_m, res_first_q, res_third_q, t_load, res)
+        create_graphic_report_average_car_per_exit(res_overview[0], res_overview[1], res_overview[2], res_overview[3], t_load, res)
 
         now = datetime.datetime.now()
 
@@ -145,7 +142,7 @@ class TestReportGenerator(unittest.TestCase):
         labels_expected = ['exit1 - entry1', 'exit1 - entry2', 'exit2 - entry3']
         data_average = [10, 17.5, 23.333333333333332]
         data_median = [10, 20.0, 30]
-        data_f_q = [10, 20.0, 30]
+        data_f_q = [10, 10, 20]
         data_t_q = [10, 20.0, 30]
 
         for i in range(len(j['data']['labels'])):

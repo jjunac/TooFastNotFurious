@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from shared import Orientation
 from simulator import Simulator, Entry, Exit, Path, RightPriorityJunction, Car, Road
-from statistics.analytics import Analytics
+from analytic.analytics import Analytics
 from shared import dijkstra_with_path
 
 
@@ -129,9 +129,9 @@ class TestAnalytics(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res = a.compute_function_per_exit(a.compute_average, stats)
+        res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 17.5}, exit2: {entry3: 23.333333333333332}}, res)
+        self.assertEqual({exit1: {entry1: 10, entry2: 17.5}, exit2: {entry3: 23.333333333333332}}, res[0])
 
     def test_should_compute_first_quartile_for_exit_nodes(self):
         s = Simulator()
@@ -179,9 +179,9 @@ class TestAnalytics(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res = a.compute_function_per_exit(a.compute_first_quartile, stats)
+        res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 10}, exit2: {entry3: 20}}, res)
+        self.assertEqual({exit1: {entry1: 10, entry2: 10}, exit2: {entry3: 20}}, res[2])
 
     def test_should_compute_third_quartile_for_exit_nodes(self):
         s = Simulator()
@@ -228,9 +228,9 @@ class TestAnalytics(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res = a.compute_function_per_exit(a.compute_third_quartile, stats)
+        res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 20}, exit2: {entry3: 30}}, res)
+        self.assertEqual({exit1: {entry1: 10, entry2: 20}, exit2: {entry3: 30}}, res[3])
 
     def test_should_compute_median_for_exit_nodes(self):
         s = Simulator()
@@ -278,9 +278,9 @@ class TestAnalytics(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res = a.compute_function_per_exit(a.compute_median, stats)
+        res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 15}, exit2: {entry3: 30}}, res)
+        self.assertEqual({exit1: {entry1: 10, entry2: 15}, exit2: {entry3: 30}}, res[1])
 
     def test_should_compute_the_stop_time_for_each_arrived_cars(self):
         s = Simulator()

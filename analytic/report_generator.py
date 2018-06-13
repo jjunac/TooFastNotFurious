@@ -7,7 +7,7 @@ import datetime
 def create_graphic_report_average_car_per_exit(stats_average, stats_median, stats_first_Q, stats_third_Q, traffic_load,
                                                expectancy_load):
     env = Environment(
-        loader=PackageLoader('statistics', 'templates'),
+        loader=PackageLoader('analytic', 'templates'),
         autoescape=select_autoescape(['html'])
     )
 
@@ -39,7 +39,7 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
                         index_entry, index_exit)
     create_state_string(stats_third_Q, stats_string_third_q, entry_name, exit_name, explored_entry, explored_exit,
                         index_entry, index_exit)
-    print(stats_string_average)
+
     for key, value in stats_string_average.items():
 
         for entry, val in value.items():

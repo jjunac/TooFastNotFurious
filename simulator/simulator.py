@@ -1,5 +1,5 @@
 from simulator.exit import Exit
-from statistics.analytics import Analytics
+from analytic.analytics import Analytics
 from visualizer.drawer import Drawer
 
 
