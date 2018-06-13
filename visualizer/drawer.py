@@ -6,6 +6,7 @@ from pygame.locals import *
 from simulator import Exit, Entry
 from simulator.junction import Junction
 from simulator.road import Road
+from simulator.roundabout import Roundabout
 from simulator.traffic_light_junction import TrafficLightJunction
 from visualizer.junction import GraphicJunction
 from visualizer.my_sprite import CarSprite
@@ -41,8 +42,8 @@ class Drawer:
         roads = []
         while stack:
             entity, pos, forward = stack.pop()
-            res = copy(pos)
-            if entity not in visited:
+            if entity not in visited and type(entity) is not Roundabout:
+                res = copy(pos)
                 predecessors = entity.predecessors.values()
                 successors = entity.successors.values()
                 if type(entity) is Road:
