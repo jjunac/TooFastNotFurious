@@ -32,11 +32,11 @@ class Node:
                 break
         if all_dependency_satisfied:
             return True
-        if self.can_ignore_dependency:
+        if destination.can_ignore_dependency:
             for d in dependencies:
                 if d.current_car and self.current_car.id < d.current_car.id:
                     return False
-        return self.can_ignore_dependency
+        return destination.can_ignore_dependency
 
     def is_dependency_satisfied(self, source):
         if not self.entity.is_dependency_satisfied(source):
