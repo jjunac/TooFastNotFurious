@@ -19,7 +19,7 @@ def main():
     exit5 = exit_node()
     s.add_node(exit5)
 
-    junction1 = right_priority()
+    junction1 = stop().with_stop_on_road(Orientation.NORTH)
     s.add_node(junction1)
     junction2 = right_priority()
     s.add_node(junction2)

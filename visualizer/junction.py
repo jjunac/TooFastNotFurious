@@ -29,6 +29,11 @@ class GraphicJunction:
                 self.position = self.position - ((self.entity.size_north_south - 1) * cell_height, 0)
             elif previous_road.orientation == Orientation.WEST and self.entity.size_east_west - previous_road.n_of_ways > 0:
                 self.position = self.position - (0, (self.entity.size_east_west - 1) * cell_height)
+            elif previous_road.orientation == Orientation.SOUTH:
+                self.position = self.position + (0, (self.entity.size_east_west - 1) * cell_height)
+            elif previous_road.orientation == Orientation.WEST:
+                self.position = self.position - ((self.entity.size_east_west - 1) * cell_height, 0)
+
             for i in range(len(self.entity.nodes)):
                 for j in range(len(self.entity.nodes[i])):
                     point = self.position + Point(j * self.cell_length, -i * self.cell_height)
