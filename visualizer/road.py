@@ -2,11 +2,11 @@ from math import atan2
 
 from pygame.sprite import RenderClear
 
-from visualizer.my_sprite import RoadSprite
+from visualizer.my_sprite import RoadSprite, CarSprite
 from visualizer.point import Point, to_degrees
 
 
-class GraphicNode:
+class GraphicEntity:
 
     def __init__(self, position, entity, cell_length=30, cell_height=30):
         super().__init__()
@@ -16,15 +16,39 @@ class GraphicNode:
         self.cell_length = cell_length
         self.cell_height = cell_height
         self.node_pos = []
+        self.angle = 0
 
     def create_sprites(self):
-        pass
+        for i in self.entity.nodes:
+            for n in i:
+                self.node_pos.append((n, self.position))
 
     def draw(self, surface):
         self.group.draw(surface)
 
+    def update(self, car_group):
+        for node, pos in self.node_pos:
+            if node.current_car:
+                sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
+                if sprite:
+                    sprite.interpolate(pos)
+                else:
+                    car_group.add(CarSprite(pos, node.current_car, 30, 20, -self.angle))
 
-class GraphicRoad(GraphicNode):
+
+class GraphicExit(GraphicEntity):
+
+    def __init__(self, position, entity, cell_length=30, cell_height=30):
+        super().__init__(position, entity, cell_length, cell_height)
+
+    def update(self, car_group):
+        for node, pos in self.node_pos:
+            sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
+            if sprite:
+                car_group.remove(sprite)
+
+
+class GraphicRoad(GraphicEntity):
 
     def __init__(self, position, end, road, cell_length=30, cell_height=30, road_number=0):
         super().__init__(position, road, cell_length, cell_height)
@@ -57,6 +81,3 @@ class GraphicRoad(GraphicNode):
                 road_portion = RoadSprite(pos, self.cell_length, self.cell_height, -self.angle)
                 self.group.add(road_portion)
                 i += 1
-
-    def update(self):
-        pass

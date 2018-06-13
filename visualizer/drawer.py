@@ -1,17 +1,15 @@
-from copy import copy
-
 import pygame
 from pygame.locals import *
 
-from simulator import Exit, Entry
+from simulator import Exit
 from simulator.junction import Junction
 from simulator.road import Road
 from simulator.roundabout import Roundabout
+from simulator.stop_junction import StopJunction
 from simulator.traffic_light_junction import TrafficLightJunction
-from visualizer.junction import GraphicJunction
-from visualizer.my_sprite import CarSprite
+from visualizer.junction import GraphicJunction, GraphicTrafficLightJunction, GraphicStopJunction
 from visualizer.point import Point
-from visualizer.road import GraphicRoad
+from visualizer.road import GraphicRoad, GraphicExit
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -43,26 +41,19 @@ class Drawer:
         while stack:
             entity, pos, forward = stack.pop()
             if entity not in visited and type(entity) is not Roundabout:
-                res = copy(pos)
                 predecessors = entity.predecessors.values()
                 successors = entity.successors.values()
-                if type(entity) is Road:
-                    res = pos.rotate_point(entity.orientation,
-                                           Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
-                    if not forward:
-                        res = pos.rotate_point(entity.orientation + 180,
-                                               Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
-                        pos, res = res, pos
-                    roads.append(GraphicRoad(pos, res, entity, self.cell_length, self.cell_height))
-                elif isinstance(entity, Junction):
-                    junction = GraphicJunction(pos, entity, self.cell_length, self.cell_height, roads[-1].entity)
+                if isinstance(entity, Junction):
+                    junction = create_graphic_entity(entity, forward, pos, self.cell_length, self.cell_height,
+                                                     roads[-1].entity)
                     roads.append(junction)
                     next_entities = self.get_correct_road_positions(entity, junction, visited)
                     stack.extend(next_entities)
                     visited.add(entity)
                     continue
-                else:
-                    roads.append(GraphicJunction(pos, entity, self.cell_length, self.cell_height))
+                graphic_entity, res = create_graphic_entity(entity, forward, pos, self.cell_length, self.cell_height)
+                if graphic_entity:
+                    roads.append(graphic_entity)
                 visited.add(entity)
                 next_entities = [(r, pos, False) for r in set(predecessors) - visited]
                 next_entities.extend([(r, res, True) for r in set(successors) - visited])
@@ -84,16 +75,10 @@ class Drawer:
                 next_entities.append((value, pos, True))
         return next_entities
 
-    def start_point(self, point, angle, iterations):
-        res = []
-        for k in range(iterations):
-            res.append(point.rotate_point(angle, point - (0, k * self.cell_height)))
-        return res
-
     def draw(self):
-        graphic_roads = self.create_graphic_roads(self.simulator.entities[0])
-        graphic_roads.sort(key=lambda r: str(type(r)))
-        for graphic_road in graphic_roads:
+        graphic_entities = self.create_graphic_roads(self.simulator.entities[0])
+        graphic_entities.sort(key=lambda r: str(type(r)))
+        for graphic_road in graphic_entities:
             graphic_road.create_sprites()
         clock = pygame.time.Clock()
         car_group = pygame.sprite.RenderClear()
@@ -103,7 +88,7 @@ class Drawer:
             tick = clock.tick()
             accumulator += tick
             car_updates += tick
-            for graphic_road in graphic_roads:
+            for graphic_road in graphic_entities:
                 graphic_road.draw(self.screen)
             if car_updates >= 20:
                 car_group.update(tick)
@@ -112,50 +97,32 @@ class Drawer:
             if accumulator > 1000:
                 self.simulator.tick()
                 accumulator = 0
-                self.tick_cars(car_group, graphic_roads)
+                for road in graphic_entities:
+                    road.update(car_group)
             pygame.display.flip()
             self.screen.fill(WHITE)
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.continue_drawing = 0
 
-    @staticmethod
-    def tick_cars(car_group, entities):
-        for road in entities:
-            if type(road.entity) is TrafficLightJunction:
-                lights = get_traffic_light_state(road)
-                for i in range(len(lights)):
-                    for sprite in road.lights[i]:
-                        surfarray = pygame.PixelArray(sprite.image)
-                        if lights[i]:
-                            surfarray.replace((255, 0, 0), (0, 255, 0))
-                        else:
-                            surfarray.replace((0, 255, 0), (255, 0, 0))
-            for node, pos in road.node_pos:
-                if node.current_car and type(road.entity) is not Exit and type(
-                        road.entity) is not Entry:
-                    sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
-                    if sprite:
-                        sprite.interpolate(pos)
-                    else:
-                        car_group.add(CarSprite(pos, node.current_car, 30, 20, -road.angle))
-                elif node.current_car and type(road.entity) == Exit:
-                    sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
-                    if sprite:
-                        car_group.remove(sprite)
 
-
-def get_traffic_light_state(road):
-    if road.entity.counter < road.entity.state1_timer:
-        state1 = True
-        state2 = False
-    elif road.entity.counter < road.entity.state1_timer + road.entity.interval:
-        state1 = False
-        state2 = False
-    elif road.entity.counter < road.entity.state1_timer + road.entity.interval + road.entity.state2_timer:
-        state1 = False
-        state2 = True
+def create_graphic_entity(entity, forward, pos, cell_length, cell_height, previous_road=None):
+    if type(entity) is Road:
+        res = pos.rotate_point(entity.orientation,
+                               Point(pos.x + (entity.length + 1) * cell_length, pos.y))
+        if not forward:
+            res = pos.rotate_point(entity.orientation + 180,
+                                   Point(pos.x + (entity.length + 1) * cell_length, pos.y))
+            pos, res = res, pos
+        return GraphicRoad(pos, res, entity, cell_length, cell_height), res
+    elif isinstance(entity, Junction):
+        if type(entity) is StopJunction:
+            return GraphicStopJunction(pos, entity, cell_length, cell_height, previous_road)
+        elif type(entity) is TrafficLightJunction:
+            return GraphicTrafficLightJunction(pos, entity, cell_length, cell_height, previous_road)
+        else:
+            return GraphicJunction(pos, entity, cell_length, cell_height, previous_road)
+    elif type(entity) is Exit:
+        return GraphicExit(pos, entity, cell_length, cell_height), pos
     else:
-        state2 = False
-        state1 = False
-    return [state1, state2]
+        return None, pos
