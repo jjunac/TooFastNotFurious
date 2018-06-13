@@ -130,7 +130,7 @@ class TestReportGenerator(unittest.TestCase):
 
         parser.feed(list(p.glob('./*.html'))[0].read_text())
 
-        script = parser.scripts[5]
+        script = parser.scripts[4]
 
         script = re.search(r'var data = .*$', script, re.DOTALL).group()
 
@@ -156,7 +156,7 @@ class TestReportGenerator(unittest.TestCase):
                 self.assertTrue(data_f_q[i] in j['data']['datasets'][2]['data'])
                 self.assertTrue(data_t_q[i] in j['data']['datasets'][3]['data'])
 
-        script = parser.scripts[7]
+        script = parser.scripts[6]
 
         script = re.search(r'var data = .*$', script, re.DOTALL).group()
 
