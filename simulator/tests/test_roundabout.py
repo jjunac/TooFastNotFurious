@@ -7,7 +7,7 @@ from simulator.roundabout import Roundabout
 
 class TestRoundabout(unittest.TestCase):
 
-    def test_roundabout_internal_mesh_should_be_well_connected(self):
+    def test_roundabout_internal_mesh_should_be_well_connected_when_the_is_1_way(self):
         simulator = Simulator()
         round = Roundabout(simulator, {Orientation.NORTH: (1, 1), Orientation.EAST: (1, 1),
                                       Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, 1)
@@ -31,6 +31,83 @@ class TestRoundabout(unittest.TestCase):
         self.assertEqual({round.roads[Orientation.EAST].nodes[0][0]}, set(round.yields[Orientation.EAST].nodes[1][0].successors))
         self.assertEqual({round.roads[Orientation.EAST].nodes[0][1]}, set(round.roads[Orientation.EAST].nodes[0][0].successors))
         self.assertEqual({round.yields[Orientation.NORTH].nodes[0][1]}, set(round.roads[Orientation.EAST].nodes[0][1].successors))
+
+    def test_roundabout_internal_mesh_should_be_well_connected_when_the_is_2_way(self):
+        simulator = Simulator()
+        round = Roundabout(simulator, {Orientation.NORTH: (1, 1), Orientation.EAST: (1, 1),
+                                       Orientation.SOUTH: (1, 1), Orientation.WEST: (1, 1)}, 2)
+
+        self.assertEqual({round.yields[Orientation.NORTH].nodes[1][0]},
+                         set(round.yields[Orientation.NORTH].nodes[1][1].successors))
+        self.assertEqual({round.yields[Orientation.NORTH].nodes[0][0]},
+                         set(round.yields[Orientation.NORTH].nodes[1][0].successors))
+        self.assertEqual({round.yields[Orientation.NORTH].nodes[0][0], round.roads[Orientation.NORTH].nodes[1][0]},
+                         set(round.yields[Orientation.NORTH].nodes[0][1].successors))
+        self.assertEqual({round.roads[Orientation.NORTH].nodes[0][0]},
+                         set(round.yields[Orientation.NORTH].nodes[0][0].successors))
+
+        self.assertEqual({round.roads[Orientation.NORTH].nodes[1][1], round.roads[Orientation.NORTH].nodes[0][1]},
+                         set(round.roads[Orientation.NORTH].nodes[1][0].successors))
+        self.assertEqual({round.roads[Orientation.NORTH].nodes[1][1], round.roads[Orientation.NORTH].nodes[0][1]},
+                         set(round.roads[Orientation.NORTH].nodes[0][0].successors))
+        self.assertEqual({round.yields[Orientation.WEST].nodes[1][1]},
+                         set(round.roads[Orientation.NORTH].nodes[1][1].successors))
+        self.assertEqual({round.yields[Orientation.WEST].nodes[1][0]},
+                         set(round.roads[Orientation.NORTH].nodes[0][1].successors))
+
+        self.assertEqual({round.yields[Orientation.WEST].nodes[0][1], round.roads[Orientation.WEST].nodes[1][0]},
+                         set(round.yields[Orientation.WEST].nodes[1][1].successors))
+        self.assertEqual({round.yields[Orientation.WEST].nodes[0][0]},
+                         set(round.yields[Orientation.WEST].nodes[1][0].successors))
+        self.assertEqual({round.roads[Orientation.WEST].nodes[0][0]},
+                         set(round.yields[Orientation.WEST].nodes[0][1].successors))
+        self.assertEqual({round.yields[Orientation.WEST].nodes[0][1]},
+                         set(round.yields[Orientation.WEST].nodes[0][0].successors))
+
+        self.assertEqual({round.roads[Orientation.WEST].nodes[1][1], round.roads[Orientation.WEST].nodes[0][1]},
+                         set(round.roads[Orientation.WEST].nodes[1][0].successors))
+        self.assertEqual({round.roads[Orientation.WEST].nodes[1][1], round.roads[Orientation.WEST].nodes[0][1]},
+                         set(round.roads[Orientation.WEST].nodes[0][0].successors))
+        self.assertEqual({round.yields[Orientation.SOUTH].nodes[1][0]},
+                         set(round.roads[Orientation.WEST].nodes[1][1].successors))
+        self.assertEqual({round.yields[Orientation.SOUTH].nodes[0][0]},
+                         set(round.roads[Orientation.WEST].nodes[0][1].successors))
+
+        self.assertEqual({round.roads[Orientation.SOUTH].nodes[1][0]},
+                         set(round.yields[Orientation.SOUTH].nodes[1][1].successors))
+        self.assertEqual({round.roads[Orientation.SOUTH].nodes[0][0], round.yields[Orientation.SOUTH].nodes[1][1]},
+                         set(round.yields[Orientation.SOUTH].nodes[1][0].successors))
+        self.assertEqual({round.yields[Orientation.SOUTH].nodes[1][1]},
+                         set(round.yields[Orientation.SOUTH].nodes[0][1].successors))
+        self.assertEqual({round.yields[Orientation.SOUTH].nodes[0][1]},
+                         set(round.yields[Orientation.SOUTH].nodes[0][0].successors))
+
+        self.assertEqual({round.roads[Orientation.SOUTH].nodes[1][1], round.roads[Orientation.SOUTH].nodes[0][1]},
+                         set(round.roads[Orientation.SOUTH].nodes[1][0].successors))
+        self.assertEqual({round.roads[Orientation.SOUTH].nodes[1][1], round.roads[Orientation.SOUTH].nodes[0][1]},
+                         set(round.roads[Orientation.SOUTH].nodes[0][0].successors))
+        self.assertEqual({round.yields[Orientation.EAST].nodes[0][1]},
+                         set(round.roads[Orientation.SOUTH].nodes[1][1].successors))
+        self.assertEqual({round.yields[Orientation.EAST].nodes[0][0]},
+                         set(round.roads[Orientation.SOUTH].nodes[0][1].successors))
+
+        self.assertEqual({round.yields[Orientation.EAST].nodes[1][0]},
+                         set(round.yields[Orientation.EAST].nodes[1][1].successors))
+        self.assertEqual({round.roads[Orientation.EAST].nodes[1][0]},
+                         set(round.yields[Orientation.EAST].nodes[1][0].successors))
+        self.assertEqual({round.yields[Orientation.EAST].nodes[1][1]},
+                         set(round.yields[Orientation.EAST].nodes[0][1].successors))
+        self.assertEqual({round.yields[Orientation.EAST].nodes[1][0], round.roads[Orientation.EAST].nodes[0][0]},
+                         set(round.yields[Orientation.EAST].nodes[0][0].successors))
+
+        self.assertEqual({round.roads[Orientation.EAST].nodes[1][1], round.roads[Orientation.EAST].nodes[0][1]},
+                         set(round.roads[Orientation.EAST].nodes[1][0].successors))
+        self.assertEqual({round.roads[Orientation.EAST].nodes[1][1], round.roads[Orientation.EAST].nodes[0][1]},
+                         set(round.roads[Orientation.EAST].nodes[0][0].successors))
+        self.assertEqual({round.yields[Orientation.NORTH].nodes[1][1]},
+                         set(round.roads[Orientation.EAST].nodes[1][1].successors))
+        self.assertEqual({round.yields[Orientation.NORTH].nodes[0][1]},
+                         set(round.roads[Orientation.EAST].nodes[0][1].successors))
 
     def test_a_roundabout_should_be_well_connected_with_in_out_roads(self):
         simulator = Simulator()

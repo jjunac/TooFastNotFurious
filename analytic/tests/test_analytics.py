@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from shared import Orientation
 from simulator import Simulator, Entry, Exit, Path, RightPriorityJunction, Car, Road
-from statistics.analytics import Analytics
+from analytic.analytics import Analytics
 from shared import dijkstra_with_path
 
 
@@ -129,9 +129,16 @@ class TestAnalytics(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res = a.compute_function_per_exit(a.compute_average, stats)
+        res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 17.5}, exit2: {entry3: 23.333333333333332}}, res)
+        self.assertTrue(exit1 in res[0])
+        self.assertTrue(exit2 in res[0])
+        self.assertTrue(entry1 in res[0][exit1])
+        self.assertTrue(entry2 in res[0][exit1])
+        self.assertTrue(entry3 in res[0][exit2])
+        self.assertEqual(10, res[0][exit1][entry1])
+        self.assertEqual(17.5, res[0][exit1][entry2])
+        self.assertAlmostEqual(23.33, res[0][exit2][entry3], delta=0.1)
 
     def test_should_compute_first_quartile_for_exit_nodes(self):
         s = Simulator()
@@ -179,9 +186,9 @@ class TestAnalytics(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res = a.compute_function_per_exit(a.compute_first_quartile, stats)
+        res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 10}, exit2: {entry3: 20}}, res)
+        self.assertEqual({exit1: {entry1: 10, entry2: 10}, exit2: {entry3: 20}}, res[2])
 
     def test_should_compute_third_quartile_for_exit_nodes(self):
         s = Simulator()
@@ -228,9 +235,9 @@ class TestAnalytics(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res = a.compute_function_per_exit(a.compute_third_quartile, stats)
+        res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 20}, exit2: {entry3: 30}}, res)
+        self.assertEqual({exit1: {entry1: 10, entry2: 20}, exit2: {entry3: 30}}, res[3])
 
     def test_should_compute_median_for_exit_nodes(self):
         s = Simulator()
@@ -278,9 +285,9 @@ class TestAnalytics(unittest.TestCase):
             exit2: {(entry3, p1): [car2, car1, car3, car3],
                     (entry3, p2): [car3, car3, car3, car1, car2]}}
 
-        res = a.compute_function_per_exit(a.compute_median, stats)
+        res = a.compute_function_per_exit(stats)
 
-        self.assertEqual({exit1: {entry1: 10, entry2: 15}, exit2: {entry3: 30}}, res)
+        self.assertEqual({exit1: {entry1: 10, entry2: 15}, exit2: {entry3: 30}}, res[1])
 
     def test_should_compute_the_stop_time_for_each_arrived_cars(self):
         s = Simulator()
@@ -451,8 +458,69 @@ class TestAnalytics(unittest.TestCase):
         self.assertAlmostEqual(300, res[22], delta=0.1)
         self.assertEqual(400, res[28])
 
+    def test_should_compute_median_consumption_for_exit_nodes(self):
+        s = Simulator()
+        entry1 = Entry(s, 0, 1)
+        entry2 = Entry(s, 0, 1)
+        entry3 = Entry(s, 0, 1)
 
+        p1 = Path([])
+        p2 = Path([])
 
+        exit1 = Exit(s, 1)
+        exit2 = Exit(s, 1)
+
+        road1 = Road(s, 100, Orientation.SOUTH, 1)
+
+        car1 = Car(p2, entry1, 0)
+        car2 = Car(p2, entry2, 0)
+        car3 = Car(p2, entry3, 0)
+        car4 = Car(p2, entry1, 0)
+        car5 = Car(p2, entry2, 0)
+        car6 = Car(p2, entry3, 0)
+
+        nodes = []
+
+        for i in range(0, 10):
+            nodes.append(road1.nodes[0][i])
+
+        car1.visited_nodes = nodes
+        car2.visited_nodes = nodes
+        nodes1 = []
+
+        for i in range(0, 20):
+            nodes1.append(road1.nodes[0][i])
+
+        car3.visited_nodes = nodes1
+        car4.visited_nodes = nodes1
+        nodes2 = []
+
+        for i in range(0, 30):
+            nodes2.append(road1.nodes[0][i])
+
+        car5.visited_nodes = nodes2
+        car6.visited_nodes = nodes2
+
+        car1.original_path.nodes = nodes
+        car2.original_path.nodes = nodes
+        car3.original_path.nodes = nodes
+        car4.original_path.nodes = nodes
+        car5.original_path.nodes = nodes
+        car6.original_path.nodes = nodes
+
+        stats = {exit1: {(entry1, p1): [car1, car2, car3, car6]},
+                 exit2: {(entry2, p1): [car4, car5]}}
+
+        a = Analytics([], [])
+
+        res = a.compute_consommation_by_car(stats)
+
+        self.assertEqual(20, res[car1])
+        self.assertEqual(20, res[car2])
+        self.assertEqual(30, res[car3])
+        self.assertEqual(30, res[car4])
+        self.assertEqual(40, res[car5])
+        self.assertEqual(40, res[car6])
 
 
 if __name__ == '__main__':

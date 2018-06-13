@@ -7,7 +7,7 @@ import datetime
 def create_graphic_report_average_car_per_exit(stats_average, stats_median, stats_first_Q, stats_third_Q, traffic_load,
                                                expectancy_load):
     env = Environment(
-        loader=PackageLoader('statistics', 'templates'),
+        loader=PackageLoader('analytic', 'templates'),
         autoescape=select_autoescape(['html'])
     )
 
@@ -39,13 +39,13 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
                         index_entry, index_exit)
     create_state_string(stats_third_Q, stats_string_third_q, entry_name, exit_name, explored_entry, explored_exit,
                         index_entry, index_exit)
-    print(stats_string_average)
+
     for key, value in stats_string_average.items():
 
         for entry, val in value.items():
             dataset_average.append(val)
             labels.append(key + " - " + entry)
-    print("AVE",dataset_average)
+
     fill_dataset(dataset_median, stats_string_median)
     fill_dataset(dataset_first_q, stats_string_first_q)
     fill_dataset(dataset_third_q, stats_string_third_q)
@@ -63,7 +63,7 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
     now = datetime.datetime.now()
 
     name = "report_" + now.strftime("%Y_%m_%d_%Hh%Mm%S") + ".html"
-    print("AVE2", dataset_average)
+
     with open(name, 'w+') as file:
         file.write(template.render(labels=labels, data_average=dataset_average, data_median=dataset_median,
                                    data_first_q=dataset_first_q, data_third_q=dataset_third_q,

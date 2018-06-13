@@ -1,8 +1,9 @@
 from math import ceil
 from collections import Counter
+from statistics import mean, median
 
 from simulator import Exit
-from statistics.report_generator import create_graphic_report_average_car_per_exit
+from analytic.report_generator import create_graphic_report_average_car_per_exit
 
 
 class Analytics:
@@ -19,56 +20,58 @@ class Analytics:
 
         return stats
 
+
     def generate_report(self):
         cars = self.get_path_with_their_exit_nodes()
 
-        res_average = self.compute_function_per_exit(self.compute_average, cars)
-        res_median = self.compute_function_per_exit(self.compute_median, cars)
-        res_first_quartile = self.compute_function_per_exit(self.compute_first_quartile, cars)
-        res_third_quartile = self.compute_function_per_exit(self.compute_third_quartile, cars)
+        res = self.compute_function_per_exit(cars)
+
         expectancy_load = self.compute_delay_time_expectancy_with_traffic_load(self.compute_delay_time_by_car(cars))
-        create_graphic_report_average_car_per_exit(res_average, res_median, res_first_quartile, res_third_quartile,
+        create_graphic_report_average_car_per_exit(res[0], res[1], res[2], res[3],
                                                    self.traffic_load, expectancy_load)
 
-    def compute_function_per_exit(self, fct, cars):
-        result = {}
+    def compute_function_per_exit(self, cars):
+
+        result_a = {}
+        result_m = {}
+        result_fq = {}
+        result_tq = {}
 
         for key, value in cars.items():
             path_lengths = {}
 
+            average = {}
+            med = {}
+            first_q = {}
+            third_q = {}
+
             for entry, val in value.items():
                 if not entry[0] in path_lengths:
                     path_lengths[entry[0]] = []
-                # print(val)
+
                 for i in range(len(val)):
                     path_lengths[entry[0]].append(len(val[i].visited_nodes))
                     path_lengths[entry[0]].sort()
 
-            fct(path_lengths)
 
-            result[key] = path_lengths
+            for entry, val in path_lengths.items():
+                average[entry] = mean(val)
+                med[entry] = median(val)
+                first_q[entry] = self.__first_quartile(val)
+                third_q[entry] = self.__third_quartile(val)
 
-        return result
+            result_a[key] = average
+            result_m[key] = med
+            result_fq[key] = first_q
+            result_tq[key] = third_q
 
-    def compute_average(self, path_lengths):
-        for entry, val in path_lengths.items():
-            path_lengths[entry] = sum(val) / len(val)
+        return result_a, result_m, result_fq, result_tq
 
-    def compute_first_quartile(self, path_lengths):
-        for entry, val in path_lengths.items():
-            path_lengths[entry] = val[(ceil(len(val) / 4)) - 1]
+    def __first_quartile(self, val):
+        return val[(ceil(len(val) / 4)) - 1]
 
-    def compute_third_quartile(self, path_lengths):
-        for entry, val in path_lengths.items():
-            path_lengths[entry] = val[(ceil((3 * len(val)) / 4)) - 1]
-
-    def compute_median(self, path_lengths):
-        for entry, val in path_lengths.items():
-            if len(val) % 2:
-                path_lengths[entry] = val[(ceil((len(val)) / 2)) - 1]
-            else:
-                index = len(val) / 2
-                path_lengths[entry] = (val[int(index) - 1] + val[int(index)]) / 2
+    def __third_quartile(self, val):
+        return val[(ceil((3 * len(val)) / 4)) - 1]
 
     def compute_delay_time_by_car(self, nodes):
 
@@ -109,3 +112,16 @@ class Analytics:
                 expectancy[entry] = proba
 
         return expectancy
+
+    def __consommation_function(self, v0, v1):
+        return 2 * v1 + v0
+
+    def compute_consommation_by_car(self, nodes):
+        conso = {}
+        for value in nodes.values():
+            for val in value.values():
+                for i in range(len(val)):
+                    v0 = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
+                    v1 = len(val[i].original_path.nodes)
+                    conso[val[i]] = self.__consommation_function(v0, v1)
+        return conso

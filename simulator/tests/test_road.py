@@ -1,6 +1,6 @@
 import unittest
 
-from shared import Orientation
+from shared import *
 from simulator import Simulator
 from simulator.car import Car
 from simulator.road import Road
@@ -84,6 +84,38 @@ class TestRoad(unittest.TestCase):
         self.assertIsNone(road.nodes[0][0].current_car)
         self.assertIsNone(road.nodes[0][1].current_car)
         self.assertIsNone(road.nodes[0][2].current_car)
+
+    def test_a_road_should_be_well_connected_when_it_has_multiple_ways(self):
+        simulator = Simulator()
+        road = Road(simulator, 4, Orientation.NORTH, 3)
+
+        self.assertEqual({road.nodes[0][1], road.nodes[1][1]}, set(road.nodes[0][0].successors))
+        self.assertEqual({road.nodes[0][2], road.nodes[1][2]}, set(road.nodes[0][1].successors))
+        self.assertEqual({road.nodes[0][3], road.nodes[1][3]}, set(road.nodes[0][2].successors))
+        self.assertEqual(set(), set(road.nodes[0][3].successors))
+
+        self.assertEqual({road.nodes[0][1], road.nodes[1][1], road.nodes[2][1]}, set(road.nodes[1][0].successors))
+        self.assertEqual({road.nodes[0][2], road.nodes[1][2], road.nodes[2][2]}, set(road.nodes[1][1].successors))
+        self.assertEqual({road.nodes[0][3], road.nodes[1][3], road.nodes[2][3]}, set(road.nodes[1][2].successors))
+        self.assertEqual(set(), set(road.nodes[1][3].successors))
+
+        self.assertEqual({road.nodes[1][1], road.nodes[2][1]}, set(road.nodes[2][0].successors))
+        self.assertEqual({road.nodes[1][2], road.nodes[2][2]}, set(road.nodes[2][1].successors))
+        self.assertEqual({road.nodes[1][3], road.nodes[2][3]}, set(road.nodes[2][2].successors))
+        self.assertEqual(set(), set(road.nodes[2][3].successors))
+
+    def test_a_car_should_change_lane_when_the_road_has_multiple_ways(self):
+        simulator = Simulator()
+        road = Road(simulator, 4, Orientation.NORTH, 3)
+
+        road.nodes[0][0].current_car = Car(Path(dijkstra_with_path(simulator.get_nodes(), simulator.weights, road.nodes[0][0], road.nodes[2][3])), road.nodes[0][0], 0)
+
+        for _ in range(4):
+            simulator.tick()
+
+        self.assertIsNotNone(road.nodes[2][3])
+
+
 
 if __name__ == '__main__':
     unittest.main()
