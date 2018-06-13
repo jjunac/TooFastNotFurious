@@ -20,7 +20,7 @@ class GraphicJunction:
         self.cell_length = cell_length
         self.cell_height = cell_height
         self.angle = 0
-        self.lights = []
+        self.lights = [[], []]
         self.node_pos = []
         if isinstance(self.entity, Junction):
             surface = pygame.Surface((self.cell_length, self.cell_height))
@@ -61,11 +61,9 @@ class GraphicJunction:
                                   for n in self.entity.get_end_of_predecessor(o) for k in n.successors]
             nodes = [k[0] for k in nodes_orientations]
             for cell, pos in self.node_pos:
-                surface = pygame.Surface((self.cell_length, self.cell_height))
-                surface.fill((29, 17, 17))
-                self.group.add(MySprite(pos, self.cell_length, self.cell_height, image=surface))
                 if cell in nodes:
                     orientations = [k[1] for k in nodes_orientations if k[0] == cell]
+                    i = 0
                     for o in orientations:
                         point = pos.rotate_point(o, pos + (self.cell_length, -self.cell_height))
                         surface = pygame.Surface((self.cell_length, self.cell_height), pygame.SRCALPHA)
@@ -74,9 +72,12 @@ class GraphicJunction:
                                            round(self.cell_length / 2))
                         sprite = MySprite(point, round(self.cell_length / 2), round(self.cell_height / 2),
                                           image=surface)
-                        self.group.add(
-                            sprite)
-                        self.lights.append(sprite)
+                        self.group.add(sprite)
+                        self.lights[i].append(sprite)
+                        i += 1
+                surface = pygame.Surface((self.cell_length, self.cell_height))
+                surface.fill((29, 17, 17))
+                self.group.add(MySprite(pos, self.cell_length, self.cell_height, image=surface))
 
     def draw(self, surface):
         self.group.draw(surface)

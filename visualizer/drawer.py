@@ -3,7 +3,8 @@ from copy import copy
 import pygame
 from pygame.locals import *
 
-from simulator import Exit, Entry, RightPriorityJunction
+from simulator import Exit, Entry
+from simulator.junction import Junction
 from simulator.road import Road
 from simulator.traffic_light_junction import TrafficLightJunction
 from visualizer.junction import GraphicJunction
@@ -52,7 +53,7 @@ class Drawer:
                                                Point(pos.x + (entity.length + 1) * self.cell_length, pos.y))
                         pos, res = res, pos
                     roads.append(GraphicRoad(pos, res, entity, self.cell_length, self.cell_height))
-                elif type(entity) is RightPriorityJunction:
+                elif isinstance(entity, Junction):
                     junction = GraphicJunction(pos, entity, self.cell_length, self.cell_height, roads[-1].entity)
                     roads.append(junction)
                     next_entities = self.get_correct_road_positions(entity, junction, visited)
@@ -90,10 +91,9 @@ class Drawer:
 
     def draw(self):
         graphic_roads = self.create_graphic_roads(self.simulator.entities[0])
-        # node_positions = nodes
+        graphic_roads.sort(key=lambda r: str(type(r)))
         for graphic_road in graphic_roads:
             graphic_road.create_sprites()
-            # node_positions.append([graphic_roads, graphic_road.node_pos])
         clock = pygame.time.Clock()
         car_group = pygame.sprite.RenderClear()
         accumulator = 0
@@ -124,12 +124,12 @@ class Drawer:
             if type(road.entity) is TrafficLightJunction:
                 lights = get_traffic_light_state(road)
                 for i in range(len(lights)):
-                    sprite = road.lights[i]
-                    surfarray = pygame.PixelArray(sprite.image)
-                    if lights[i]:
-                        surfarray.replace((255, 0, 0), (0, 255, 0))
-                    else:
-                        surfarray.replace((0, 255, 0), (255, 0, 0))
+                    for sprite in road.lights[i]:
+                        surfarray = pygame.PixelArray(sprite.image)
+                        if lights[i]:
+                            surfarray.replace((255, 0, 0), (0, 255, 0))
+                        else:
+                            surfarray.replace((0, 255, 0), (255, 0, 0))
             for node, pos in road.node_pos:
                 if node.current_car and type(road.entity) is not Exit and type(
                         road.entity) is not Entry:
