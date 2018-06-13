@@ -40,6 +40,9 @@ class Point:
     def __eq__(self, o):
         return isclose(o.x, self.x, abs_tol=1e-09) and isclose(o.y, self.y, abs_tol=1e-09)
 
+    def __repr__(self):
+        return "Point({0},{1})".format(self.x, self.y)
+
     def __str__(self) -> str:
         return "({0},{1})".format(self.x, self.y)
 

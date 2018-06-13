@@ -26,9 +26,6 @@ class GraphicRoad:
         self.node_pos = []
 
     def create_sprites(self):
-        vector = self.end - self.sprite_start
-        dist = vector.length()
-
         for k in range(self.entity.n_of_ways):
             if self.angle == 180 or self.angle == -90:
                 p = self.sprite_start.rotate_point(self.angle,

@@ -39,7 +39,6 @@ def main():
     s.add_road(entry3.connect(Orientation.EAST).to(junction1).with_length(4).with_n_ways(2))
     s.add_road(junction1.connect(Orientation.NORTH).to(exit1).with_length(3).with_n_ways(1))
     s.add_road(junction1.connect(Orientation.SOUTH).to(exit2).with_length(3).with_n_ways(1))
-
     s.add_road(junction1.connect(Orientation.EAST).to(junction2).with_length(7).with_n_ways(2))
 
     s.add_road(entry4.connect(Orientation.NORTH).to(junction2).with_length(3).with_n_ways(1))
