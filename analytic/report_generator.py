@@ -58,7 +58,7 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
         if i in expectancy_load:
             data_delay_time.append({'x': i, 'y': expectancy_load[i]})
 
-    template = env.get_template('bar_chart_average_template.html')
+    template = env.get_template('template_report.html')
 
     now = datetime.datetime.now()
 
