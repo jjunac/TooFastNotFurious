@@ -66,9 +66,9 @@ class Road(AbstractEntity):
             self.simulator.weights[(end[i], start[i])] = 1
 
     def __build_road(self, simulator, length):
-        res = [Node(self)]
+        res = [Node(self, can_ignore_dependency=True)]
         for _ in range(length - 1):
-            res.append(Node(self))
+            res.append(Node(self, can_ignore_dependency=True))
             link(res[-2], res[-1])
             simulator.dependencies[(res[-2], res[-1])] = [res[-1]]
             simulator.weights[(res[-2], res[-1])] = 1

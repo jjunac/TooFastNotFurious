@@ -115,7 +115,31 @@ class TestRoad(unittest.TestCase):
 
         self.assertIsNotNone(road.nodes[2][3])
 
+    def test_a_road_should_not_be_blocked_when_cars_both_want_to_change_way(self):
+        simulator = Simulator()
+        road = Road(simulator, 4, Orientation.NORTH, 2)
 
+        car1 = Car(Path([road.nodes[0][1], road.nodes[1][2], road.nodes[1][3]]), road.nodes[0][0], 0)
+        car1.id = 7
+        road.nodes[0][0].current_car = car1
+        car2 = Car(Path([road.nodes[1][1], road.nodes[0][2], road.nodes[0][3]]), road.nodes[1][0], 0)
+        car2.id = 42
+        road.nodes[1][0].current_car = car2
+
+        simulator.tick()
+        self.assertEqual(car1, road.nodes[0][1].current_car)
+        self.assertEqual(car2, road.nodes[1][1].current_car)
+
+        simulator.tick()
+        self.assertEqual(car1, road.nodes[0][1].current_car)
+        self.assertEqual(car2, road.nodes[0][2].current_car)
+
+        simulator.tick()
+        self.assertEqual(car1, road.nodes[1][2].current_car)
+        self.assertEqual(car2, road.nodes[0][3].current_car)
+
+        simulator.tick()
+        self.assertEqual(car1, road.nodes[1][3].current_car)
 
 if __name__ == '__main__':
     unittest.main()
