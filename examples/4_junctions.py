@@ -32,21 +32,21 @@ def main():
     junction4 = stop().with_stop_on_road(Orientation.WEST)
     s.add_node(junction4)
 
-    s.add_road(entry1.connect(Orientation.SOUTH).to(junction1).with_length(2).with_n_ways(2))
-    s.add_road(junction1.connect(Orientation.WEST).to(exit1).with_length(2).with_n_ways(2))
-    s.add_road(junction1.connect(Orientation.EAST).to(junction2).with_length(2).with_n_ways(2))
+    s.add_road(entry1.connect(Orientation.SOUTH).to(junction1).with_length(2).with_n_ways(1))
+    s.add_road(junction1.connect(Orientation.WEST).to(exit1).with_length(2).with_n_ways(1))
+    s.add_road(junction1.connect(Orientation.EAST).to(junction2).with_length(2).with_n_ways(1))
 
-    s.add_road(entry2.connect(Orientation.WEST).to(junction2).with_length(2).with_n_ways(2))
-    s.add_road(junction2.connect(Orientation.NORTH).to(exit2).with_length(2).with_n_ways(2))
-    s.add_road(junction2.connect(Orientation.SOUTH).to(junction3).with_length(2).with_n_ways(2))
+    s.add_road(entry2.connect(Orientation.WEST).to(junction2).with_length(2).with_n_ways(1))
+    s.add_road(junction2.connect(Orientation.NORTH).to(exit2).with_length(2).with_n_ways(1))
+    s.add_road(junction2.connect(Orientation.SOUTH).to(junction3).with_length(2).with_n_ways(1))
 
-    s.add_road(entry3.connect(Orientation.NORTH).to(junction3).with_length(2).with_n_ways(2))
-    s.add_road(junction3.connect(Orientation.EAST).to(exit3).with_length(2).with_n_ways(2))
-    s.add_road(junction3.connect(Orientation.WEST).to(junction4).with_length(2).with_n_ways(2))
+    s.add_road(entry3.connect(Orientation.NORTH).to(junction3).with_length(2).with_n_ways(1))
+    s.add_road(junction3.connect(Orientation.EAST).to(exit3).with_length(2).with_n_ways(1))
+    s.add_road(junction3.connect(Orientation.WEST).to(junction4).with_length(2).with_n_ways(1))
 
-    s.add_road(entry4.connect(Orientation.EAST).to(junction4).with_length(2).with_n_ways(2))
-    s.add_road(junction4.connect(Orientation.SOUTH).to(exit4).with_length(2).with_n_ways(2))
-    s.add_road(junction4.connect(Orientation.NORTH).to(junction1).with_length(2).with_n_ways(2))
+    s.add_road(entry4.connect(Orientation.EAST).to(junction4).with_length(2).with_n_ways(1))
+    s.add_road(junction4.connect(Orientation.SOUTH).to(exit4).with_length(2).with_n_ways(1))
+    s.add_road(junction4.connect(Orientation.NORTH).to(junction1).with_length(2).with_n_ways(1))
 
     s.add_path(entry1.to(exit1).with_proportion(25))
     s.add_path(entry1.to(exit2).with_proportion(25))
