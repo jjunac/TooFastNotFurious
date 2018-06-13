@@ -30,7 +30,7 @@ class MyTestCase(unittest.TestCase):
         self.assertRoad(road, start, end, start - Point(cell_size, 0), end + Point(cell_size, 0), 180, Point(-30, 0))
 
     def assertRoad(self, road, start, end, sprite_start, sprite_end, angle, pos_i):
-        self.assertEqual(start, road.start)
+        self.assertEqual(start, road.position)
         self.assertEqual(end, road.end)
         self.assertEqual(sprite_start, road.sprite_start)
         self.assertEqual(sprite_end, road.sprite_end)
