@@ -57,8 +57,8 @@ class Analytics:
             for entry, val in path_lengths.items():
                 average[entry] = mean(val)
                 med[entry] = median(val)
-                first_q[entry] = self.first_quartile(val)
-                third_q[entry] = self.third_quartile(val)
+                first_q[entry] = self.__first_quartile(val)
+                third_q[entry] = self.__third_quartile(val)
 
             result_a[key] = average
             result_m[key] = med
@@ -67,10 +67,10 @@ class Analytics:
 
         return result_a, result_m, result_fq, result_tq
 
-    def first_quartile(self, val):
+    def __first_quartile(self, val):
         return val[(ceil(len(val) / 4)) - 1]
 
-    def third_quartile(self, val):
+    def __third_quartile(self, val):
         return val[(ceil((3 * len(val)) / 4)) - 1]
 
     def compute_delay_time_by_car(self, nodes):
