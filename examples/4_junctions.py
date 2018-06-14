@@ -68,8 +68,8 @@ def main():
     s.add_path(entry4.to(exit2).with_proportion(25))
     s.add_path(entry4.to(exit3).with_proportion(25))
 
-    s.run_for(100)
-    s.with_report()
+    s.run_for(1000)
+    # s.with_report()
 
 
 if __name__ == '__main__':
