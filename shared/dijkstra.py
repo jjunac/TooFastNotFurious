@@ -1,5 +1,3 @@
-from shared import DijkstraHeap
-
 def dijkstra(nodes, weights, source):
     '''
     Computes all shortest paths frm source to all other vertices.
