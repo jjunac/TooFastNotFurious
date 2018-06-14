@@ -3,7 +3,7 @@ from collections import Counter
 from statistics import mean, median
 
 from simulator import Exit
-from analytic.report_generator import create_graphic_report_average_car_per_exit
+from analytic.report_generator import create_graphic_report
 
 
 class Analytics:
@@ -28,7 +28,7 @@ class Analytics:
         consumption = self.compute_consumption_by_car_with_traffic_load(self.compute_consumption_by_car(cars))
 
         expectancy_load = self.compute_delay_time_expectancy_with_traffic_load(self.compute_delay_time_by_car(cars))
-        create_graphic_report_average_car_per_exit(res, self.traffic_load, expectancy_load, consumption)
+        create_graphic_report(res, self.traffic_load, expectancy_load, consumption)
 
     def compute_function_per_exit(self, cars):
 

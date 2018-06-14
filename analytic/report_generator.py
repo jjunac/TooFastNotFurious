@@ -3,8 +3,8 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 import datetime
 
 
-def create_graphic_report_average_car_per_exit(stats, traffic_load,
-                                               expectancy_load, consumption):
+def create_graphic_report(stats, traffic_load,
+                          expectancy_load, consumption):
     env = Environment(
         loader=PackageLoader('analytic', 'templates'),
         autoescape=select_autoescape(['html'])

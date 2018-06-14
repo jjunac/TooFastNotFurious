@@ -3,7 +3,7 @@ import unittest
 from shared import Orientation
 from simulator import Path, Simulator, Entry, Exit, Road, Car
 from analytic.analytics import Analytics
-from analytic.report_generator import create_graphic_report_average_car_per_exit, create_state_string
+from analytic.report_generator import create_graphic_report, create_state_string
 
 from pathlib import Path as P
 
