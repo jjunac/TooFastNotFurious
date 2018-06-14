@@ -25,9 +25,11 @@ class Analytics:
 
         res = self.compute_function_per_exit(cars)
 
+        consumption = self.compute_consumption_by_car_with_traffic_load(self.compute_consumption_by_car(cars))
+
         expectancy_load = self.compute_delay_time_expectancy_with_traffic_load(self.compute_delay_time_by_car(cars))
         create_graphic_report_average_car_per_exit(res[0], res[1], res[2], res[3],
-                                                   self.traffic_load, expectancy_load)
+                                                   self.traffic_load, expectancy_load, consumption)
 
     def compute_function_per_exit(self, cars):
 
@@ -135,35 +137,17 @@ class Analytics:
                         graph[i] = []
                     graph[i].append(value)
 
-        # expectancy = {}
-
         result_a = {}
         result_m = {}
         result_fq = {}
         result_tq = {}
 
-        print(graph)
-
         for entry, val in graph.items():
-            proba = 0
-            # print("VAL", val)
+
             val.sort()
             result_a[entry] = mean(val)
             result_m[entry] = median(val)
             result_fq[entry] = self.first_quartile(val)
             result_tq[entry] = self.third_quartile(val)
-
-            # for key, value in dict(Counter(val)).items():
-            #     proba += (key * key) * (value / len(val))
-
-            # if not entry in expectancy:
-            #     expectancy[entry] = proba
-
-        # print("REZ")
-        # print(graph)
-        # print(result_a)
-        # print(result_m)
-        # print(result_fq)
-        # print(result_tq)
 
         return result_a, result_fq, result_m, result_tq

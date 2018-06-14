@@ -5,7 +5,7 @@ import datetime
 
 
 def create_graphic_report_average_car_per_exit(stats_average, stats_median, stats_first_Q, stats_third_Q, traffic_load,
-                                               expectancy_load):
+                                               expectancy_load, consumption):
     env = Environment(
         loader=PackageLoader('analytic', 'templates'),
         autoescape=select_autoescape(['html'])
@@ -53,10 +53,20 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
     data_traffic_load = []
     data_delay_time = []
 
+    data_average_consumption = []
+    data_first_q_consumption = []
+    data_median_consumption = []
+    data_third_q_consumption = []
+
     for i in range(len(traffic_load)):
         data_traffic_load.append({'x': i, 'y': traffic_load[i]})
         if i in expectancy_load:
             data_delay_time.append({'x': i, 'y': expectancy_load[i]})
+        if i in consumption[0]:
+            data_average_consumption.append({'x': i, 'y': consumption[0][i]})
+            data_first_q_consumption.append({'x': i, 'y': consumption[1][i]})
+            data_median_consumption.append({'x': i, 'y': consumption[2][i]})
+            data_third_q_consumption.append({'x': i, 'y': consumption[3][i]})
 
     template = env.get_template('bar_chart_average_template.html')
 
@@ -67,7 +77,9 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
     with open(name, 'w+') as file:
         file.write(template.render(labels=labels, data_average=dataset_average, data_median=dataset_median,
                                    data_first_q=dataset_first_q, data_third_q=dataset_third_q,
-                                   data_traffic_load=data_traffic_load, data_delay_time=data_delay_time))
+                                   data_traffic_load=data_traffic_load, data_delay_time=data_delay_time, data_average_consumption=data_average_consumption,
+                                   data_first_q_consumption=data_first_q_consumption, data_median_consumption= data_median_consumption,
+                                   data_third_q_consumption=data_third_q_consumption))
 
 
 def fill_dataset(dataset, stats_string):

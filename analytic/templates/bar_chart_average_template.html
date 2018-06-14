@@ -5,105 +5,110 @@
     <meta charset="UTF-8">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
-            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
     <script type="text/javascript" src="http://hammerjs.github.io/dist/hammer.min.js"></script>
-    <script type="text/javascript"
-            src="https://cdn.rawgit.com/chartjs/chartjs-plugin-zoom/d5caf691/chartjs-plugin-zoom.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/chartjs/chartjs-plugin-zoom/d5caf691/chartjs-plugin-zoom.js"></script>
     <title>Too Fast and not Furious</title>
 </head>
 
 <body>
-<!--Nav brand bootstrap-->
-<div class="container">
-    <div class="row pt-4">
-        <div class="col-4">
-            <img alt="Baboulinet"
-                 src="https://l7moyg.dm.files.1drv.com/y4mUyxqg-2t7vE4Zx8zZQ3uSeLaDcyOGJkHCcRGiSn416JRYwoKE-dyFBn6_6PKscGl7A-hdzHe1RLLW2g33Ax7b_CODlqlG5Jb2Mb4ZZr3dvpIvbgpEtdNejD-oNc-zzRG846TUmkAHXSCmphnnFlBPyVZ-jb7LWheYmRTY8Ue7PPanmxe9kwzeeKhVFKQiSAPqMJLZK-36s8gj03MyAUvZw"
-                 height="100"/>
+    <!--Nav brand bootstrap-->
+    <div class="container">
+        <div class="row pt-4">
+            <div class="col-4">
+                <img alt="Baboulinet" src="https://l7moyg.dm.files.1drv.com/y4mUyxqg-2t7vE4Zx8zZQ3uSeLaDcyOGJkHCcRGiSn416JRYwoKE-dyFBn6_6PKscGl7A-hdzHe1RLLW2g33Ax7b_CODlqlG5Jb2Mb4ZZr3dvpIvbgpEtdNejD-oNc-zzRG846TUmkAHXSCmphnnFlBPyVZ-jb7LWheYmRTY8Ue7PPanmxe9kwzeeKhVFKQiSAPqMJLZK-36s8gj03MyAUvZw"
+                    height="100" />
+            </div>
+            <div class="col-8 pt-4">
+                <h1>
+                    <span>></span>
+                    Simulation Report
+                </h1>
+            </div>
         </div>
-        <div class="col-8 pt-4">
-            <h1>
-                <span>></span>
-                Simulation Report
-            </h1>
+        <div class="row pt-4">
+            <h3>Overview</h3>
+            <div class="w-100"></div>
+            <div class="col-12 pt-4" style="background-color: #f0f0f0; border-radius: 10px">
+                <canvas id="ReportChart" width="100" height="60"></canvas>
+            </div>
         </div>
-    </div>
-    <div class="row pt-4">
-        <h3>Overview</h3>
-        <div class="w-100"></div>
-        <div class="col-12 pt-4" style="background-color: #f0f0f0; border-radius: 10px">
-            <canvas id="ReportChart" width="100" height="60"></canvas>
-        </div>
-    </div>
 
-    <div class="row pt-4">
-        <h3>Traffic Load</h3>
-        <div class="w-100"></div>
-        <div class="col-12 pt-4" style="background-color: #f0f0f0; border-radius: 10px">
-            <canvas id="TrafficLoad" width="100" height="60"></canvas>
+        <div class="row pt-4">
+            <h3>Traffic Load</h3>
+            <div class="w-100"></div>
+            <div class="col-12 pt-4" style="background-color: #f0f0f0; border-radius: 10px">
+                <canvas id="TrafficLoad" width="100" height="60"></canvas>
+            </div>
         </div>
-    </div>
 
-</div>
+        <div class="row pt-4">
+            <h3>Consumption</h3>
+            <div class="w-100"></div>
+            <div class="col-12 pt-4" style="background-color: #f0f0f0; border-radius: 10px">
+                <canvas id="ConsumptionChart" width="100" height="60"></canvas>
+            </div>
+        </div>
+
+    </div>
 
 </body>
 
 <script type="text/javascript">
     var reportChart = document.getElementById("ReportChart");
 
-     var data = {
+    var data = {
         type: 'bar',
         data: {
 
-            labels: {{labels | safe}},
-            datasets: [{
-                label: 'Average',
-                data: {{data_average | safe}},
-                backgroundColor: 'rgba(175, 104, 211, 0.7)'
+            labels: {{ labels | safe}},
+    datasets: [{
+        label: 'Average',
+        data: {{ data_average | safe }},
+        backgroundColor: 'rgba(175, 104, 211, 0.7)'
             },
-                {
-                    label: 'First Quartile',
-                    data: {{data_first_q | safe}},
-                    backgroundColor: 'rgba(85, 63, 126, 0.7)'
+    {
+        label: 'First Quartile',
+        data: {{ data_first_q | safe }},
+        backgroundColor: 'rgba(85, 63, 126, 0.7)'
                 },
-                {
-                    label: 'Median',
-                    data: {{data_median | safe}},
-                    backgroundColor: 'rgba(98, 101, 238, 0.7)'
+    {
+        label: 'Median',
+        data: {{ data_median | safe }},
+        backgroundColor: 'rgba(98, 101, 238, 0.7)'
                 },
 
-                {
-                    label: 'Third Quartile',
-                    data: {{data_third_q | safe}},
-                    backgroundColor: 'rgba(29, 18, 168, 0.7)'
+    {
+        label: 'Third Quartile',
+        data: {{ data_third_q | safe }},
+        backgroundColor: 'rgba(29, 18, 168, 0.7)'
                 }]
         },
-        options: {
-            responsive: true,
+    options: {
+        responsive: true,
             scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
-            pan: {
-                enabled: true,
-                mode: 'xy'
-            },
-            zoom: {
-                enabled: true,
-                mode: 'xy',
-                limits: {
-                    max: 10,
-                    min: 0.5
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
                 }
+            }]
+        },
+        pan: {
+            enabled: true,
+                mode: 'xy'
+        },
+        zoom: {
+            enabled: true,
+                mode: 'xy',
+                    limits: {
+                max: 10,
+                    min: 0.5
             }
         }
+    }
     }
 
     var ReportChart = new Chart(reportChart, data);
@@ -118,40 +123,40 @@
 
             datasets: [{
                 label: 'Delay Time',
-                data: {{data_delay_time |safe}},
-                yAxisID: 'y-axis-1',
-                showLine: true,
-                fill: false,
-                borderColor: 'rgba(175, 104, 211, 0.7)'
-            },
-                {
-                    label: 'Traffic Load',
-                    data: {{data_traffic_load |safe}},
-                    yAxisID: 'y-axis-2',
-                    showLine: true,
-                    fill: true,
-                    borderColor: 'rgba(0, 104, 211, 0.7)'
+                data: {{ data_delay_time | safe }},
+        yAxisID: 'y-axis-1',
+        showLine: true,
+        fill: false,
+        borderColor: 'rgba(175, 104, 211, 0.7)'
+    },
+        {
+            label: 'Traffic Load',
+            data: {{ data_traffic_load | safe}},
+    yAxisID: 'y-axis-2',
+        showLine: true,
+            fill: true,
+                borderColor: 'rgba(89, 226, 0, 0.7)'
                 }]
         },
-        options: {
-            responsive: true,
-                elements: {
-                    point:{
-                        radius: 0,
-                        hitRadius: 4
-                    }
+    options: {
+        responsive: true,
+            elements: {
+            point: {
+                radius: 0,
+                    hitRadius: 4
+            }
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    suggestedMin: 0
                 },
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        suggestedMin: 0
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Time',
-                        fontSize: 16
-                    }
-                }],
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time',
+                    fontSize: 16
+                }
+            }],
                 yAxes: [{
                     ticks: {
                         suggestedMin: 0,
@@ -161,50 +166,178 @@
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Expectancy E(T&sup2;)',
+                        labelString: 'Expectancy E(T^2)',
                         fontSize: 16
                     },
                     position: 'left',
                     id: 'y-axis-1'
                 },
-                    {
-                        type: 'linear',
+                {
+                    type: 'linear',
+                    display: true,
+                    scaleLabel: {
                         display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Number of cars',
-                            fontSize: 16
-                        },
-                        position: 'right',
-                        id: 'y-axis-2',
-                        gridLines: {drawOnChartArea: false}
-                    }]
-            },
-            pan: {
-                enabled: true,
+                        labelString: 'Number of cars',
+                        fontSize: 16
+                    },
+                    position: 'right',
+                    id: 'y-axis-2',
+                    gridLines: { drawOnChartArea: false }
+                }]
+        },
+        pan: {
+            enabled: true,
                 mode: 'xy',
-                rangeMin: {
-                    // Format of min pan range depends on scale type
-                    x: 0,
+                    rangeMin: {
+                // Format of min pan range depends on scale type
+                x: 0,
                     y: 0
-                }
-            },
-            zoom: {
-                enabled: true,
+            }
+        },
+        zoom: {
+            enabled: true,
                 mode: 'xy',
-                rangeMin: {
-                    // Format of min zoom range depends on scale type
-                    x: 0,
+                    rangeMin: {
+                // Format of min zoom range depends on scale type
+                x: 0,
                     y: 0
-                },
-                limits: {
-                    max: 10,
+            },
+            limits: {
+                max: 10,
                     min: 0.5
-                }
             }
         }
     }
+    }
     var TrafficLoad = new Chart(reportChart, data);
+</script>
+
+<script type="text/javascript">
+    var reportChart = document.getElementById("ConsumptionChart");
+
+    var data = {
+        type: 'scatter',
+        data: {
+
+            datasets: [
+                {
+                    label: 'Traffic Load',
+                    data: {{ data_traffic_load | safe }},
+        yAxisID: 'y-axis-2',
+        showLine: true,
+        fill: false,
+        borderColor: 'rgba(89, 226, 0, 1)'
+    },
+        {
+            label: 'Average Consumption',
+            data: {{ data_average_consumption | safe}},
+                    yAxisID: 'y-axis-1',
+                    showLine: true,
+                    fill: false,
+                    borderColor: 'rgba(233, 16, 242, 1)'
+            },
+    {
+        label: 'First Quartile Consumption',
+            data: {{ data_first_q_consumption | safe }},
+                    yAxisID: 'y-axis-1',
+                    showLine: true,
+                    fill: true,
+                    borderColor: 'rgba(85, 63, 126, 0.7)',
+                    backgroundColor: 'rgba(85, 63, 126, 0.5)'
+    },
+    {
+        label: 'Median Consumption',
+            data: {{ data_median_consumption | safe }},
+                    yAxisID: 'y-axis-1',
+                    showLine: true,
+                    fill: true,
+                    borderColor: 'rgba(98, 101, 238, 0.7)',
+                    backgroundColor: 'rgba(29, 18, 168, 0.3)'
+    },
+    {
+        label: 'Third Quartile Consumption',
+            data: {{ data_third_q_consumption | safe }},
+                    yAxisID: 'y-axis-1',
+                    showLine: true,
+                    fill: true,
+                    borderColor: 'rgba(98, 101, 238, 0.7)',
+                    backgroundColor: 'rgba(98, 101, 238, 0.5)'
+    }
+    ]
+        },
+    options: {
+        responsive: true,
+            elements: {
+            point: {
+                radius: 0,
+                    hitRadius: 4
+            }
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    suggestedMin: 0
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time',
+                    fontSize: 16
+                }
+            }],
+                yAxes: [{
+                    ticks: {
+                        suggestedMin: 0,
+                        beginAtZero: true
+                    },
+                    type: 'linear',
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Consumption',
+                        fontSize: 16
+                    },
+                    position: 'left',
+                    id: 'y-axis-1'
+                },
+                {
+                    type: 'linear',
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of cars',
+                        fontSize: 16,
+                        fontColor: 'rgba(89, 226, 0, 1)'
+                    },
+                    position: 'right',
+                    id: 'y-axis-2',
+                    gridLines: { drawOnChartArea: false }
+                }]
+        },
+        pan: {
+            enabled: true,
+                mode: 'xy',
+                    rangeMin: {
+                // Format of min pan range depends on scale type
+                x: 0,
+                    y: 0
+            }
+        },
+        zoom: {
+            enabled: true,
+                mode: 'xy',
+                    rangeMin: {
+                // Format of min zoom range depends on scale type
+                x: 0,
+                    y: 0
+            },
+            limits: {
+                max: 10,
+                    min: 0.5
+            }
+        }
+    }
+    }
+    var ConsumptionChart = new Chart(reportChart, data);
 </script>
 
 </html>
