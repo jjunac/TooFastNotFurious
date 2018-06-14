@@ -134,15 +134,15 @@
         yAxisID: 'y-axis-1',
         showLine: true,
         fill: false,
-        borderColor: 'rgba(175, 104, 211, 0.7)'
+        borderColor: 'rgba(89, 226, 0, 0.7)'
     },
         {
             label: 'Traffic Load',
             data: {{ data_traffic_load | safe}},
-    yAxisID: 'y-axis-2',
-        showLine: true,
+            yAxisID: 'y-axis-2',
+            showLine: true,
             fill: true,
-                borderColor: 'rgba(89, 226, 0, 0.7)'
+            borderColor: 'rgba(175, 104, 211, 0.7)'
                 }]
         },
     options: {
@@ -174,7 +174,7 @@
                     scaleLabel: {
                         display: true,
                         labelString: 'Expectancy E(T^2)',
-                        fontColor: 'rgba(175, 104, 211, 0.7)',
+                        fontColor: 'rgba(89, 226, 0, 0.7)',
                         fontSize: 16
                     },
                     position: 'left',
@@ -186,7 +186,7 @@
                     scaleLabel: {
                         display: true,
                         labelString: 'Number of cars',
-                        fontColor: 'rgba(89, 226, 0, 0.7)',
+                        fontColor: 'rgba(175, 104, 211, 0.7)',
                         fontSize: 16
                     },
                     position: 'right',
@@ -235,7 +235,7 @@
         yAxisID: 'y-axis-2',
         showLine: true,
         fill: false,
-        borderColor: 'rgba(89, 226, 0, 1)'
+        borderColor: 'rgba(128, 0, 128, 0.7)'
     },
         {
             label: 'Average Consumption',
@@ -243,7 +243,7 @@
                     yAxisID: 'y-axis-1',
                     showLine: true,
                     fill: false,
-                    borderColor: 'rgba(233, 16, 242, 1)'
+                    borderColor: 'rgba(255, 128, 0, 1)'
             },
     {
         label: 'First Quartile Consumption',
@@ -251,8 +251,8 @@
                     yAxisID: 'y-axis-1',
                     showLine: true,
                     fill: true,
-                    borderColor: 'rgba(85, 63, 126, 0.7)',
-                    backgroundColor: 'rgba(85, 63, 126, 0.5)'
+                    borderColor: 'rgba(178, 251, 144, 1)',
+                    backgroundColor: 'rgba(178, 251, 144, 1)'
     },
     {
         label: 'Median Consumption',
@@ -260,8 +260,8 @@
                     yAxisID: 'y-axis-1',
                     showLine: true,
                     fill: true,
-                    borderColor: 'rgba(98, 101, 238, 0.7)',
-                    backgroundColor: 'rgba(29, 18, 168, 0.3)'
+                    borderColor: 'rgba(67, 83, 226, 1)',
+                    backgroundColor: 'rgba(67, 83, 226, 1)'
     },
     {
         label: 'Third Quartile Consumption',
@@ -269,8 +269,8 @@
                     yAxisID: 'y-axis-1',
                     showLine: true,
                     fill: true,
-                    borderColor: 'rgba(98, 101, 238, 0.7)',
-                    backgroundColor: 'rgba(98, 101, 238, 0.5)'
+                     borderColor: 'rgba(199, 57, 5, 1)',
+                    backgroundColor: 'rgba(199, 57, 5, 1)'
     }
     ]
         },
@@ -315,7 +315,7 @@
                         display: true,
                         labelString: 'Number of cars',
                         fontSize: 16,
-                        fontColor: 'rgba(89, 226, 0, 1)'
+                        fontColor: 'rgba(128, 0, 128, 0.7)'
                     },
                     position: 'right',
                     id: 'y-axis-2',
