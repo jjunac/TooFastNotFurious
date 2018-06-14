@@ -91,10 +91,17 @@
         responsive: true,
             scales: {
             yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    type: 'linear',
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of cars by exit and entry',
+                        fontSize: 16
+                    }
+                }]
         },
         pan: {
             enabled: true,
@@ -103,8 +110,8 @@
         zoom: {
             enabled: true,
                 mode: 'xy',
-                    limits: {
-                max: 10,
+                limits: {
+                    max: 10,
                     min: 0.5
             }
         }
@@ -167,6 +174,7 @@
                     scaleLabel: {
                         display: true,
                         labelString: 'Expectancy E(T^2)',
+                        fontColor: 'rgba(175, 104, 211, 0.7)',
                         fontSize: 16
                     },
                     position: 'left',
@@ -178,6 +186,7 @@
                     scaleLabel: {
                         display: true,
                         labelString: 'Number of cars',
+                        fontColor: 'rgba(0, 104, 211, 0.7)',
                         fontSize: 16
                     },
                     position: 'right',
@@ -188,26 +197,26 @@
         pan: {
             enabled: true,
                 mode: 'xy',
-                    rangeMin: {
-                // Format of min pan range depends on scale type
-                x: 0,
+                rangeMin: {
+                    // Format of min pan range depends on scale type
+                    x: 0,
                     y: 0
-            }
-        },
-        zoom: {
-            enabled: true,
-                mode: 'xy',
-                    rangeMin: {
-                // Format of min zoom range depends on scale type
-                x: 0,
-                    y: 0
+                }
             },
-            limits: {
-                max: 10,
+            zoom: {
+                enabled: true,
+                mode: 'xy',
+                rangeMin: {
+                    // Format of min zoom range depends on scale type
+                    x: 0,
+                    y: 0
+                },
+                limits: {
+                    max: 10,
                     min: 0.5
+                }
             }
         }
-    }
     }
     var TrafficLoad = new Chart(reportChart, data);
 </script>

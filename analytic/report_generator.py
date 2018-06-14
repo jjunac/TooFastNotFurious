@@ -1,10 +1,9 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
-from random import randrange
 
 import datetime
 
 
-def create_graphic_report_average_car_per_exit(stats_average, stats_median, stats_first_Q, stats_third_Q, traffic_load,
+def create_graphic_report_average_car_per_exit(stats_average, stats_median, stats_first_q, stats_third_q, traffic_load,
                                                expectancy_load, consumption):
     env = Environment(
         loader=PackageLoader('analytic', 'templates'),
@@ -35,9 +34,9 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
                         index_entry, index_exit)
     create_state_string(stats_median, stats_string_median, entry_name, exit_name, explored_entry, explored_exit,
                         index_entry, index_exit)
-    create_state_string(stats_first_Q, stats_string_first_q, entry_name, exit_name, explored_entry, explored_exit,
+    create_state_string(stats_first_q, stats_string_first_q, entry_name, exit_name, explored_entry, explored_exit,
                         index_entry, index_exit)
-    create_state_string(stats_third_Q, stats_string_third_q, entry_name, exit_name, explored_entry, explored_exit,
+    create_state_string(stats_third_q, stats_string_third_q, entry_name, exit_name, explored_entry, explored_exit,
                         index_entry, index_exit)
 
     for key, value in stats_string_average.items():
@@ -68,7 +67,7 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
             data_median_consumption.append({'x': i, 'y': consumption[2][i]})
             data_third_q_consumption.append({'x': i, 'y': consumption[3][i]})
 
-    template = env.get_template('bar_chart_average_template.html')
+    template = env.get_template('template_report.html')
 
     now = datetime.datetime.now()
 

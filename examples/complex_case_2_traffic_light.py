@@ -19,7 +19,9 @@ def main():
     exit5 = exit_node()
     s.add_node(exit5)
 
-    junction1 = stop().with_stop_on_road(Orientation.NORTH)
+    junction1 = traffic_light().set_state1_orientations(Orientation.SOUTH, Orientation.NORTH).with_timer(5)
+    junction1.set_state2_orientations(Orientation.WEST).with_timer(5)
+    junction1.with_interval(2)
     s.add_node(junction1)
     junction2 = right_priority()
     s.add_node(junction2)

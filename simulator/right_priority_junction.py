@@ -16,12 +16,12 @@ class RightPriorityJunction(Junction):
         # The car on the left (so heading right) needs to leave the priority
         if orientation.right() in self.predecessors:
             for i in range(len(start)):
-                self.simulator.dependencies[(end[i], start[i])].extend(self.get_end_of_predecessor(orientation.right()))
+                self.simulator.dependencies[(end[i], start[i])].extend(self.get_end_of_predecessor(orientation.right()) + self.get_nodes())
         # This car needs to leave the priority to the car on the right (so heading left)
         if orientation.left() in self.predecessors:
             end_of_predecessor = self.get_end_of_predecessor(orientation.left())
             for i in range(len(end_of_predecessor)):
-                self.simulator.dependencies[(end_of_predecessor[i], self.get_start(orientation.left())[i])].extend(end)
+                self.simulator.dependencies[(end_of_predecessor[i], self.get_start(orientation.left())[i])].extend(end + self.get_nodes())
 
     def is_dependency_satisfied(self, source):
         return True

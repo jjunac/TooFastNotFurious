@@ -1,3 +1,4 @@
+import random
 from copy import copy
 
 from simulator.path import Path
@@ -11,6 +12,7 @@ class Car:
         self.departure = departure
         self.visited_nodes = []
         self.departure_tick = departure_tick
+        self.id = random.randint(0, 2**32)
 
     def get_next_node(self):
         return self.path.next_node()

@@ -2,28 +2,65 @@ from math import atan2
 
 from pygame.sprite import RenderClear
 
-from visualizer.my_sprite import RoadSprite
+from visualizer.my_sprite import RoadSprite, CarSprite
 from visualizer.point import Point, to_degrees
 
 
-class GraphicRoad:
+class GraphicEntity:
 
-    def __init__(self, start, end, road, cell_length=30, cell_height=30, road_number=0):
+    def __init__(self, position, entity, cell_length=30, cell_height=30):
         super().__init__()
-        self.start = start
-        self.end = end
+        self.position = position
         self.group = RenderClear()
-        self.entity = road
+        self.entity = entity
         self.cell_length = cell_length
         self.cell_height = cell_height
+        self.node_pos = []
+        self.angle = 0
+
+    def create_sprites(self):
+        for i in self.entity.nodes:
+            for n in i:
+                self.node_pos.append((n, self.position))
+
+    def draw(self, surface):
+        self.group.draw(surface)
+
+    def update(self, car_group):
+        for node, pos in self.node_pos:
+            if node.current_car:
+                sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
+                if sprite:
+                    sprite.interpolate(pos)
+                else:
+                    car_group.add(CarSprite(pos, node.current_car, 30, 20, -self.angle))
+
+
+class GraphicExit(GraphicEntity):
+
+    def __init__(self, position, entity, cell_length=30, cell_height=30):
+        super().__init__(position, entity, cell_length, cell_height)
+
+    def update(self, car_group):
+        for node, pos in self.node_pos:
+            sprite = next(iter(s for s in car_group.sprites() if s.car == node.current_car), None)
+            if sprite:
+                car_group.remove(sprite)
+
+
+class GraphicRoad(GraphicEntity):
+
+    def __init__(self, position, end, road, cell_length=30, cell_height=30, road_number=0):
+        super().__init__(position, road, cell_length, cell_height)
+        self.end = end
         self.road_number = road_number
-        self.angle = to_degrees(atan2(self.end.y - self.start.y, self.end.x - self.start.x))
-        self.sprite_start = start.rotate_point(self.angle, Point(self.start.x + self.cell_length, self.start.y))
+        self.angle = to_degrees(atan2(self.end.y - self.position.y, self.end.x - self.position.x))
+        self.sprite_start = self.position.rotate_point(self.angle,
+                                                       Point(self.position.x + self.cell_length, self.position.y))
         self.sprite_end = end.rotate_point(self.angle, Point(self.end.x - self.cell_length, self.end.y))
         tmp = self.sprite_start.rotate_point(self.angle,
                                              Point(self.sprite_start.x + self.cell_length, self.sprite_start.y))
         self.pos_i = tmp - self.sprite_start
-        self.node_pos = []
 
     def create_sprites(self):
         for k in range(self.entity.n_of_ways):
@@ -44,9 +81,3 @@ class GraphicRoad:
                 road_portion = RoadSprite(pos, self.cell_length, self.cell_height, -self.angle)
                 self.group.add(road_portion)
                 i += 1
-
-    def update(self):
-        pass
-
-    def draw(self, surface):
-        self.group.draw(surface)

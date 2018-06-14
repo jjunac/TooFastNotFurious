@@ -21,16 +21,18 @@ class TestSingleRoad(unittest.TestCase):
         # With seed 0 and a rate of 0.2, 38 cars are generated in 200 tick, plus 20 tick to reach the end
         # Code used to compute:
         """
+        import random
         res = 0
         random.seed(0)
         for _ in range(200):
             if random.random() <= 0.2:
                 res += 1
                 random.random()
+                random.randint(1,2)
                 random.choice([0])
         """
         s.run_for(220)
-        self.assertEqual(38, s.entity_conversion[e2].outflow)
+        self.assertEqual(40, s.entity_conversion[e2].outflow)
 
     def test_double_road(self):
         s = new_simulation()
@@ -47,7 +49,7 @@ class TestSingleRoad(unittest.TestCase):
         random.seed(0)
         # With seed 0, 36 cars are generated in 200 tick, plus 20 tick to reach the end
         s.run_for(220)
-        self.assertEqual(36, s.entity_conversion[e2].outflow)
+        self.assertEqual(39, s.entity_conversion[e2].outflow)
 
 if __name__ == '__main__':
     unittest.main()

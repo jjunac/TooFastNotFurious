@@ -1,10 +1,11 @@
 class Node:
-    def __init__(self, entity):
+    def __init__(self, entity, can_ignore_dependency=False):
         self.entity = entity
         self.successors = []
         self.predecessors = []
         self.current_car = None
         self.next_car = None
+        self.can_ignore_dependency = can_ignore_dependency
 
     def compute_next(self, simulator):
         if not self.current_car:
@@ -21,13 +22,21 @@ class Node:
             self.next_car = self.current_car
 
     def __can_move_to(self, destination, simulator):
-        if destination.next_car:
+        if destination.current_car or destination.next_car:
             return False
         dependencies = simulator.dependencies[(self, destination)]
+        all_dependency_satisfied = True
         for d in dependencies:
             if not d.is_dependency_satisfied(self):
-                return False
-        return True
+                all_dependency_satisfied = False
+                break
+        if all_dependency_satisfied:
+            return True
+        if destination.can_ignore_dependency:
+            for d in dependencies:
+                if d.current_car and self.current_car.id < d.current_car.id:
+                    return False
+        return destination.can_ignore_dependency
 
     def is_dependency_satisfied(self, source):
         if not self.entity.is_dependency_satisfied(source):
