@@ -152,8 +152,8 @@ class TestReportGenerator(unittest.TestCase):
             with self.subTest(i=i):
                 self.assertTrue(labels_expected[i] in j['data']['labels'])
                 self.assertTrue(round(j['data']['datasets'][0]['data'][i]) in data_average)
-                self.assertTrue(data_median[i] in j['data']['datasets'][1]['data'])
-                self.assertTrue(data_f_q[i] in j['data']['datasets'][2]['data'])
+                self.assertTrue(data_f_q[i] in j['data']['datasets'][1]['data'])
+                self.assertTrue(data_median[i] in j['data']['datasets'][2]['data'])
                 self.assertTrue(data_t_q[i] in j['data']['datasets'][3]['data'])
 
         script = parser.scripts[7]

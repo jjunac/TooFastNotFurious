@@ -20,7 +20,6 @@ class Analytics:
 
         return stats
 
-
     def generate_report(self):
         cars = self.get_path_with_their_exit_nodes()
 
@@ -53,7 +52,6 @@ class Analytics:
                     path_lengths[entry[0]].append(len(val[i].visited_nodes))
                     path_lengths[entry[0]].sort()
 
-
             for entry, val in path_lengths.items():
                 average[entry] = mean(val)
                 med[entry] = median(val)
@@ -65,7 +63,7 @@ class Analytics:
             result_fq[key] = first_q
             result_tq[key] = third_q
 
-        return result_a, result_m, result_fq, result_tq
+        return result_a, result_fq, result_m, result_tq
 
     def first_quartile(self, val):
         return val[(ceil(len(val) / 4)) - 1]
@@ -113,15 +111,59 @@ class Analytics:
 
         return expectancy
 
-    def __consommation_function(self, v0, v1):
+    def __consumption_function(self, v0, v1):
         return 2 * v1 + v0
 
-    def compute_consommation_by_car(self, nodes):
+    def compute_consumption_by_car(self, nodes):
         conso = {}
         for value in nodes.values():
             for val in value.values():
                 for i in range(len(val)):
                     v0 = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
                     v1 = len(val[i].original_path.nodes)
-                    conso[val[i]] = self.__consommation_function(v0, v1)
+                    conso[val[i]] = self.__consumption_function(v0, v1)
         return conso
+
+    def compute_consumption_by_car_with_traffic_load(self, consumption):
+
+        graph = {}
+
+        for i in range(len(self.traffic_load)):
+            for key, value in consumption.items():
+                if key.departure_tick <= i <= key.departure_tick + len(key.visited_nodes):
+                    if not i in graph:
+                        graph[i] = []
+                    graph[i].append(value)
+
+        # expectancy = {}
+
+        result_a = {}
+        result_m = {}
+        result_fq = {}
+        result_tq = {}
+
+        print(graph)
+
+        for entry, val in graph.items():
+            proba = 0
+            # print("VAL", val)
+            val.sort()
+            result_a[entry] = mean(val)
+            result_m[entry] = median(val)
+            result_fq[entry] = self.first_quartile(val)
+            result_tq[entry] = self.third_quartile(val)
+
+            # for key, value in dict(Counter(val)).items():
+            #     proba += (key * key) * (value / len(val))
+
+            # if not entry in expectancy:
+            #     expectancy[entry] = proba
+
+        # print("REZ")
+        # print(graph)
+        # print(result_a)
+        # print(result_m)
+        # print(result_fq)
+        # print(result_tq)
+
+        return result_a, result_fq, result_m, result_tq

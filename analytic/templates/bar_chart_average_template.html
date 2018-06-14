@@ -66,15 +66,16 @@
                 backgroundColor: 'rgba(175, 104, 211, 0.7)'
             },
                 {
-                    label: 'Median',
-                    data: {{data_median | safe}},
-                    backgroundColor: 'rgba(98, 101, 238, 0.7)'
-                },
-                {
                     label: 'First Quartile',
                     data: {{data_first_q | safe}},
                     backgroundColor: 'rgba(85, 63, 126, 0.7)'
                 },
+                {
+                    label: 'Median',
+                    data: {{data_median | safe}},
+                    backgroundColor: 'rgba(98, 101, 238, 0.7)'
+                },
+
                 {
                     label: 'Third Quartile',
                     data: {{data_third_q | safe}},
@@ -160,7 +161,7 @@
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Expectancy E(T²)',
+                        labelString: 'Expectancy E(T&sup2;)',
                         fontSize: 16
                     },
                     position: 'left',
