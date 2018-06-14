@@ -193,7 +193,6 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_road(junction1.connect(Orientation.WEST).to(exit1).with_length(3))
         s.add_road(junction1.connect(Orientation.EAST).to(junction2).with_length(7))
 
-        
         s.add_road(entry2.connect(Orientation.WEST).to(junction2).with_length(3))
         s.add_road(junction2.connect(Orientation.NORTH).to(exit2).with_length(3))
         s.add_road(junction2.connect(Orientation.SOUTH).to(junction3).with_length(7))
@@ -210,17 +209,17 @@ class TestRoadRightPriorities(unittest.TestCase):
         s.add_path(entry1.to(exit2).with_proportion(25))
         s.add_path(entry1.to(exit3).with_proportion(25))
         s.add_path(entry1.to(exit4).with_proportion(25))
-        
+
         s.add_path(entry2.to(exit2).with_proportion(25))
         s.add_path(entry2.to(exit3).with_proportion(25))
         s.add_path(entry2.to(exit4).with_proportion(25))
         s.add_path(entry2.to(exit1).with_proportion(25))
-        
+
         s.add_path(entry3.to(exit3).with_proportion(25))
         s.add_path(entry3.to(exit4).with_proportion(25))
         s.add_path(entry3.to(exit1).with_proportion(25))
         s.add_path(entry3.to(exit2).with_proportion(25))
-        
+
         s.add_path(entry4.to(exit4).with_proportion(25))
         s.add_path(entry4.to(exit1).with_proportion(25))
         s.add_path(entry4.to(exit2).with_proportion(25))
@@ -313,7 +312,6 @@ class TestRoadRightPriorities(unittest.TestCase):
             blocked_entry_nodes = entry_node_with_car
             actual_number_of_car = len([n for e in simulator.entities for row in e.nodes for n in row if n.current_car])
             self.assertEqual(number_of_car, actual_number_of_car)
-
 
 
 if __name__ == '__main__':

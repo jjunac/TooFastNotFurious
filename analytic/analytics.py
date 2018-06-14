@@ -146,7 +146,7 @@ class Analytics:
             val.sort()
             result_a[entry] = mean(val)
             result_m[entry] = median(val)
-            result_fq[entry] = self.first_quartile(val)
-            result_tq[entry] = self.third_quartile(val)
+            result_fq[entry] = self.__first_quartile(val)
+            result_tq[entry] = self.__third_quartile(val)
 
         return result_a, result_fq, result_m, result_tq
