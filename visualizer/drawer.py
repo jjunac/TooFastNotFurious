@@ -51,7 +51,8 @@ class Drawer:
                     stack.extend(next_entities)
                     visited.add(entity)
                     continue
-                graphic_entity, res = create_graphic_entity(entity, forward, pos, self.cell_length, self.cell_height)
+                graphic_entity, pos, res = create_graphic_entity(entity, forward, pos, self.cell_length,
+                                                                 self.cell_height)
                 if graphic_entity:
                     roads.append(graphic_entity)
                 visited.add(entity)
@@ -114,15 +115,15 @@ def create_graphic_entity(entity, forward, pos, cell_length, cell_height, previo
             res = pos.rotate_point(entity.orientation + 180,
                                    Point(pos.x + (entity.length + 1) * cell_length, pos.y))
             pos, res = res, pos
-        return GraphicRoad(pos, res, entity, cell_length, cell_height), res
+        return GraphicRoad(pos, res, entity, cell_length, cell_height), pos, res
     elif isinstance(entity, Junction):
         if type(entity) is StopJunction:
-            return GraphicStopJunction(pos, entity, cell_length, cell_height, previous_road)
+            return GraphicStopJunction(pos, entity, cell_length, cell_height, forward, previous_road)
         elif type(entity) is TrafficLightJunction:
-            return GraphicTrafficLightJunction(pos, entity, cell_length, cell_height, previous_road)
+            return GraphicTrafficLightJunction(pos, entity, cell_length, cell_height, forward, previous_road)
         else:
-            return GraphicJunction(pos, entity, cell_length, cell_height, previous_road)
+            return GraphicJunction(pos, entity, cell_length, cell_height, forward, previous_road)
     elif type(entity) is Exit:
-        return GraphicExit(pos, entity, cell_length, cell_height), pos
+        return GraphicExit(pos, entity, cell_length, cell_height), pos, pos
     else:
-        return None, pos
+        return None, pos, pos

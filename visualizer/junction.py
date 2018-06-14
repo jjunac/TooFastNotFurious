@@ -10,19 +10,19 @@ from visualizer.road import GraphicEntity
 
 class GraphicJunction(GraphicEntity):
 
-    def __init__(self, position, junction, cell_length=30, cell_height=30, previous_road=None):
+    def __init__(self, position, junction, cell_length=30, cell_height=30, forward=False, previous_road=None):
         super().__init__(position, junction, cell_length, cell_height)
-        surface = pygame.Surface((self.cell_length, self.cell_height))
-        surface.fill((29, 17, 17))
         if self.entity.size_east_west > 1 or self.entity.size_north_south > 1:
-            if previous_road.orientation == Orientation.NORTH and self.entity.size_north_south - previous_road.n_of_ways > 0:
+            first = Orientation.NORTH
+            second = Orientation.WEST
+            if previous_road.orientation == first and self.entity.size_north_south - previous_road.n_of_ways > 0:
                 self.position = self.position - ((self.entity.size_north_south - 1) * cell_height, 0)
-            elif previous_road.orientation == Orientation.WEST and self.entity.size_east_west - previous_road.n_of_ways > 0:
-                self.position = self.position - (0, (self.entity.size_east_west - 1) * cell_height)
+            elif previous_road.orientation == second and self.entity.size_east_west - previous_road.n_of_ways > 0:
+                self.position = self.position - (1 * cell_length, -(self.entity.size_east_west - 1) * cell_height)
             elif previous_road.orientation == Orientation.SOUTH:
                 self.position = self.position + (0, max((self.entity.size_east_west - 1), 1) * cell_height)
-            elif previous_road.orientation == Orientation.WEST:
-                self.position = self.position - (max((self.entity.size_east_west - 1), 1) * cell_height, 0)
+            elif previous_road.orientation == second:
+                self.position = self.position - (max((self.entity.size_north_south - 1), 1) * cell_height, 0)
         for i in range(len(self.entity.nodes)):
             for j in range(len(self.entity.nodes[i])):
                 point = self.position + Point(j * self.cell_length, -i * self.cell_height)
@@ -40,8 +40,10 @@ def draw(self, surface):
 
 
 class GraphicStopJunction(GraphicJunction):
-    def __init__(self, position: Point, junction, cell_length=30, cell_height=30, previous_road=None):
-        super().__init__(position, junction, cell_length, cell_height, previous_road)
+    op = 0
+
+    def __init__(self, position: Point, junction, cell_length=30, cell_height=30, forward=False, previous_road=None):
+        super().__init__(position, junction, cell_length, cell_height, forward, previous_road)
 
     def create_sprites(self):
         self.entity: StopJunction
@@ -54,11 +56,20 @@ class GraphicStopJunction(GraphicJunction):
                 self.group.add(MySprite(pos, self.cell_length, self.cell_height, image=surface))
             else:
                 self.group.add(StopSprite(pos, self.cell_length, self.cell_height, -self.entity.stop_orientation))
+        surface = pygame.Surface((self.cell_length, self.cell_height), pygame.SRCALPHA)
+        pygame.draw.circle(surface, (GraphicStopJunction.op * 50, 0, 0),
+                           (round(self.cell_length / 2), round(self.cell_height / 2)),
+                           round(self.cell_length / 2))
+        sprite = MySprite(self.position, round(self.cell_length / 2),
+                          round(self.cell_height / 2),
+                          image=surface)
+        self.group.add(sprite)
+        GraphicStopJunction.op += 1
 
 
 class GraphicTrafficLightJunction(GraphicJunction):
-    def __init__(self, position: Point, junction, cell_length=30, cell_height=30, previous_road=None):
-        super().__init__(position, junction, cell_length, cell_height, previous_road)
+    def __init__(self, position: Point, junction, cell_length=30, cell_height=30, forward=False, previous_road=None):
+        super().__init__(position, junction, cell_length, cell_height, forward, previous_road)
         self.lights = [[], []]
 
     def create_sprites(self):
