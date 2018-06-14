@@ -26,9 +26,6 @@ class Point:
     def __mul__(self, other):
         return Point(self.x * other, self.y * other)
 
-    def __truediv__(self, other):
-        return Point(self.x / other, self.y / other)
-
     def length(self):
         return sqrt(self.x ** 2 + self.y ** 2)
 
@@ -45,9 +42,6 @@ class Point:
 
     def __str__(self) -> str:
         return "({0},{1})".format(self.x, self.y)
-
-    def __neg__(self):
-        return Point(-self.x, -self.y)
 
 
 def to_radians(degree_angle):

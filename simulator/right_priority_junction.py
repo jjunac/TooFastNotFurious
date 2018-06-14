@@ -1,7 +1,4 @@
-from shared import Orientation
 from simulator.junction import Junction
-from simulator.node import Node
-from simulator.utils import link
 
 
 class RightPriorityJunction(Junction):
