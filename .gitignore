@@ -183,3 +183,4 @@ venv.bak/
 cosmic-ray*.yml
 session_*.json
 mutation-report/
+report_mutation_*/
