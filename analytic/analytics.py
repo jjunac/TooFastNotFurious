@@ -82,9 +82,8 @@ class Analytics:
             for val in value.values():
 
                 for i in range(len(val)):
-                    if len(val[i].visited_nodes) - len(val[i].original_path.nodes) != 0:
-                        if not val[i] in delay:
-                            delay[val[i]] = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
+                    if len(val[i].visited_nodes) - len(val[i].original_path.nodes) != 0 and not val[i] in delay:
+                        delay[val[i]] = len(val[i].visited_nodes) - len(val[i].original_path.nodes)
 
         return delay
 
