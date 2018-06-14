@@ -27,7 +27,7 @@ class Junction(AbstractEntity, ABC):
         start = self.get_start(orientation.invert())
         for i in range(len(start)):
             link(end[i], start[i])
-            self.simulator.dependencies[(end[i], start[i])] = self.get_nodes()
+            self.simulator.dependencies[(end[i], start[i])] = [start[i]]
             self.simulator.weights[(end[i], start[i])] = 2
 
     def get_end_of_predecessor(self, orientation):

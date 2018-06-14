@@ -17,7 +17,7 @@ class StopJunction(Junction):
                 if o == orientation.invert():
                     continue
                 for i in range(len(start)):
-                    self.simulator.dependencies[(end[i], start[i])].extend(self.get_end_of_predecessor(o))
+                    self.simulator.dependencies[(end[i], start[i])].extend(self.get_end_of_predecessor(o) + self.get_nodes())
         else:
             if self.stop_orientation in self.predecessors:
                 end_of_predecessor = self.get_end_of_predecessor(self.stop_orientation)
