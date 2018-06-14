@@ -3,7 +3,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 import datetime
 
 
-def create_graphic_report_average_car_per_exit(stats_average, stats_median, stats_first_q, stats_third_q, traffic_load,
+def create_graphic_report_average_car_per_exit(stats, traffic_load,
                                                expectancy_load, consumption):
     env = Environment(
         loader=PackageLoader('analytic', 'templates'),
@@ -19,25 +19,20 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
     index_entry = 1
     index_exit = 1
 
-    stats_string_average = {}
-    stats_string_median = {}
-    stats_string_first_q = {}
-    stats_string_third_q = {}
+    stats_string_average = create_state_string(stats[0], entry_name, exit_name, explored_entry, explored_exit,
+                                               index_entry, index_exit)
+    stats_string_first_q = create_state_string(stats[1], entry_name, exit_name, explored_entry, explored_exit,
+                                               index_entry, index_exit)
+    stats_string_median = create_state_string(stats[2], entry_name, exit_name, explored_entry, explored_exit,
+                                              index_entry, index_exit)
+    stats_string_third_q = create_state_string(stats[3], entry_name, exit_name, explored_entry, explored_exit,
+                                               index_entry, index_exit)
 
     dataset_average = []
     dataset_median = []
     dataset_first_q = []
     dataset_third_q = []
     labels = []
-
-    create_state_string(stats_average, stats_string_average, entry_name, exit_name, explored_entry, explored_exit,
-                        index_entry, index_exit)
-    create_state_string(stats_median, stats_string_median, entry_name, exit_name, explored_entry, explored_exit,
-                        index_entry, index_exit)
-    create_state_string(stats_first_q, stats_string_first_q, entry_name, exit_name, explored_entry, explored_exit,
-                        index_entry, index_exit)
-    create_state_string(stats_third_q, stats_string_third_q, entry_name, exit_name, explored_entry, explored_exit,
-                        index_entry, index_exit)
 
     for key, value in stats_string_average.items():
 
@@ -76,8 +71,10 @@ def create_graphic_report_average_car_per_exit(stats_average, stats_median, stat
     with open(name, 'w+') as file:
         file.write(template.render(labels=labels, data_average=dataset_average, data_median=dataset_median,
                                    data_first_q=dataset_first_q, data_third_q=dataset_third_q,
-                                   data_traffic_load=data_traffic_load, data_delay_time=data_delay_time, data_average_consumption=data_average_consumption,
-                                   data_first_q_consumption=data_first_q_consumption, data_median_consumption= data_median_consumption,
+                                   data_traffic_load=data_traffic_load, data_delay_time=data_delay_time,
+                                   data_average_consumption=data_average_consumption,
+                                   data_first_q_consumption=data_first_q_consumption,
+                                   data_median_consumption=data_median_consumption,
                                    data_third_q_consumption=data_third_q_consumption))
 
 
@@ -88,8 +85,10 @@ def fill_dataset(dataset, stats_string):
             dataset.append(val)
 
 
-def create_state_string(stats, stats_string, entry_name, exit_name, explored_entry, explored_exit, index_entry,
+def create_state_string(stats, entry_name, exit_name, explored_entry, explored_exit, index_entry,
                         index_exit):
+    stats_string = {}
+
     for key, value in stats.items():
 
         if not key.__hash__() in explored_exit:
@@ -108,3 +107,5 @@ def create_state_string(stats, stats_string, entry_name, exit_name, explored_ent
             if not explored_exit[key.__hash__()] in stats_string[explored_exit[key.__hash__()]]:
                 stats_string[explored_exit[key.__hash__()]][explored_entry[entry.__hash__()]] = {}
                 stats_string[explored_exit[key.__hash__()]][explored_entry[entry.__hash__()]] = val
+
+    return stats_string

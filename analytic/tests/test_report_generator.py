@@ -3,7 +3,7 @@ import unittest
 from shared import Orientation
 from simulator import Path, Simulator, Entry, Exit, Road, Car
 from analytic.analytics import Analytics
-from analytic.report_generator import create_graphic_report_average_car_per_exit
+from analytic.report_generator import create_graphic_report_average_car_per_exit, create_state_string
 
 from pathlib import Path as P
 
@@ -34,9 +34,6 @@ class TestReportGenerator(unittest.TestCase):
         car1 = Car(p2, entry1, 0)
         car2 = Car(p2, entry2, 0)
         car3 = Car(p2, entry3, 0)
-        car4 = Car(p2, entry1, 0)
-        car5 = Car(p2, entry2, 0)
-        car6 = Car(p2, entry3, 0)
 
         nodes = []
 
@@ -44,65 +41,26 @@ class TestReportGenerator(unittest.TestCase):
             nodes.append(road1.nodes[0][i])
 
         car1.visited_nodes = nodes
-        car6.visited_nodes = nodes
+
         nodes1 = []
 
         for i in range(0, 20):
             nodes1.append(road1.nodes[0][i])
 
         car2.visited_nodes = nodes1
-        car4.visited_nodes = nodes1
+
         nodes2 = []
 
         for i in range(0, 30):
             nodes2.append(road1.nodes[0][i])
 
         car3.visited_nodes = nodes2
-        car5.visited_nodes = nodes2
-
-        car1.original_path.nodes = nodes
-        car2.original_path.nodes = nodes
-        car3.original_path.nodes = nodes
-        car4.original_path.nodes = nodes
-        car5.original_path.nodes = nodes
-        car6.original_path.nodes = nodes
 
         car1.departure_tick = 1
         car2.departure_tick = 1
         car3.departure_tick = 2
-        car4.departure_tick = 3
-        car5.departure_tick = 3
-        car6.departure_tick = 4
 
-        t_load = []
-
-        for i in range(0, 50):
-            t_load.append(0)
-
-        t_load[1] = 2
-        t_load[2] = 3
-        t_load[3] = 5
-        t_load[4] = 6
-
-        for i in range(5, 11):
-            t_load[i] = 6
-
-        for i in range(11, 15):
-            t_load[i] = 5
-
-        for i in range(15, 21):
-            t_load[i] = 4
-
-        for i in range(21, 24):
-            t_load[i] = 3
-
-        for i in range(24, 32):
-            t_load[i] = 2
-
-        t_load[32] = 1
-        t_load[33] = 1
-
-        a = Analytics([], t_load)
+        a = Analytics([], [])
 
         stats = {
             exit1: {(entry1, p1): [car1, car1, car1, car1, car1], (entry2, p2): [car1, car2, car2, car2]},
@@ -111,89 +69,59 @@ class TestReportGenerator(unittest.TestCase):
 
         res_overview = a.compute_function_per_exit(stats)
 
-        delay = a.compute_delay_time_by_car(stats)
+        explored_entry = {}
+        explored_exit = {}
 
-        res = a.compute_delay_time_expectancy_with_traffic_load(delay)
+        entry_name = "entry"
+        exit_name = "exit"
 
-        create_graphic_report_average_car_per_exit(res_overview[0], res_overview[1], res_overview[2], res_overview[3],
-                                                   t_load, res)
+        index_entry = 1
+        index_exit = 1
 
-        now = datetime.datetime.now()
+        string_average = create_state_string(res_overview[0], entry_name, exit_name, explored_entry, explored_exit,
+                                             index_entry, index_exit)
+        string_f_q = create_state_string(res_overview[1], entry_name, exit_name, explored_entry, explored_exit,
+                                         index_entry, index_exit)
+        string_median = create_state_string(res_overview[2], entry_name, exit_name, explored_entry, explored_exit,
+                                            index_entry, index_exit)
+        string_t_q = create_state_string(res_overview[3], entry_name, exit_name, explored_entry, explored_exit,
+                                         index_entry, index_exit)
 
-        name = "report_" + now.strftime("%Y_%m_%d_%Hh%Mm%S") + ".html"
+        self.assertTrue('exit1' in string_average)
+        self.assertTrue('entry1' in string_average['exit1'])
+        self.assertTrue('entry2' in string_average['exit1'])
+        self.assertEqual(10, string_average['exit1']['entry1'])
+        self.assertEqual(17.5, string_average['exit1']['entry2'])
+        self.assertTrue('exit2' in string_average)
+        self.assertTrue('entry3' in string_average['exit2'])
+        self.assertAlmostEqual(23.3, string_average['exit2']['entry3'], delta=0.1)
 
-        p = P('.')
+        self.assertTrue('exit1' in string_f_q)
+        self.assertTrue('entry1' in string_f_q['exit1'])
+        self.assertTrue('entry2' in string_f_q['exit1'])
+        self.assertEqual(10, string_f_q['exit1']['entry1'])
+        self.assertEqual(10, string_f_q['exit1']['entry2'])
+        self.assertTrue('exit2' in string_f_q)
+        self.assertTrue('entry3' in string_f_q['exit2'])
+        self.assertEqual(20, string_f_q['exit2']['entry3'])
 
-        self.assertEqual(name, list(p.glob('./' + name))[0].name)
+        self.assertTrue('exit1' in string_median)
+        self.assertTrue('entry1' in string_median['exit1'])
+        self.assertTrue('entry2' in string_median['exit1'])
+        self.assertEqual(10, string_median['exit1']['entry1'])
+        self.assertEqual(20, string_median['exit1']['entry2'])
+        self.assertTrue('exit2' in string_median)
+        self.assertTrue('entry3' in string_median['exit2'])
+        self.assertEqual(30, string_median['exit2']['entry3'])
 
-        parser = ParserHTML()
-
-        parser.feed(list(p.glob('./*.html'))[0].read_text())
-
-        script = parser.scripts[4]
-
-        script = re.search(r'var data = .*$', script, re.DOTALL).group()
-
-        script = script.replace('var data =', '')
-
-        j = json.loads(
-            demjson.encode(
-                demjson.decode(script.replace('var ReportChart = new Chart(reportChart, data);', ''))))
-
-        labels_expected = ['exit1 - entry1', 'exit1 - entry2', 'exit2 - entry3']
-        data_average = [10, 18, 23]
-        data_median = [10, 20.0, 30]
-        data_f_q = [10, 10, 20]
-        data_t_q = [10, 20.0, 30]
-
-        self.assertEqual(3, len(j['data']['datasets'][0]['data']))
-
-        for i in range(len(j['data']['labels'])):
-            with self.subTest(i=i):
-                self.assertTrue(labels_expected[i] in j['data']['labels'])
-                self.assertTrue(round(j['data']['datasets'][0]['data'][i]) in data_average)
-                self.assertTrue(data_f_q[i] in j['data']['datasets'][1]['data'])
-                self.assertTrue(data_median[i] in j['data']['datasets'][2]['data'])
-                self.assertTrue(data_t_q[i] in j['data']['datasets'][3]['data'])
-
-        script = parser.scripts[6]
-
-        script = re.search(r'var data = .*$', script, re.DOTALL).group()
-
-        script = script.replace('var data =', '')
-
-        j = json.loads(
-            demjson.encode(
-                demjson.decode(script.replace('var TrafficLoad = new Chart(reportChart, data);', ''))))
-
-        self.assertTrue({'x': 1, 'y': 100} in j["data"]["datasets"][0]["data"])
-        self.assertTrue({'x': 2, 'y': 250} in j["data"]["datasets"][0]["data"])
-        self.assertTrue({'x': 8, 'y': 250} in j["data"]["datasets"][0]["data"])
-        self.assertTrue({'x': 28, 'y': 400} in j["data"]["datasets"][0]["data"])
-
-        for i in range(len(t_load)):
-            with self.subTest(i=i):
-                self.assertTrue({'x': i, 'y': t_load[i]} in j["data"]["datasets"][1]["data"])
-
-        list(p.glob('./' + name))[0].unlink()
-
-
-class ParserHTML(HTMLParser):
-
-    def error(self, message):
-        pass
-
-    def __init__(self):
-        super().__init__()
-        self.tag = ""
-        self.scripts = []
-
-    def handle_starttag(self, tag, attrs):
-        self.tag = tag
-
-    def handle_data(self, data):
-        if self.tag == "script":
-            self.scripts.append(data)
+        self.assertTrue('exit1' in string_t_q)
+        self.assertTrue('entry1' in string_t_q['exit1'])
+        self.assertTrue('entry2' in string_t_q['exit1'])
+        self.assertEqual(10, string_t_q['exit1']['entry1'])
+        self.assertEqual(20, string_t_q['exit1']['entry2'])
+        self.assertTrue('exit2' in string_t_q)
+        self.assertTrue('entry3' in string_t_q['exit2'])
+        self.assertEqual(30, string_t_q['exit2']['entry3'])
 
 
 if __name__ == '__main__':
