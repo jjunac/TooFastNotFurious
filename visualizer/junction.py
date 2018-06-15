@@ -13,22 +13,25 @@ class GraphicJunction(GraphicEntity):
     def __init__(self, position, junction, cell_length=30, cell_height=30, forward=False, previous_road=None):
         super().__init__(position, junction, cell_length, cell_height)
         if self.entity.size_east_west > 1 or self.entity.size_north_south > 1:
-            first = Orientation.NORTH if forward else Orientation.SOUTH
-            second = Orientation.WEST if forward else Orientation.EAST
-            if previous_road.orientation == first and self.entity.size_north_south - previous_road.n_of_ways > 0:
-                self.position = self.position - (
-                    (self.entity.size_north_south - 1 * previous_road.n_of_ways) * cell_height, 0)
-            elif previous_road.orientation == second and self.entity.size_east_west - previous_road.n_of_ways > 0:
-                self.position = self.position - (
-                    1 * cell_length, -(self.entity.size_east_west - 1 * previous_road.n_of_ways) * cell_height)
-            elif previous_road.orientation == Orientation.SOUTH:
-                self.position = self.position + (0, max((self.entity.size_east_west - 1), 1) * cell_height)
-            elif previous_road.orientation == second:
-                self.position = self.position - (max((self.entity.size_north_south - 1), 1) * cell_height, 0)
+            self.fix_multiple_way_position(cell_height, cell_length, forward, previous_road)
         for i in range(len(self.entity.nodes)):
             for j in range(len(self.entity.nodes[i])):
                 point = self.position + Point(j * self.cell_length, -i * self.cell_height)
                 self.node_pos.append((self.entity.nodes[i][j], point))
+
+    def fix_multiple_way_position(self, cell_height, cell_length, forward, previous_road):
+        first = Orientation.NORTH if forward else Orientation.SOUTH
+        second = Orientation.WEST if forward else Orientation.EAST
+        if previous_road.orientation == first and self.entity.size_north_south - previous_road.n_of_ways > 0:
+            self.position = self.position - (
+                (self.entity.size_north_south - 1 * previous_road.n_of_ways) * cell_height, 0)
+        elif previous_road.orientation == second and self.entity.size_east_west - previous_road.n_of_ways > 0:
+            self.position = self.position - (
+                1 * cell_length, -(self.entity.size_east_west - 1 * previous_road.n_of_ways) * cell_height)
+        elif previous_road.orientation == Orientation.SOUTH:
+            self.position = self.position + (0, max((self.entity.size_east_west - 1), 1) * cell_height)
+        elif previous_road.orientation == second:
+            self.position = self.position - (max((self.entity.size_north_south - 1), 1) * cell_height, 0)
 
     def create_sprites(self):
         for cell, pos in self.node_pos:

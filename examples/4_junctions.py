@@ -68,7 +68,7 @@ def main():
     s.add_path(entry4.to(exit2).with_proportion(25))
     s.add_path(entry4.to(exit3).with_proportion(25))
 
-    s.run_for(1000)
+    s.run_graphical_for(1000)
     # s.with_report()
 
 
