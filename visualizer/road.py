@@ -33,7 +33,8 @@ class GraphicEntity:
                 if sprite:
                     sprite.interpolate(pos)
                 else:
-                    car_group.add(CarSprite(pos, node.current_car, 30, 20, -self.angle))
+                    car_group.add(
+                        CarSprite(pos, node.current_car, self.cell_length, int(2 * self.cell_height / 3), -self.angle))
 
 
 class GraphicExit(GraphicEntity):

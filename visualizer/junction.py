@@ -13,12 +13,14 @@ class GraphicJunction(GraphicEntity):
     def __init__(self, position, junction, cell_length=30, cell_height=30, forward=False, previous_road=None):
         super().__init__(position, junction, cell_length, cell_height)
         if self.entity.size_east_west > 1 or self.entity.size_north_south > 1:
-            first = Orientation.NORTH
-            second = Orientation.WEST
+            first = Orientation.NORTH if forward else Orientation.SOUTH
+            second = Orientation.WEST if forward else Orientation.EAST
             if previous_road.orientation == first and self.entity.size_north_south - previous_road.n_of_ways > 0:
-                self.position = self.position - ((self.entity.size_north_south - 1) * cell_height, 0)
+                self.position = self.position - (
+                    (self.entity.size_north_south - 1 * previous_road.n_of_ways) * cell_height, 0)
             elif previous_road.orientation == second and self.entity.size_east_west - previous_road.n_of_ways > 0:
-                self.position = self.position - (1 * cell_length, -(self.entity.size_east_west - 1) * cell_height)
+                self.position = self.position - (
+                    1 * cell_length, -(self.entity.size_east_west - 1 * previous_road.n_of_ways) * cell_height)
             elif previous_road.orientation == Orientation.SOUTH:
                 self.position = self.position + (0, max((self.entity.size_east_west - 1), 1) * cell_height)
             elif previous_road.orientation == second:
@@ -40,8 +42,6 @@ def draw(self, surface):
 
 
 class GraphicStopJunction(GraphicJunction):
-    op = 0
-
     def __init__(self, position: Point, junction, cell_length=30, cell_height=30, forward=False, previous_road=None):
         super().__init__(position, junction, cell_length, cell_height, forward, previous_road)
 
@@ -56,15 +56,6 @@ class GraphicStopJunction(GraphicJunction):
                 self.group.add(MySprite(pos, self.cell_length, self.cell_height, image=surface))
             else:
                 self.group.add(StopSprite(pos, self.cell_length, self.cell_height, -self.entity.stop_orientation))
-        surface = pygame.Surface((self.cell_length, self.cell_height), pygame.SRCALPHA)
-        pygame.draw.circle(surface, (GraphicStopJunction.op * 50, 0, 0),
-                           (round(self.cell_length / 2), round(self.cell_height / 2)),
-                           round(self.cell_length / 2))
-        sprite = MySprite(self.position, round(self.cell_length / 2),
-                          round(self.cell_height / 2),
-                          image=surface)
-        self.group.add(sprite)
-        GraphicStopJunction.op += 1
 
 
 class GraphicTrafficLightJunction(GraphicJunction):
