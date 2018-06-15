@@ -105,16 +105,26 @@
         },
         pan: {
             enabled: true,
-                mode: 'xy'
+                mode: 'xy',
+                rangeMin: {
+                    // Format of min pan range depends on scale type
+                    x: 0,
+                    y: 0
+                }
         },
         zoom: {
-            enabled: true,
+                enabled: true,
                 mode: 'xy',
+                rangeMin: {
+                    // Format of min zoom range depends on scale type
+                    x: 0,
+                    y: 0
+                },
                 limits: {
                     max: 10,
                     min: 0.5
+                }
             }
-        }
     }
     }
 
